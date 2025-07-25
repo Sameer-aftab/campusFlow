@@ -27,7 +27,7 @@ export function CertificateGenerator({ student }: { student: Student }) {
     setShowCertificate(false);
     
     try {
-      const text = generateCertificateText(certificateType, student);
+      const text = await generateCertificateText(certificateType, student);
       setGeneratedText(text);
       setShowCertificate(true);
     } catch (error) {

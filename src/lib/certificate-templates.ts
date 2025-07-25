@@ -12,7 +12,7 @@ function formatDate(date: Date | null | undefined): string {
 }
 
 
-export function generateCertificateText(type: CertificateType, student: Student): string {
+export async function generateCertificateText(type: CertificateType, student: Student): Promise<string> {
     const { 
         studentName, 
         fatherName, 

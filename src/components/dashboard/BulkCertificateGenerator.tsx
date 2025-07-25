@@ -87,10 +87,10 @@ export function BulkCertificateGenerator({ students }: { students: Student[] }) 
     const studentsToProcess = students.filter(s => selectedStudents.has(s.id));
 
     try {
-      const results = studentsToProcess.map(student => {
-        const certificateText = generateCertificateText(certificateType, student);
+      const results = await Promise.all(studentsToProcess.map(async (student) => {
+        const certificateText = await generateCertificateText(certificateType, student);
         return { studentName: student.studentName, certificateText, student };
-      });
+      }));
       
       setGeneratedCertificates(results);
       setShowCertificates(true);
