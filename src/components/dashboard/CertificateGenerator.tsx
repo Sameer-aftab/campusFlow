@@ -150,6 +150,12 @@ export function CertificateGenerator({ student }: { student: Student }) {
       <div className="md:col-span-2">
         {showCertificate ? (
            <div className="space-y-4">
+            <div className="mb-4 text-right no-print">
+                <Button onClick={handlePrint}>
+                    <Printer className="mr-2 h-4 w-4"/>
+                    Print Certificate
+                </Button>
+            </div>
             <Card className={`printable-area w-full shadow-lg flex flex-col justify-between p-8 ${isLeavingCert ? 'aspect-[1/1.414]' : 'aspect-[1.414/1]'}`}>
               <CardHeader className="items-center text-center">
                 <h2 className="text-xl md:text-3xl font-bold tracking-wider">Govt: (N) NOOR MUHAMMAD HIGH SCHOOL HYDERABAD</h2>
@@ -166,7 +172,7 @@ export function CertificateGenerator({ student }: { student: Student }) {
                  <div className="flex justify-between items-end pt-8 mt-auto text-sm md:text-base">
                       <div className="text-center">
                           <p className="font-semibold">Date:</p>
-                          <p>{format(new date(), 'MMMM dd, yyyy')}</p>
+                          <p>{format(new Date(), 'MMMM dd, yyyy')}</p>
                       </div>
                       <div className="text-center">
                           <p className="border-t-2 border-foreground pt-2 px-4 md:px-8">First Assistant</p>
@@ -177,12 +183,6 @@ export function CertificateGenerator({ student }: { student: Student }) {
                   </div>
               </CardContent>
             </Card>
-            <div className="mt-4 text-right no-print">
-                <Button onClick={handlePrint}>
-                    <Printer className="mr-2 h-4 w-4"/>
-                    Print Certificate
-                </Button>
-            </div>
           </div>
         ) : (
           <Card className="min-h-[700px] flex items-center justify-center border-dashed no-print">

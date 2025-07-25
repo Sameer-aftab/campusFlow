@@ -63,8 +63,18 @@
     visibility: hidden;
     margin: 0;
   }
-  
-  #bulk-print-container {
+
+  /*
+    When printing, hide everything that is not meant for printing.
+    The `printable-area` class is on each certificate card.
+    The `#bulk-print-container` wraps all the certificates for bulk printing.
+   */
+  .no-print {
+    display: none !important;
+  }
+
+  #bulk-print-container,
+  .printable-area {
     visibility: visible;
     position: absolute;
     left: 0;
@@ -73,16 +83,12 @@
   }
 
   .printable-area {
-    visibility: visible;
     page-break-after: always;
   }
 
+  /* This prevents an extra blank page from being printed after the last certificate. */
   .printable-area:last-child {
     page-break-after: avoid;
-  }
-
-  .no-print {
-    display: none !important;
   }
   
   @page {
