@@ -77,7 +77,9 @@ export function StudentTable({ students }: { students: Student[] }) {
 
   const filteredStudents = useMemo(() => {
     return students.filter(student => {
-      const searchMatch = student.studentName.toLowerCase().includes(searchTerm.toLowerCase());
+      const lowerCaseSearchTerm = searchTerm.toLowerCase();
+      const searchMatch = student.studentName.toLowerCase().includes(lowerCaseSearchTerm) ||
+                          student.grNo.toLowerCase().includes(lowerCaseSearchTerm);
       const classMatch = classFilter === 'all' || student.classStudying === classFilter;
       const sectionMatch = sectionFilter === 'all' || student.section === sectionFilter;
       return searchMatch && classMatch && sectionMatch;
@@ -109,7 +111,7 @@ export function StudentTable({ students }: { students: Student[] }) {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input 
-            placeholder="Search by student name..."
+            placeholder="Search by name or G.R. No..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10"
