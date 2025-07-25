@@ -11,7 +11,7 @@ export default async function DashboardPage() {
   const students = await getStudents();
 
   return (
-    <div className="flex flex-col h-full">
+    <>
       <header className="flex h-16 shrink-0 items-center border-b bg-card px-6">
         <h1 className="text-xl font-semibold">Students</h1>
         <div className="ml-auto flex items-center gap-2">
@@ -36,6 +36,6 @@ export default async function DashboardPage() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </>
   );
 }

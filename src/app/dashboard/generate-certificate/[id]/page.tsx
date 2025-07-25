@@ -10,13 +10,13 @@ export default async function GenerateCertificatePage({ params }: { params: { id
   }
 
   return (
-    <div className="flex flex-col h-full">
+    <>
       <header className="flex h-16 shrink-0 items-center border-b bg-card px-6 no-print">
         <h1 className="text-xl font-semibold">Generate Certificate for {student.studentName}</h1>
       </header>
-       <div className="flex-1 p-6 overflow-auto">
+       <div className="p-6">
         <CertificateGenerator student={student} />
       </div>
-    </div>
+    </>
   );
 }
