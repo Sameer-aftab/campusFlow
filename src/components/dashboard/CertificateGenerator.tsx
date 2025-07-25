@@ -16,6 +16,7 @@ import { Input } from '@/components/ui/input';
 import { generateCertificateText } from '@/lib/certificate-templates';
 import { certificateTypes } from '@/lib/definitions';
 import { SchoolLogo } from './SchoolLogo';
+import { AjrakBorder } from './AjrakBorder';
 
 
 export function CertificateGenerator({ student }: { student: Student }) {
@@ -157,36 +158,39 @@ export function CertificateGenerator({ student }: { student: Student }) {
                     Print Certificate
                 </Button>
             </div>
-            <CertWrapper className={`printable-area w-full ${isLeavingCert ? 'bg-white text-black p-10' : 'shadow-lg flex flex-col justify-between p-8 aspect-[1.414/1]'}`}>
+            <CertWrapper className={`printable-area w-full relative ${isLeavingCert ? 'bg-white text-black' : 'shadow-lg flex flex-col justify-between aspect-[1.414/1]'}`}>
               {isLeavingCert ? (
                  <div dangerouslySetInnerHTML={{ __html: generatedText }} />
               ) : (
                 <>
-                  <CardHeader className="items-center text-center">
-                    <h2 className="text-xl md:text-3xl font-bold tracking-wider">Govt: (N) NOOR MUHAMMAD HIGH SCHOOL HYDERABAD</h2>
-                    <div className="w-24 h-24 mx-auto mt-4"><SchoolLogo /></div>
-                    <Separator className="my-4"/>
-                    <CardTitle className="text-xl md:text-2xl font-bold tracking-widest uppercase text-primary pt-4">
-                      {certificateType} Certificate
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="px-4 md:px-12 py-8 text-base md:text-lg leading-relaxed text-center flex-grow flex items-center justify-center">
-                    <div dangerouslySetInnerHTML={{ __html: generatedText }} />
-                  </CardContent>
-                  <CardContent className="pb-12">
-                    <div className="flex justify-between items-end pt-8 mt-auto text-sm md:text-base">
-                          <div className="text-center">
-                              <p className="font-semibold">Date:</p>
-                              <p>{format(new Date(), 'MMMM dd, yyyy')}</p>
-                          </div>
-                          <div className="text-center">
-                              <p className="border-t-2 border-foreground pt-2 px-4 md:px-8">First Assistant</p>
-                          </div>
-                          <div className="text-center">
-                              <p className="border-t-2 border-foreground pt-2 px-4 md:px-8">Headmaster</p>
-                          </div>
-                      </div>
-                  </CardContent>
+                  <AjrakBorder />
+                  <div className="p-8 flex flex-col justify-between h-full">
+                    <CardHeader className="items-center text-center">
+                      <h2 className="text-xl md:text-3xl font-bold tracking-wider">Govt: (N) NOOR MUHAMMAD HIGH SCHOOL HYDERABAD</h2>
+                      <div className="w-24 h-24 mx-auto mt-4"><SchoolLogo /></div>
+                      <Separator className="my-4"/>
+                      <CardTitle className="text-xl md:text-2xl font-bold tracking-widest uppercase text-primary pt-4">
+                        {certificateType} Certificate
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="py-8 text-base md:text-lg leading-relaxed text-center flex-grow flex items-center justify-center">
+                      <div dangerouslySetInnerHTML={{ __html: generatedText }} />
+                    </CardContent>
+                    <CardContent className="pb-0">
+                      <div className="flex justify-between items-end pt-8 mt-auto text-sm md:text-base">
+                            <div className="text-center">
+                                <p className="font-semibold">Date:</p>
+                                <p>{format(new Date(), 'MMMM dd, yyyy')}</p>
+                            </div>
+                            <div className="text-center">
+                                <p className="border-t-2 border-foreground pt-2 px-4 md:px-8">First Assistant</p>
+                            </div>
+                            <div className="text-center">
+                                <p className="border-t-2 border-foreground pt-2 px-4 md:px-8">Headmaster</p>
+                            </div>
+                        </div>
+                    </CardContent>
+                  </div>
                 </>
               )}
             </CertWrapper>

@@ -4,18 +4,18 @@ import { format } from 'date-fns';
 import type { Student, CertificateType } from './definitions';
 
 function formatDate(date: Date | null | undefined): string {
-    if (!date) return 'N/A';
+    if (!date) return '________________';
     try {
       // Attempt to format assuming it's a valid date object or string
       return format(new Date(date), 'MMMM dd, yyyy');
     } catch (error) {
-        // If it's an invalid date, return N/A
-        return 'N/A';
+        // If it's an invalid date, return placeholder
+        return '________________';
     }
 }
 
 function formatValue(value: string | null | undefined): string {
-  return value || 'N/A';
+  return value || '________________';
 }
 
 function getLogoSvg() {
@@ -45,6 +45,33 @@ function getLogoSvg() {
         <path d="M 70 135 L 70 110 L 100 115 L 130 110 L 130 135" fill="none" stroke-width="2" />
         <line x1="100" y1="115" x2="100" y2="137" stroke-width="2"/>
       </g>
+    </svg>
+    `;
+}
+
+function getAjrakBorderSvg() {
+    return `
+    <svg width="100%" height="100%" style="position: absolute; top: 0; left: 0; z-index: -1;" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <pattern id="ajrak" patternUnits="userSpaceOnUse" width="80" height="80" patternTransform="scale(1)">
+                <g fill="none" stroke="black" stroke-width="1.5">
+                    <path d="M0 10h10V0h10v10h10V0h10v10h10V0h10v10h10V0h10v10" />
+                    <path d="M10 80v-10h10v-10h10v-10h10v-10h10v-10h10v-10h10v-10h10" />
+                    <path d="M20 20v10h10V20zm30 0v10h10V20zM0 40h10v10H0zm20 0h10v10H20zm20 0h10v10H40zm20 0h10v10H60z" />
+                    <path d="M30 50h10v10H30zM10 60v10h10V60zm50 0v10h10V60z" />
+                    <circle cx="25" cy="25" r="3" fill="black" />
+                    <circle cx="55" cy="25" r="3" fill="black" />
+                    <circle cx="5" cy="45" r="3" fill="black" />
+                    <circle cx="25" cy="45" r="3" fill="black" />
+                    <circle cx="45" cy="45" r="3" fill="black" />
+                    <circle cx="65" cy="45" r="3" fill="black" />
+                    <circle cx="35" cy="55" r="3" fill="black" />
+                    <circle cx="15" cy="65" r="3" fill="black" />
+                    <circle cx="55" cy="65" r="3" fill="black" />
+                </g>
+            </pattern>
+        </defs>
+        <rect x="0" y="0" width="100%" height="100%" fill="none" stroke="url(#ajrak)" stroke-width="40" />
     </svg>
     `;
 }
@@ -91,57 +118,58 @@ export async function generateCertificateText(type: CertificateType, student: St
             return `This is to certify that <b>${studentName}</b>, S/O <b>${fatherName}</b> has passed the examination from this institution with grade <b>${finalGrade}</b>.`;
 
         case 'School Leaving':
-        return `<div class="w-full text-black font-sans flex flex-col justify-between h-full p-10">
+        return `<div class="w-full text-black font-sans flex flex-col justify-between h-full p-10 relative">
+            ${getAjrakBorderSvg()}
             <header class="text-center space-y-4">
                 <h1 class="text-3xl font-bold tracking-wide">Govt: (N) NOOR MUHAMMAD HIGH SCHOOL HYDERABAD</h1>
                 ${getLogoSvg()}
                 <h2 class="text-2xl font-bold tracking-widest uppercase text-black pt-4">SCHOOL LEAVING CERTIFICATE</h2>
             </header>
 
-            <main class="text-base leading-relaxed my-6 space-y-2.5">
-                <div class="flex justify-between">
-                    <div><b>Name of Student:</b> <u class="px-2">${formatValue(studentName)}</u></div>
-                    <div><b>G.R No:</b> <u class="px-2">${formatValue(grNo)}</u></div>
+            <main class="text-lg leading-relaxed my-6 space-y-3">
+                <div style="display: flex; justify-content: space-between; width: 100%;">
+                    <p><b>Name of Student:</b> <u style="padding: 0 8px;">${formatValue(studentName)}</u></p>
+                    <p><b>G.R No:</b> <u style="padding: 0 8px;">${formatValue(grNo)}</u></p>
                 </div>
-                <div><b>Father's Name:</b> <u class="px-2">${formatValue(fatherName)}</u></div>
-                <div><b>Race and Caste (With Sub-Caste):</b> <u class="px-2">${formatValue(raceAndCaste)}</u></div>
-                <div><b>Religion:</b> <u class="px-2">${formatValue(religion)}</u></div>
-                <div><b>Place of Birth:</b> <u class="px-2">${formatValue(placeOfBirth)}</u></div>
-                <div><b>Date of Birth (in Figures):</b> <u class="px-2">${formatDate(dateOfBirth)}</u></div>
-                <div><b>Date of Birth (in words):</b> <u class="px-2">${formatValue(dateOfBirthInWords)}</u></div>
-                <div><b>Last School Attended:</b> <u class="px-2">${formatValue(lastSchoolAttended)}</u></div>
-                <div><b>Date of Admission:</b> <u class="px-2">${formatDate(admissionDate)}</u></div>
-                <div><b>Class in which admitted:</b> <u class="px-2">${formatValue(classInWhichAdmitted)}</u></div>
+                <p><b>Father's Name:</b> <u style="padding: 0 8px;">${formatValue(fatherName)}</u></p>
+                <p><b>Race and Caste (With Sub-Caste):</b> <u style="padding: 0 8px;">${formatValue(raceAndCaste)}</u></p>
+                <p><b>Religion:</b> <u style="padding: 0 8px;">${formatValue(religion)}</u></p>
+                <p><b>Place of Birth:</b> <u style="padding: 0 8px;">${formatValue(placeOfBirth)}</u></p>
+                <p><b>Date of Birth (in Figures):</b> <u style="padding: 0 8px;">${formatDate(dateOfBirth)}</u></p>
+                <p><b>Date of Birth (in words):</b> <u style="padding: 0 8px;">${formatValue(dateOfBirthInWords)}</u></p>
+                <p><b>Last School Attended:</b> <u style="padding: 0 8px;">${formatValue(lastSchoolAttended)}</u></p>
+                <p><b>Date of Admission:</b> <u style="padding: 0 8px;">${formatDate(admissionDate)}</u></p>
+                <p><b>Class in which admitted:</b> <u style="padding: 0 8px;">${formatValue(classInWhichAdmitted)}</u></p>
                 
-                <div class="grid grid-cols-2">
-                    <div><b>Class in which studying:</b> <u class="px-2">${formatValue(classStudying)}</u></div>
-                    <div><b>Conduct:</b> <u class="px-2">${formatValue(conduct)}</u></div>
+                <div style="display: flex; justify-content: space-between; width: 100%;">
+                    <p><b>Class in which studying:</b> <u style="padding: 0 8px;">${formatValue(classStudying)}</u></p>
+                    <p><b>Conduct:</b> <u style="padding: 0 8px;">${formatValue(conduct)}</u></p>
                 </div>
                 
-                <div><b>Progress:</b> <u class="px-2">${formatValue(progress)}</u></div>
-                <div><b>Date of Leaving the School:</b> <u class="px-2">${dateOfLeaving ? formatDate(dateOfLeaving) : 'N/A'}</u></div>
-                <div><b>Reason of Leaving the School:</b> <u class="px-2">${formatValue(reasonOfLeaving)}</u></div>
+                <p><b>Progress:</b> <u style="padding: 0 8px;">${formatValue(progress)}</u></p>
+                <p><b>Date of Leaving the School:</b> <u style="padding: 0 8px;">${dateOfLeaving ? formatDate(dateOfLeaving) : 'N/A'}</u></p>
+                <p><b>Reason of Leaving the School:</b> <u style="padding: 0 8px;">${formatValue(reasonOfLeaving)}</u></p>
 
-                <div class="grid grid-cols-3">
-                    <div><b>Examination:</b> <u class="px-2">${formatValue(examination)}</u></div>
-                    <div><b>Under Seat No:</b> <u class="px-2">${formatValue(underSeatNo)}</u></div>
-                    <div><b>Grade:</b> <u class="px-2">${formatValue(finalGrade)}</u></div>
+                <div style="display: flex; justify-content: space-between; width: 100%;">
+                    <p><b>Examination:</b> <u style="padding: 0 8px;">${formatValue(examination)}</u></p>
+                    <p><b>Under Seat No:</b> <u style="padding: 0 8px;">${formatValue(underSeatNo)}</u></p>
+                    <p><b>Grade:</b> <u style="padding: 0 8px;">${formatValue(finalGrade)}</u></p>
                 </div>
                 <br/>
                 <p><b>Certified that the above information is in accordance with the school General Register.</b></p>
             </main>
 
             <footer class="pt-12 mt-auto">
-                <div class="flex justify-between items-end text-base">
-                    <div class="text-center">
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; width: 100%; font-size: 1.1rem;">
+                    <div style="text-align: center;">
                         <p><b>Date:</b></p>
                         <p>${format(new Date(), 'MMMM dd, yyyy')}</p>
                     </div>
-                    <div class="text-center">
-                        <p class="border-t-2 border-black pt-2 px-12">First Assistant</p>
+                    <div style="text-align: center;">
+                        <p style="border-top: 2px solid black; padding: 8px 48px 0;">First Assistant</p>
                     </div>
-                    <div class="text-center">
-                        <p class="border-t-2 border-black pt-2 px-12">Headmaster</p>
+                    <div style="text-align: center;">
+                        <p style="border-top: 2px solid black; padding: 8px 48px 0;">Headmaster</p>
                     </div>
                 </div>
             </footer>
