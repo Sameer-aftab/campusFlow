@@ -12,7 +12,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { generateCertificateText, CertificateType, certificateTypes } from '@/lib/certificate-templates';
+import { generateCertificateText } from '@/lib/certificate-templates';
+import { CertificateType, certificateTypes } from '@/lib/definitions';
 
 
 export function CertificateGenerator({ student }: { student: Student }) {

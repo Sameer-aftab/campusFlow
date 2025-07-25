@@ -1,10 +1,7 @@
 'use server';
 
 import { format } from 'date-fns';
-import type { Student } from './definitions';
-
-export const certificateTypes = ['Appearance', 'Character', 'Pass', 'School Leaving'] as const;
-export type CertificateType = typeof certificateTypes[number];
+import type { Student, CertificateType } from './definitions';
 
 function formatDate(date: Date | null | undefined): string {
     if (!date) return 'N/A';

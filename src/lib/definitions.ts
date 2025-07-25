@@ -25,3 +25,6 @@ export type Student = {
   conduct: 'Excellent' | 'Good' | 'Average' | 'Poor';
   grade: string;
 };
+
+export const certificateTypes = ['Appearance', 'Character', 'Pass', 'School Leaving'] as const;
+export type CertificateType = typeof certificateTypes[number];
