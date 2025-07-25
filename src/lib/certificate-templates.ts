@@ -1,3 +1,4 @@
+
 'use server';
 
 import { format } from 'date-fns';
@@ -65,12 +66,12 @@ function getLogoSvg() {
 
 function getAjrakBorderSvg() {
     return `
-    <svg width="100%" height="100%" style="position: absolute; top: 0; left: 0; z-index: 1;" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <svg width="100%" height="100%" style="position: absolute; top: 0; left: 0; z-index: -1;" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
         <defs>
             <pattern id="ajrak-top-print" patternUnits="userSpaceOnUse" width="100" height="30" patternTransform="scale(1)">
-                <rect width="100" height="30" fill="hsl(210 40% 60%)" />
-                <rect y="12" width="100" height="6" fill="hsl(224 71.4% 4.1%)" />
-                <g fill="hsl(210 40% 98%)">
+                <rect width="100" height="30" fill="hsl(var(--primary))" />
+                <rect y="12" width="100" height="6" fill="hsl(var(--foreground))" />
+                <g fill="hsl(var(--primary-foreground))">
                     <circle cx="10" cy="15" r="2" />
                     <rect x="20" y="13" width="10" height="4" />
                     <circle cx="40" cy="15" r="2" />
@@ -79,7 +80,7 @@ function getAjrakBorderSvg() {
                     <rect x="80" y="13" width="10" height="4" />
                     <circle cx="100" cy="15" r="2" />
                 </g>
-                 <g fill="hsl(210 40% 98%)">
+                 <g fill="hsl(var(--primary-foreground))">
                     <circle cx="5" cy="5" r="1" />
                     <circle cx="15" cy="5" r="1" />
                     <circle cx="25" cy="5" r="1" />
@@ -103,11 +104,11 @@ function getAjrakBorderSvg() {
                 </g>
             </pattern>
             <pattern id="ajrak-main-print" patternUnits="userSpaceOnUse" width="120" height="120" patternTransform="scale(1)">
-                <rect width="120" height="120" fill="hsl(224 71.4% 4.1%)" />
-                <path d="M60 10 C 30 10, 10 30, 10 60 C 10 90, 30 110, 60 110 C 90 110, 110 90, 110 60 C 110 30, 90 10, 60 10 Z" fill="hsl(210 40% 60%)"/>
-                <circle cx="60" cy="60" r="15" fill="hsl(224 71.4% 4.1%)"/>
-                <circle cx="60" cy="60" r="8" fill="hsl(210 40% 60%)"/>
-                <g fill="hsl(210 40% 98%)" transform="translate(60,60)">
+                <rect width="120" height="120" fill="hsl(var(--foreground))" />
+                <path d="M60 10 C 30 10, 10 30, 10 60 C 10 90, 30 110, 60 110 C 90 110, 110 90, 110 60 C 110 30, 90 10, 60 10 Z" fill="hsl(var(--primary))"/>
+                <circle cx="60" cy="60" r="15" fill="hsl(var(--foreground))"/>
+                <circle cx="60" cy="60" r="8" fill="hsl(var(--primary))"/>
+                <g fill="hsl(var(--primary-foreground))" transform="translate(60,60)">
                     <path transform="rotate(0)" d="M 0 -18 C 5 -18, 5 -28, 0 -28 C -5 -28, -5 -18, 0 -18 Z" />
                     <path transform="rotate(45)" d="M 0 -18 C 5 -18, 5 -28, 0 -28 C -5 -28, -5 -18, 0 -18 Z" />
                     <path transform="rotate(90)" d="M 0 -18 C 5 -18, 5 -28, 0 -28 C -5 -28, -5 -18, 0 -18 Z" />
@@ -117,7 +118,7 @@ function getAjrakBorderSvg() {
                     <path transform="rotate(270)" d="M 0 -18 C 5 -18, 5 -28, 0 -28 C -5 -28, -5 -18, 0 -18 Z" />
                     <path transform="rotate(315)" d="M 0 -18 C 5 -18, 5 -28, 0 -28 C -5 -28, -5 -18, 0 -18 Z" />
                 </g>
-                <g fill="hsl(210 40% 98%)">
+                <g fill="hsl(var(--primary-foreground))">
                     <path d="M10 60 C 20 40, 20 20, 40 10 L 30 30 C 30 30, 40 50, 10 60 Z"/>
                     <path d="M110 60 C 100 40, 100 20, 80 10 L 90 30 C 90 30, 80 50, 110 60 Z"/>
                     <path d="M10 60 C 20 80, 20 100, 40 110 L 30 90 C 30 90, 40 70, 10 60 Z"/>
@@ -185,39 +186,39 @@ export async function generateCertificateText(type: CertificateType, student: St
             return `This is to certify that <b>${studentName}</b>, S/O <b>${fatherName}</b> has passed the examination from this institution with grade <b>${finalGrade}</b>.`;
 
         case 'School Leaving':
-        return `<div class="w-full text-black font-sans bg-white p-10">
-          <div class="w-full h-full relative">
+        return `<div class="w-full text-black font-sans bg-white p-10" style="height: 100vh; display: flex; flex-direction: column;">
+          <div class="w-full h-full relative border-2 border-black p-8">
             ${getAjrakBorderSvg()}
-            <div class="p-8 flex flex-col justify-between h-full">
-                <header class="text-center space-y-2 mb-4">
+            <div class="flex flex-col justify-between h-full">
+                <header class="text-center space-y-2 mb-6">
                   <h1 class="text-3xl font-bold tracking-wide">Govt: (N) NOOR MUHAMMAD HIGH SCHOOL HYDERABAD</h1>
                   ${getLogoSvg()}
                   <h2 class="text-2xl font-bold tracking-widest uppercase text-black pt-2">SCHOOL LEAVING CERTIFICATE</h2>
                 </header>
 
-              <main class="text-lg leading-relaxed my-4 space-y-3">
-                  <div style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 0.75rem;">
+              <main class="text-lg leading-relaxed my-4 space-y-4">
+                  <div style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 1rem;">
                       <span><b>Name of Student:</b> <u style="padding: 0 8px;">${formatValue(studentName)}</u></span>
                       <span><b>G.R No:</b> <u style="padding: 0 8px;">${formatValue(grNo)}</u></span>
                   </div>
-                  <div style="margin-bottom: 0.75rem;"><b>Father's Name:</b> <u style="padding: 0 8px;">${formatValue(fatherName)}</u></div>
-                  <div style="margin-bottom: 0.75rem;"><b>Race and Caste (With Sub-Caste):</b> <u style="padding: 0 8px;">${formatValue(raceAndCaste)}</u></div>
-                  <div style="margin-bottom: 0.75rem;"><b>Religion:</b> <u style="padding: 0 8px;">${formatValue(religion)}</u></div>
-                  <div style="margin-bottom: 0.75rem;"><b>Place of Birth:</b> <u style="padding: 0 8px;">${formatValue(placeOfBirth)}</u></div>
-                  <div style="margin-bottom: 0.75rem;"><b>Date of Birth (in Figures):</b> <u style="padding: 0 8px;">${formatDate(dateOfBirth)}</u></div>
-                  <div style="margin-bottom: 0.75rem;"><b>Date of Birth (in words):</b> <u style="padding: 0 8px;">${formatValue(dateOfBirthInWords)}</u></div>
-                  <div style="margin-bottom: 0.75rem;"><b>Last School Attended:</b> <u style="padding: 0 8px;">${formatValue(lastSchoolAttended)}</u></div>
-                  <div style="margin-bottom: 0.75rem;"><b>Date of Admission:</b> <u style="padding: 0 8px;">${formatDate(admissionDate)}</u></div>
-                  <div style="margin-bottom: 0.75rem;"><b>Class in which admitted:</b> <u style="padding: 0 8px;">${formatValue(classInWhichAdmitted)}</u></div>
+                  <div style="margin-bottom: 1rem;"><b>Father's Name:</b> <u style="padding: 0 8px;">${formatValue(fatherName)}</u></div>
+                  <div style="margin-bottom: 1rem;"><b>Race and Caste (With Sub-Caste):</b> <u style="padding: 0 8px;">${formatValue(raceAndCaste)}</u></div>
+                  <div style="margin-bottom: 1rem;"><b>Religion:</b> <u style="padding: 0 8px;">${formatValue(religion)}</u></div>
+                  <div style="margin-bottom: 1rem;"><b>Place of Birth:</b> <u style="padding: 0 8px;">${formatValue(placeOfBirth)}</u></div>
+                  <div style="margin-bottom: 1rem;"><b>Date of Birth (in Figures):</b> <u style="padding: 0 8px;">${formatDate(dateOfBirth)}</u></div>
+                  <div style="margin-bottom: 1rem;"><b>Date of Birth (in words):</b> <u style="padding: 0 8px;">${formatValue(dateOfBirthInWords)}</u></div>
+                  <div style="margin-bottom: 1rem;"><b>Last School Attended:</b> <u style="padding: 0 8px;">${formatValue(lastSchoolAttended)}</u></div>
+                  <div style="margin-bottom: 1rem;"><b>Date of Admission:</b> <u style="padding: 0 8px;">${formatDate(admissionDate)}</u></div>
+                  <div style="margin-bottom: 1rem;"><b>Class in which admitted:</b> <u style="padding: 0 8px;">${formatValue(classInWhichAdmitted)}</u></div>
                   
-                  <div style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 0.75rem;">
+                  <div style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 1rem;">
                       <span><b>Class in which studying:</b> <u style="padding: 0 8px;">${formatValue(classStudying)}</u></span>
                       <span><b>Conduct:</b> <u style="padding: 0 8px;">${formatValue(conduct)}</u></span>
                   </div>
                   
-                  <div style="margin-bottom: 0.75rem;"><b>Progress:</b> <u style="padding: 0 8px;">${formatValue(progress)}</u></div>
-                  <div style="margin-bottom: 0.75rem;"><b>Date of Leaving the School:</b> <u style="padding: 0 8px;">${dateOfLeaving ? formatDate(dateOfLeaving) : 'N/A'}</u></div>
-                  <div style="margin-bottom: 0.75rem;"><b>Reason of Leaving the School:</b> <u style="padding: 0 8px;">${formatValue(reasonOfLeaving)}</u></div>
+                  <div style="margin-bottom: 1rem;"><b>Progress:</b> <u style="padding: 0 8px;">${formatValue(progress)}</u></div>
+                  <div style="margin-bottom: 1rem;"><b>Date of Leaving the School:</b> <u style="padding: 0 8px;">${dateOfLeaving ? formatDate(dateOfLeaving) : 'N/A'}</u></div>
+                  <div style="margin-bottom: 1rem;"><b>Reason of Leaving the School:</b> <u style="padding: 0 8px;">${formatValue(reasonOfLeaving)}</u></div>
 
                   <div style="display: flex; justify-content: space-between; width: 100%; align-items: baseline; flex-wrap: wrap; margin-bottom: 1rem;">
                       <span style="margin-right: 1.5rem;"><b>Examination:</b> <u style="padding: 0 8px;">${formatValue(examination)}</u></span>
@@ -250,3 +251,5 @@ export async function generateCertificateText(type: CertificateType, student: St
             return 'Invalid certificate type.';
     }
 }
+
+    
