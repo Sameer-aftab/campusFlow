@@ -1,95 +1,80 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
-import {
-  Sidebar,
-  SidebarHeader,
-  SidebarTrigger,
-  SidebarContent,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarProvider,
-} from '@/components/ui/sidebar';
-import { BookOpen, FileText, Home, PlusCircle, User, LogOut } from 'lucide-react';
 import Link from 'next/link';
-import { Separator } from '../ui/separator';
+import { usePathname } from 'next/navigation';
+import { useState } from 'react';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { BookOpen, FileText, Home, PlusCircle, User, LogOut, PanelLeft, PanelRight } from 'lucide-react';
 
-export function AppSidebar({ children }: { children: React.ReactNode }) {
+const navItems = [
+  { href: '/dashboard', label: 'Students', icon: Home },
+  { href: '/dashboard/add-student', label: 'Add Student', icon: PlusCircle },
+  { href: '/dashboard/generate-certificates', label: 'Generate Certificates', icon: FileText },
+];
+
+export function AppSidebar() {
   const pathname = usePathname();
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
-  const navItems = [
-    { href: '/dashboard', label: 'Students', icon: Home, tooltip: 'Students' },
-    { href: '/dashboard/add-student', label: 'Add Student', icon: PlusCircle, tooltip: 'Add Student' },
-    { href: '/dashboard/generate-certificates', label: 'Generate Certificates', icon: FileText, tooltip: 'Generate Certificates' },
-  ];
+  const toggleSidebar = () => {
+    setIsCollapsed(!isCollapsed);
+  };
 
   return (
-    <SidebarProvider>
-      <Sidebar collapsible="icon" className="border-r">
-        <SidebarHeader className="h-16 justify-center data-[collapsible=icon]:h-14">
-          <Link href="/dashboard">
-            <SidebarMenuButton
-              tooltip={{ children: 'CampusFlow', side: 'right' }}
-              className="!h-10 !w-10 [&>span]:hidden"
-            >
-              <BookOpen className="text-primary" />
-              <span className="text-lg font-semibold">CampusFlow</span>
-            </SidebarMenuButton>
+    <div
+      className={cn(
+        'relative h-full bg-card border-r flex flex-col transition-all duration-300 ease-in-out',
+        isCollapsed ? 'w-20' : 'w-64'
+      )}
+    >
+        <div className="flex h-16 shrink-0 items-center px-6">
+            <Link href="/dashboard" className="flex items-center gap-3">
+                 <BookOpen className="h-7 w-7 text-primary" />
+                <span className={cn("text-xl font-semibold", isCollapsed && "hidden")}>CampusFlow</span>
+            </Link>
+        </div>
+
+      <nav className="flex-1 space-y-2 px-4 py-4">
+        {navItems.map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={cn(
+              'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
+              pathname === item.href && 'bg-muted text-primary',
+              isCollapsed && 'justify-center'
+            )}
+          >
+            <item.icon className="h-5 w-5" />
+            <span className={cn('font-medium', isCollapsed && 'sr-only')}>{item.label}</span>
           </Link>
-        </SidebarHeader>
+        ))}
+      </nav>
 
-        <SidebarContent>
-          <SidebarGroup>
-            <SidebarMenu>
-              {navItems.map((item) => (
-                <SidebarMenuItem key={item.href}>
-                  <Link href={item.href}>
-                    <SidebarMenuButton
-                      isActive={pathname === item.href}
-                      tooltip={{ children: item.tooltip, side: 'right' }}
-                    >
-                      <item.icon />
-                      <span>{item.label}</span>
-                    </SidebarMenuButton>
-                  </Link>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroup>
-        </SidebarContent>
+        <div className="mt-auto flex flex-col gap-2 p-4 border-t">
+            <div className={cn('flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground', isCollapsed && 'justify-center')}>
+                <User className="h-5 w-5" />
+                <span className={cn('font-medium', isCollapsed && 'sr-only')}>Admin</span>
+            </div>
+            <Link 
+                href="/login" 
+                className={cn('flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary', isCollapsed && 'justify-center')}>
+                <LogOut className="h-5 w-5" />
+                <span className={cn('font-medium', isCollapsed && 'sr-only')}>Logout</span>
+            </Link>
+        </div>
+      
+      <Button
+        variant="ghost"
+        size="icon"
+        className="absolute -right-5 top-14 rounded-full"
+        onClick={toggleSidebar}
+      >
+        {isCollapsed ? <PanelRight className="h-5 w-5" /> : <PanelLeft className="h-5 w-5" />}
+      </Button>
 
-        <SidebarFooter>
-          <SidebarGroup>
-             <Separator className="mb-2" />
-             <SidebarMenu>
-                <SidebarMenuItem>
-                    <SidebarMenuButton tooltip={{ children: 'Admin', side: 'right' }}>
-                        <User />
-                        <span>Admin</span>
-                    </SidebarMenuButton>
-                </SidebarMenuItem>
-                 <SidebarMenuItem>
-                    <Link href="/login">
-                        <SidebarMenuButton tooltip={{ children: 'Logout', side: 'right' }}>
-                            <LogOut />
-                            <span>Logout</span>
-                        </SidebarMenuButton>
-                    </Link>
-                </SidebarMenuItem>
-             </SidebarMenu>
-          </SidebarGroup>
-        </SidebarFooter>
-      </Sidebar>
-      <div className="flex flex-1 flex-col">
-        <header className="flex h-16 shrink-0 items-center justify-between border-b bg-card px-6 md:justify-end">
-            <SidebarTrigger className="md:hidden"/>
-            {/* Header Content can go here if needed */}
-        </header>
-        {children}
-      </div>
-    </SidebarProvider>
+    </div>
   );
 }
