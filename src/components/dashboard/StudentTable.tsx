@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { MoreHorizontal, Pencil, Trash2, FileText, Download, FileSpreadsheet, File } from 'lucide-react';
+import { MoreHorizontal, Pencil, Trash2, FileText, FileSpreadsheet, File, Search } from 'lucide-react';
 import {
   Table,
   TableBody,
@@ -32,6 +32,8 @@ import { Button } from '@/components/ui/button';
 import type { Student } from '@/lib/definitions';
 import { deleteStudent } from '@/lib/actions';
 import { useToast } from '@/hooks/use-toast';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 function downloadAsCSV(data: Student[], filename: string) {
     if (!data || data.length === 0) {
@@ -66,6 +68,21 @@ export function StudentTable({ students }: { students: Student[] }) {
   const { toast } = useToast();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [classFilter, setClassFilter] = useState('all');
+  const [sectionFilter, setSectionFilter] = useState('all');
+  
+  const uniqueClasses = useMemo(() => ['all', ...Array.from(new Set(students.map(s => s.classStudying)))], [students]);
+  const uniqueSections = useMemo(() => ['all', ...Array.from(new Set(students.map(s => s.section)))], [students]);
+
+  const filteredStudents = useMemo(() => {
+    return students.filter(student => {
+      const searchMatch = student.studentName.toLowerCase().includes(searchTerm.toLowerCase());
+      const classMatch = classFilter === 'all' || student.classStudying === classFilter;
+      const sectionMatch = sectionFilter === 'all' || student.section === sectionFilter;
+      return searchMatch && classMatch && sectionMatch;
+    });
+  }, [students, searchTerm, classFilter, sectionFilter]);
   
   const handleDelete = async () => {
     if (selectedStudentId) {
@@ -88,8 +105,37 @@ export function StudentTable({ students }: { students: Student[] }) {
 
   return (
     <>
+      <div className="mb-4 flex flex-col md:flex-row gap-2">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input 
+            placeholder="Search by student name..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10"
+          />
+        </div>
+        <div className="flex gap-2">
+          <Select value={classFilter} onValueChange={setClassFilter}>
+            <SelectTrigger className="w-full md:w-[150px]">
+              <SelectValue placeholder="Filter by class" />
+            </SelectTrigger>
+            <SelectContent>
+              {uniqueClasses.map(c => <SelectItem key={c} value={c}>{c === 'all' ? 'All Classes' : c}</SelectItem>)}
+            </SelectContent>
+          </Select>
+          <Select value={sectionFilter} onValueChange={setSectionFilter}>
+            <SelectTrigger className="w-full md:w-[150px]">
+              <SelectValue placeholder="Filter by section" />
+            </SelectTrigger>
+            <SelectContent>
+              {uniqueSections.map(s => <SelectItem key={s} value={s}>{s === 'all' ? 'All Sections' : s}</SelectItem>)}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
       <div className="mb-4 flex justify-end gap-2">
-        <Button variant="outline" onClick={() => downloadAsCSV(students, 'students.csv')}>
+        <Button variant="outline" onClick={() => downloadAsCSV(filteredStudents, 'students.csv')}>
           <FileSpreadsheet className="mr-2 h-4 w-4" /> Export to Excel (CSV)
         </Button>
         <Button variant="outline" onClick={() => window.print()}>
@@ -109,8 +155,8 @@ export function StudentTable({ students }: { students: Student[] }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {students.length > 0 ? (
-              students.map((student) => (
+            {filteredStudents.length > 0 ? (
+              filteredStudents.map((student) => (
                 <TableRow key={student.id}>
                   <TableCell className="font-medium">{student.grNo}</TableCell>
                   <TableCell>{student.studentName}</TableCell>
