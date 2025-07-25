@@ -22,6 +22,14 @@ interface StudentFormProps {
   student?: Student;
 }
 
+const examinationOptions = [
+  'Class 6',
+  'Class 7',
+  'Class 8',
+  'S.S.C Part-I Annual',
+  'S.S.C Part-II Annual',
+];
+
 export function StudentForm({ student }: StudentFormProps) {
   const router = useRouter();
   const { toast } = useToast();
@@ -40,16 +48,30 @@ export function StudentForm({ student }: StudentFormProps) {
       dateOfBirthInWords: '',
       lastSchoolAttended: '',
       classInWhichAdmitted: '',
-      examination: '',
+      examination: undefined,
       underSeatNo: '',
-      sscType: undefined,
+      grade: '',
+      reasonOfLeaving: '',
+      remarks: '',
       sscRollNo: '',
+      cnic: '',
+      dateOfLeaving: null,
+      妣ype: undefined,
     },
   });
 
   async function onSubmit(values: StudentFormValues) {
     setIsSubmitting(true);
-    const result = student ? await updateStudent(student.id, values) : await addStudent(values);
+    // Ensure optional fields that are empty strings are not sent as such if they should be undefined
+    const cleanedValues = {
+        ...values,
+        sscRollNo: values.sscRollNo || '',
+        cnic: values.cnic || '',
+        remarks: values.remarks || '',
+        reasonOfLeaving: values.reasonOfLeaving || '',
+    };
+    
+    const result = student ? await updateStudent(student.id, cleanedValues) : await addStudent(cleanedValues);
 
     if (result.success) {
       toast({ title: 'Success', description: result.success });
@@ -141,8 +163,23 @@ export function StudentForm({ student }: StudentFormProps) {
                 <FormField control={form.control} name="reasonOfLeaving" render={({ field }) => (
                   <FormItem><FormLabel>Reason for Leaving (Optional)</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
-                 <FormField control={form.control} name="examination" render={({ field }) => (
-                  <FormItem><FormLabel>Examination</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormField control={form.control} name="examination" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Examination</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select examination" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {examinationOptions.map(option => (
+                          <SelectItem key={option} value={option}>{option}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
                 )} />
                 <FormField control={form.control} name="underSeatNo" render={({ field }) => (
                   <FormItem><FormLabel>Under Seat No:</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
@@ -194,7 +231,7 @@ export function StudentForm({ student }: StudentFormProps) {
                 <CardTitle>SSC Information</CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
-                <FormField control={form.control} name="sscType" render={({ field }) => (
+                <FormField control={form.control} name="妣ype" render={({ field }) => (
                     <FormItem><FormLabel>SSC Type</FormLabel><FormControl><RadioGroup onValueChange={field.onChange} value={field.value} className="flex items-center space-x-4"><FormItem className="flex items-center space-x-2"><FormControl><RadioGroupItem value="SSC I" /></FormControl><FormLabel className="font-normal">SSC I</FormLabel></FormItem><FormItem className="flex items-center space-x-2"><FormControl><RadioGroupItem value="SSC II" /></FormControl><FormLabel className="font-normal">SSC II</FormLabel></FormItem></RadioGroup></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="sscRollNo" render={({ field }) => (

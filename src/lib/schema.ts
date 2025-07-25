@@ -31,12 +31,12 @@ export const studentSchema = z.object({
   remarks: z.string().optional(),
   dateOfLeaving: z.date().optional().nullable(),
   reasonOfLeaving: z.string().optional(),
-  examination: z.string().min(1, 'Examination is required'),
+  examination: z.enum(['Class 6', 'Class 7', 'Class 8', 'S.S.C Part-I Annual', 'S.S.C Part-II Annual'], { required_error: 'Examination is required' }),
   underSeatNo: z.string().min(1, 'Seat No. is required'),
   progress: z.enum(['Excellent', 'Good', 'Average', 'Poor'], { required_error: 'Progress is required' }),
   conduct: z.enum(['Excellent', 'Good', 'Average', 'Poor'], { required_error: 'Conduct is required' }),
   grade: z.string().min(1, 'Grade is required'),
-  sscType: z.enum(['SSC I', 'SSC II']).optional(),
+  妣ype: z.enum(['SSC I', 'SSC II']).optional(),
   sscRollNo: z.string().optional(),
 });
 
