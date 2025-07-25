@@ -5,11 +5,12 @@ import type { Student, CertificateType } from './definitions';
 
 function formatDate(date: Date | null | undefined): string {
     if (!date) return 'N/A';
-    // When creating a new Date from a string or a Date object, it's already in the correct timezone.
-    // No need for UTC conversion.
     return format(new Date(date), 'MMMM dd, yyyy');
 }
 
+function formatValue(value: string | null | undefined): string {
+  return value || 'N/A';
+}
 
 export async function generateCertificateText(type: CertificateType, student: Student, gradeOverride?: string, characterOverride?: string): Promise<string> {
     const { 
@@ -53,34 +54,57 @@ export async function generateCertificateText(type: CertificateType, student: St
             return `This is to certify that <b>${studentName}</b>, S/O <b>${fatherName}</b> has passed the examination from this institution with grade <b>${finalGrade}</b>.`;
 
         case 'School Leaving':
-        return `<div class="w-full text-left space-y-3 text-base leading-relaxed">
-            <div class="flex justify-between">
-                <p><span class="font-bold">Name of Student:</span> <span class="border-b-2 border-black px-4">${studentName}</span></p>
-                <p><span class="font-bold">G.R No:</span> <span class="border-b-2 border-black px-4">${grNo}</span></p>
-            </div>
-            <p><span class="font-bold">Father's Name:</span> <span class="border-b-2 border-black px-4">${fatherName}</span></p>
-            <p><span class="font-bold">Race and Caste (With Sub-Caste):</span> <span class="border-b-2 border-black px-4">${raceAndCaste}</span></p>
-            <p><span class="font-bold">Religion:</span> <span class="border-b-2 border-black px-4">${religion}</span></p>
-            <p><span class="font-bold">Place of Birth:</span> <span class="border-b-2 border-black px-4">${placeOfBirth}</span></p>
-            <p><span class="font-bold">Date of Birth (in Figures):</span> <span class="border-b-2 border-black px-4">${formatDate(dateOfBirth)}</span></p>
-            <p><span class="font-bold">Date of Birth (in words):</span> <span class="border-b-2 border-black px-4">${dateOfBirthInWords}</span></p>
-            <p><span class="font-bold">Last School Attended:</span> <span class="border-b-2 border-black px-4">${lastSchoolAttended}</span></p>
-            <p><span class="font-bold">Date of Admission:</span> <span class="border-b-2 border-black px-4">${formatDate(admissionDate)}</span></p>
-            <p><span class="font-bold">Class in which admitted:</span> <span class="border-b-2 border-black px-4">${classInWhichAdmitted}</span></p>
-            <div class="flex justify-between">
-                 <p><span class="font-bold">Class in which studying:</span> <span class="border-b-2 border-black px-4">${classStudying}</span></p>
-                 <p><span class="font-bold">Conduct:</span> <span class="border-b-2 border-black px-4">${conduct}</span></p>
-            </div>
-             <p><span class="font-bold">Progress:</span> <span class="border-b-2 border-black px-4">${progress}</span></p>
-            <p><span class="font-bold">Date of Leaving the School:</span> <span class="border-b-2 border-black px-4">${dateOfLeaving ? formatDate(dateOfLeaving) : 'N/A'}</span></p>
-            <p><span class="font-bold">Reason of Leaving the School:</span> Passed S.S.C Part-II Annual / Supplementary <span class="border-b-2 border-black px-4">${reasonOfLeaving}</span></p>
-            <div class="flex justify-between">
-                <p><span class="font-bold">Examination:</span> <span class="border-b-2 border-black px-4">${examination}</span></p>
-                <p><span class="font-bold">Under Seat No:</span> <span class="border-b-2 border-black px-4">${underSeatNo}</span></p>
-                <p><span class="font-bold">Grade:</span> <span class="border-b-2 border-black px-4">${finalGrade}</span></p>
-            </div>
-            <br/>
-            <p class="font-bold">Certified that the above information is in accordance with the school General Register.</p>
+        return `<div class="w-full text-base font-sans flex flex-col justify-between h-full">
+            <header class="text-center space-y-4">
+                <h1 class="text-3xl font-bold tracking-wide">Govt: (N) NOOR MUHAMMAD HIGH SCHOOL HYDERABAD</h1>
+                <img src="https://placehold.co/100x100.png" alt="School Logo" class="w-24 h-24 mx-auto rounded-full" data-ai-hint="school logo" />
+                <h2 class="text-2xl font-bold tracking-widest uppercase text-black pt-4">SCHOOL LEAVING CERTIFICATE</h2>
+            </header>
+
+            <main class="text-lg leading-relaxed my-8 space-y-3">
+                <div class="flex justify-between">
+                    <div><b>Name of Student:</b> <u class="px-4">${formatValue(studentName)}</u></div>
+                    <div><b>G.R No:</b> <u class="px-4">${formatValue(grNo)}</u></div>
+                </div>
+                <div><b>Father's Name:</b> <u class="px-4">${formatValue(fatherName)}</u></div>
+                <div><b>Race and Caste (With Sub-Caste):</b> <u class="px-4">${formatValue(raceAndCaste)}</u></div>
+                <div><b>Religion:</b> <u class="px-4">${formatValue(religion)}</u></div>
+                <div><b>Place of Birth:</b> <u class="px-4">${formatValue(placeOfBirth)}</u></div>
+                <div><b>Date of Birth (in Figures):</b> <u class="px-4">${formatDate(dateOfBirth)}</u></div>
+                <div><b>Date of Birth (in words):</b> <u class="px-4">${formatValue(dateOfBirthInWords)}</u></div>
+                <div><b>Last School Attended:</b> <u class="px-4">${formatValue(lastSchoolAttended)}</u></div>
+                <div><b>Date of Admission:</b> <u class="px-4">${formatDate(admissionDate)}</u></div>
+                <div><b>Class in which admitted:</b> <u class="px-4">${formatValue(classInWhichAdmitted)}</u></div>
+                <div class="flex justify-between">
+                    <div><b>Class in which studying:</b> <u class="px-4">${formatValue(classStudying)}</u></div>
+                    <div><b>Conduct:</b> <u class="px-4">${formatValue(conduct)}</u></div>
+                </div>
+                <div><b>Progress:</b> <u class="px-4">${formatValue(progress)}</u></div>
+                <div><b>Date of Leaving the School:</b> <u class="px-4">${dateOfLeaving ? formatDate(dateOfLeaving) : 'N/A'}</u></div>
+                <div><b>Reason of Leaving the School:</b> <u class="px-4">${formatValue(reasonOfLeaving)}</u></div>
+                <div class="flex justify-between">
+                    <div><b>Examination:</b> <u class="px-4">${formatValue(examination)}</u></div>
+                    <div><b>Under Seat No:</b> <u class="px-4">${formatValue(underSeatNo)}</u></div>
+                    <div><b>Grade:</b> <u class="px-4">${formatValue(finalGrade)}</u></div>
+                </div>
+                <br/>
+                <p><b>Certified that the above information is in accordance with the school General Register.</b></p>
+            </main>
+
+            <footer class="pt-16 mt-auto">
+                <div class="flex justify-between items-end text-lg">
+                    <div class="text-center">
+                        <p><b>Date:</b></p>
+                        <p>${format(new Date(), 'MMMM dd, yyyy')}</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="border-t-2 border-black pt-2 px-12">First Assistant</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="border-t-2 border-black pt-2 px-12">Headmaster</p>
+                    </div>
+                </div>
+            </footer>
         </div>`
             
         default:
