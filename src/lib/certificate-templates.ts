@@ -67,7 +67,7 @@ function getLogoSvg() {
 
 function getAjrakBorderSvg() {
     return `
-    <svg width="100%" height="100%" style="position: absolute; top: 0; left: 0; z-index: -1;" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <svg width="100%" height="100%" style="position: absolute; top: 0; left: 0; z-index: 1;" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
         <defs>
             <pattern id="ajrak-top-print" patternUnits="userSpaceOnUse" width="100" height="30">
                 <rect width="100" height="30" fill="#6699CC" />
