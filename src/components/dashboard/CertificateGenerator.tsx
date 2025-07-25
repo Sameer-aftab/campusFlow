@@ -30,8 +30,19 @@ export function CertificateGenerator({ student }: { student: Student }) {
     setIsLoading(true);
     setShowCertificate(false);
     
-    if (certificateType === 'Appearance' && !grade) {
-      toast({ variant: 'destructive', title: 'Grade Required', description: 'Please enter a grade for the Appearance certificate.' });
+    if (certificateType === 'School Leaving' && !student.dateOfLeaving) {
+      toast({
+        variant: 'destructive',
+        title: 'Leaving Details Missing',
+        description: `Please edit the student record for ${student.studentName} and add a "Date of Leaving" before generating this certificate.`,
+        duration: 5000,
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    if ((certificateType === 'Appearance' || certificateType === 'Pass' || certificateType === 'School Leaving') && !grade) {
+      toast({ variant: 'destructive', title: 'Grade Required', description: 'Please enter a grade for this certificate type.' });
       setIsLoading(false);
       return;
     }
