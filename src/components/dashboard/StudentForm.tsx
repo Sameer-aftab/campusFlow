@@ -108,6 +108,9 @@ export function StudentForm({ student }: StudentFormProps) {
                  <FormField control={form.control} name="placeOfBirth" render={({ field }) => (
                   <FormItem><FormLabel>Place of Birth</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
+                 <FormField control={form.control} name="lastSchoolAttended" render={({ field }) => (
+                  <FormItem><FormLabel>Last School Attended</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
                 <FormField control={form.control} name="religion" render={({ field }) => (
                   <FormItem><FormLabel>Religion</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
@@ -154,9 +157,6 @@ export function StudentForm({ student }: StudentFormProps) {
                 <CardTitle>Leaving Information</CardTitle>
               </CardHeader>
               <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <FormField control={form.control} name="lastSchoolAttended" render={({ field }) => (
-                  <FormItem><FormLabel>Last School Attended</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                )} />
                  <FormField control={form.control} name="dateOfLeaving" render={({ field }) => (
                   <FormItem><FormLabel>Date of Leaving (Optional)</FormLabel><FormControl><DatePicker value={field.value || undefined} onChange={field.onChange} /></FormControl><FormMessage /></FormItem>
                 )} />
