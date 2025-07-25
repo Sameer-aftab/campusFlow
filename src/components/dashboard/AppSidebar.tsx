@@ -1,51 +1,95 @@
 'use client';
 
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { BookOpen, FileText, Home, PlusCircle, User } from 'lucide-react';
+import {
+  Sidebar,
+  SidebarHeader,
+  SidebarTrigger,
+  SidebarContent,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarProvider,
+} from '@/components/ui/sidebar';
+import { BookOpen, FileText, Home, PlusCircle, User, LogOut } from 'lucide-react';
+import Link from 'next/link';
 import { Separator } from '../ui/separator';
-import { cn } from '@/lib/utils';
 
-export function AppSidebar() {
+export function AppSidebar({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   const navItems = [
-    { href: '/dashboard', label: 'Students', icon: Home },
-    { href: '/dashboard/add-student', label: 'Add Student', icon: PlusCircle },
-    { href: '/dashboard/generate-certificates', label: 'Generate Certificates', icon: FileText },
+    { href: '/dashboard', label: 'Students', icon: Home, tooltip: 'Students' },
+    { href: '/dashboard/add-student', label: 'Add Student', icon: PlusCircle, tooltip: 'Add Student' },
+    { href: '/dashboard/generate-certificates', label: 'Generate Certificates', icon: FileText, tooltip: 'Generate Certificates' },
   ];
 
   return (
-    <aside className="w-64 flex-col border-r bg-card text-card-foreground hidden md:flex">
-      <div className="flex h-16 items-center border-b px-6">
-        <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
-          <BookOpen className="h-6 w-6 text-primary" />
-          <span>CampusFlow</span>
-        </Link>
+    <SidebarProvider>
+      <Sidebar collapsible="icon" className="border-r">
+        <SidebarHeader className="h-16 justify-center data-[collapsible=icon]:h-14">
+          <Link href="/dashboard">
+            <SidebarMenuButton
+              tooltip={{ children: 'CampusFlow', side: 'right' }}
+              className="!h-10 !w-10 [&>span]:hidden"
+            >
+              <BookOpen className="text-primary" />
+              <span className="text-lg font-semibold">CampusFlow</span>
+            </SidebarMenuButton>
+          </Link>
+        </SidebarHeader>
+
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarMenu>
+              {navItems.map((item) => (
+                <SidebarMenuItem key={item.href}>
+                  <Link href={item.href}>
+                    <SidebarMenuButton
+                      isActive={pathname === item.href}
+                      tooltip={{ children: item.tooltip, side: 'right' }}
+                    >
+                      <item.icon />
+                      <span>{item.label}</span>
+                    </SidebarMenuButton>
+                  </Link>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroup>
+        </SidebarContent>
+
+        <SidebarFooter>
+          <SidebarGroup>
+             <Separator className="mb-2" />
+             <SidebarMenu>
+                <SidebarMenuItem>
+                    <SidebarMenuButton tooltip={{ children: 'Admin', side: 'right' }}>
+                        <User />
+                        <span>Admin</span>
+                    </SidebarMenuButton>
+                </SidebarMenuItem>
+                 <SidebarMenuItem>
+                    <Link href="/login">
+                        <SidebarMenuButton tooltip={{ children: 'Logout', side: 'right' }}>
+                            <LogOut />
+                            <span>Logout</span>
+                        </SidebarMenuButton>
+                    </Link>
+                </SidebarMenuItem>
+             </SidebarMenu>
+          </SidebarGroup>
+        </SidebarFooter>
+      </Sidebar>
+      <div className="flex flex-1 flex-col">
+        <header className="flex h-16 shrink-0 items-center justify-between border-b bg-card px-6 md:justify-end">
+            <SidebarTrigger className="md:hidden"/>
+            {/* Header Content can go here if needed */}
+        </header>
+        {children}
       </div>
-      <div className="flex-1 overflow-y-auto">
-        <nav className="grid items-start gap-1 p-4 text-sm font-medium">
-          {navItems.map((item) => (
-            <Link key={item.href} href={item.href}>
-              <Button
-                variant={pathname.startsWith(item.href) && item.href !== '/dashboard' || pathname === item.href ? 'secondary' : 'ghost'}
-                className="w-full justify-start"
-              >
-                <item.icon className="mr-3 h-4 w-4" />
-                {item.label}
-              </Button>
-            </Link>
-          ))}
-        </nav>
-      </div>
-       <div className="mt-auto p-4">
-        <Separator className="my-2"/>
-        <Button variant="ghost" className="w-full justify-start">
-          <User className="mr-3 h-4 w-4" />
-          Admin
-        </Button>
-      </div>
-    </aside>
+    </SidebarProvider>
   );
 }

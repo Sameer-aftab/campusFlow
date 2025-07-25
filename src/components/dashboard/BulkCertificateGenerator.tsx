@@ -119,6 +119,27 @@ export function BulkCertificateGenerator({ students }: { students: Student[] }) 
     }
   };
 
+  const handlePrint = () => {
+    // Set a class on the body to control @page CSS
+    const body = document.body;
+    body.classList.remove('print-a5-landscape', 'print-a5-portrait', 'print-a4-portrait'); // Clear old classes
+    
+    switch (certificateType) {
+      case 'Appearance':
+      case 'Character':
+        body.classList.add('print-a5-landscape');
+        break;
+      case 'Pass':
+        body.classList.add('print-a5-portrait');
+        break;
+      case 'School Leaving':
+        body.classList.add('print-a4-portrait');
+        break;
+    }
+
+    window.print();
+  };
+
   return (
     <div className="grid md:grid-cols-3 gap-8">
       <div className="md:col-span-1 no-print">
@@ -203,29 +224,29 @@ export function BulkCertificateGenerator({ students }: { students: Student[] }) 
         {showCertificates ? (
            <div className="space-y-4">
                 {generatedCertificates.map((cert, index) => (
-                    <Card key={index} className="h-[210mm] w-[297mm] -translate-x-[15%] shadow-lg printable-area flex flex-col justify-between p-8">
+                    <Card key={index} className="printable-area aspect-[1.414/1] w-full shadow-lg flex flex-col justify-between p-8">
                       <CardHeader className="items-center text-center">
                           <img src="https://placehold.co/100x100.png" alt="School Logo" className="w-24 h-24 mx-auto mb-4 rounded-full" data-ai-hint="school logo" />
-                          <h2 className="text-3xl font-bold tracking-wider">Govt: (N) NOOR MUHAMMAD HIGH SCHOOL HYDERABAD</h2>
+                          <h2 className="text-xl md:text-3xl font-bold tracking-wider">Govt: (N) NOOR MUHAMMAD HIGH SCHOOL HYDERABAD</h2>
                           <Separator className="my-4"/>
-                          <CardTitle className="text-2xl font-bold tracking-widest uppercase text-primary pt-4">
+                          <CardTitle className="text-xl md:text-2xl font-bold tracking-widest uppercase text-primary pt-4">
                           {certificateType} Certificate
                           </CardTitle>
                       </CardHeader>
-                      <CardContent className="px-12 py-8 text-lg leading-relaxed text-center flex-grow flex items-center justify-center">
+                      <CardContent className="px-4 md:px-12 py-8 text-base md:text-lg leading-relaxed text-center flex-grow flex items-center justify-center">
                           <p dangerouslySetInnerHTML={{ __html: cert.certificateText }}></p>
                       </CardContent>
-                      <CardContent className="px-12 pb-12">
-                         <div className="flex justify-between items-end pt-8 mt-auto">
+                      <CardContent className="px-4 md:px-12 pb-12">
+                         <div className="flex justify-between items-end pt-8 mt-auto text-sm md:text-base">
                               <div className="text-center">
                                   <p className="font-semibold">Date:</p>
                                   <p>{format(new Date(), 'MMMM dd, yyyy')}</p>
                               </div>
                               <div className="text-center">
-                                  <p className="border-t-2 border-foreground pt-2 px-8">First Assistant</p>
+                                  <p className="border-t-2 border-foreground pt-2 px-4 md:px-8">First Assistant</p>
                               </div>
                                <div className="text-center">
-                                  <p className="border-t-2 border-foreground pt-2 px-8">Headmaster</p>
+                                  <p className="border-t-2 border-foreground pt-2 px-4 md:px-8">Headmaster</p>
                               </div>
                           </div>
                       </CardContent>
@@ -233,7 +254,7 @@ export function BulkCertificateGenerator({ students }: { students: Student[] }) 
                 ))}
 
                 <div className="mt-4 text-right no-print">
-                    <Button onClick={() => window.print()}>
+                    <Button onClick={handlePrint}>
                         <Printer className="mr-2 h-4 w-4"/>
                         Print All Certificates
                     </Button>
