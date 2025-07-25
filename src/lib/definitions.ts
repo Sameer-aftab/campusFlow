@@ -3,11 +3,15 @@ export type Student = {
   grNo: string;
   studentName: string;
   fatherName: string;
-  caste: string;
+  raceAndCaste: string;
   bForm: string;
+  placeOfBirth: string;
   dateOfBirth: Date;
+  dateOfBirthInWords: string;
   religion: string;
+  lastSchoolAttended: string;
   admissionDate: Date;
+  classInWhichAdmitted: string;
   cnic: string;
   guardianName: string;
   guardianCnic: string;
@@ -21,6 +25,8 @@ export type Student = {
   remarks: string;
   dateOfLeaving?: Date | null;
   reasonOfLeaving: string;
+  examination: string;
+  underSeatNo: string;
   progress: 'Excellent' | 'Good' | 'Average' | 'Poor';
   conduct: 'Excellent' | 'Good' | 'Average' | 'Poor';
   grade: string;

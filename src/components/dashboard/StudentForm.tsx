@@ -35,6 +35,13 @@ export function StudentForm({ student }: StudentFormProps) {
       progress: undefined,
       conduct: undefined,
       disability: 'None',
+      raceAndCaste: '',
+      placeOfBirth: '',
+      dateOfBirthInWords: '',
+      lastSchoolAttended: '',
+      classInWhichAdmitted: '',
+      examination: '',
+      underSeatNo: '',
     },
   });
 
@@ -68,14 +75,20 @@ export function StudentForm({ student }: StudentFormProps) {
                 <FormField control={form.control} name="fatherName" render={({ field }) => (
                   <FormItem><FormLabel>Father's Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
-                <FormField control={form.control} name="dateOfBirth" render={({ field }) => (
-                  <FormItem><FormLabel>Date of Birth</FormLabel><FormControl><DatePicker value={field.value} onChange={field.onChange} /></FormControl><FormMessage /></FormItem>
+                 <FormField control={form.control} name="dateOfBirth" render={({ field }) => (
+                  <FormItem><FormLabel>Date of Birth (in figures)</FormLabel><FormControl><DatePicker value={field.value} onChange={field.onChange} /></FormControl><FormMessage /></FormItem>
+                )} />
+                 <FormField control={form.control} name="dateOfBirthInWords" render={({ field }) => (
+                  <FormItem><FormLabel>Date of Birth (in words)</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
+                 <FormField control={form.control} name="placeOfBirth" render={({ field }) => (
+                  <FormItem><FormLabel>Place of Birth</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="religion" render={({ field }) => (
                   <FormItem><FormLabel>Religion</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
-                <FormField control={form.control} name="caste" render={({ field }) => (
-                  <FormItem><FormLabel>Caste</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                <FormField control={form.control} name="raceAndCaste" render={({ field }) => (
+                  <FormItem><FormLabel>Race and Caste</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="bForm" render={({ field }) => (
                   <FormItem><FormLabel>B. Form #</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
@@ -117,11 +130,20 @@ export function StudentForm({ student }: StudentFormProps) {
                 <CardTitle>Leaving Information</CardTitle>
               </CardHeader>
               <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <FormField control={form.control} name="dateOfLeaving" render={({ field }) => (
+                <FormField control={form.control} name="lastSchoolAttended" render={({ field }) => (
+                  <FormItem><FormLabel>Last School Attended</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
+                 <FormField control={form.control} name="dateOfLeaving" render={({ field }) => (
                   <FormItem><FormLabel>Date of Leaving (Optional)</FormLabel><FormControl><DatePicker value={field.value || undefined} onChange={field.onChange} /></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="reasonOfLeaving" render={({ field }) => (
                   <FormItem><FormLabel>Reason for Leaving (Optional)</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
+                 <FormField control={form.control} name="examination" render={({ field }) => (
+                  <FormItem><FormLabel>Examination</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
+                <FormField control={form.control} name="underSeatNo" render={({ field }) => (
+                  <FormItem><FormLabel>Under Seat No:</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
                  <FormField control={form.control} name="remarks" render={({ field }) => (
                   <FormItem className="md:col-span-2"><FormLabel>Remarks (Optional)</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>
@@ -142,8 +164,11 @@ export function StudentForm({ student }: StudentFormProps) {
                 <FormField control={form.control} name="admissionDate" render={({ field }) => (
                   <FormItem><FormLabel>Admission Date</FormLabel><FormControl><DatePicker value={field.value} onChange={field.onChange} /></FormControl><FormMessage /></FormItem>
                 )} />
+                <FormField control={form.control} name="classInWhichAdmitted" render={({ field }) => (
+                  <FormItem><FormLabel>Class in which admitted</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
                 <FormField control={form.control} name="classStudying" render={({ field }) => (
-                  <FormItem><FormLabel>Class</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel>Class in which studying</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="section" render={({ field }) => (
                   <FormItem><FormLabel>Section</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>

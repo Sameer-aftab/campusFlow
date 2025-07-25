@@ -78,6 +78,8 @@ export function CertificateGenerator({ student }: { student: Student }) {
     window.print();
   };
 
+  const isLeavingCert = certificateType === 'School Leaving';
+
   return (
     <div className="grid md:grid-cols-3 gap-8">
       <div className="md:col-span-1 no-print">
@@ -106,7 +108,7 @@ export function CertificateGenerator({ student }: { student: Student }) {
               </RadioGroup>
             </div>
             
-            {certificateType === 'Appearance' && (
+            {(certificateType === 'Appearance' || certificateType === 'Pass' || isLeavingCert) && (
               <div>
                 <Label htmlFor="grade">Grade</Label>
                 <Input id="grade" value={grade} onChange={(e) => setGrade(e.target.value)} placeholder="e.g., A+" />
@@ -138,7 +140,7 @@ export function CertificateGenerator({ student }: { student: Student }) {
       <div className="md:col-span-2">
         {showCertificate ? (
            <div className="space-y-4">
-            <Card className="printable-area aspect-[1.414/1] w-full shadow-lg flex flex-col justify-between p-8">
+            <Card className={`printable-area w-full shadow-lg flex flex-col justify-between p-8 ${isLeavingCert ? 'aspect-[1/1.414]' : 'aspect-[1.414/1]'}`}>
               <CardHeader className="items-center text-center">
                 <h2 className="text-xl md:text-3xl font-bold tracking-wider">Govt: (N) NOOR MUHAMMAD HIGH SCHOOL HYDERABAD</h2>
                 <img src="https://placehold.co/100x100.png" alt="School Logo" className="w-24 h-24 mx-auto mt-4 rounded-full" data-ai-hint="school logo" />
@@ -148,7 +150,7 @@ export function CertificateGenerator({ student }: { student: Student }) {
                 </CardTitle>
               </CardHeader>
               <CardContent className="px-4 md:px-12 py-8 text-base md:text-lg leading-relaxed text-center flex-grow flex items-center justify-center">
-                <p dangerouslySetInnerHTML={{ __html: generatedText }} />
+                <div dangerouslySetInnerHTML={{ __html: generatedText }} />
               </CardContent>
                <CardContent className="px-4 md:px-12 pb-12">
                  <div className="flex justify-between items-end pt-8 mt-auto text-sm md:text-base">
