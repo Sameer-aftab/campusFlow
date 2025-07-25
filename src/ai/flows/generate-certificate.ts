@@ -57,20 +57,28 @@ const generateCertificatePrompt = ai.definePrompt({
   output: {schema: GenerateCertificateOutputSchema},
   prompt: `You are an expert at generating school certificates for a boys' school. You will be given student data and the desired certificate type. Based on the certificate type, select the relevant information from the student data and generate the certificate text.
 
-Student Data:
-{{studentData}}
+Here is the student's data:
+- Name: {{studentData.studentName}}
+- Father's Name: {{studentData.fatherName}}
+- Class: {{studentData.classStudying}}-{{studentData.section}}
+- Grade: {{studentData.grade}}
+- Progress: {{studentData.progress}}
+- Conduct: {{studentData.conduct}}
+- Date of Leaving: {{studentData.dateOfLeaving}}
+- Reason for Leaving: {{studentData.reasonOfLeaving}}
 
-Certificate Type: {{certificateType}}
+
+Certificate Type to Generate: {{certificateType}}
 
 
-Here are example certificates for each type:
+Use the following templates. Fill in the placeholders with the student's data.
 
-Appearance Certificate: This is to certify that {{studentName}}, S/O {{fatherName}} is bonafide student of this institution and he has a good moral character.
-Character Certificate: This is to certify that {{studentName}}, S/O {{fatherName}} is a student of this institution. As far as my knowledge goes he bears a good character.
-Pass Certificate: This is to certify that {{studentName}}, S/O {{fatherName}} has passed the examination from this institution with grade {{grade}}.
-School Leaving Certificate: This is to certify that {{studentName}}, S/O {{fatherName}} was a student of this institution. He left the school on {{dateOfLeaving}} because of {{reasonOfLeaving}}.
+- **Appearance Certificate**: "This is to certify that {{studentData.studentName}}, S/O {{studentData.fatherName}} is a bonafide student of this institution and he has a good moral character."
+- **Character Certificate**: "This is to certify that {{studentData.studentName}}, S/O {{studentData.fatherName}} is a student of this institution. As far as my knowledge goes he bears a good character."
+- **Pass Certificate**: "This is to certify that {{studentData.studentName}}, S/O {{studentData.fatherName}} has passed the examination from this institution with grade {{studentData.grade}}."
+- **School Leaving Certificate**: "This is to certify that {{studentData.studentName}}, S/O {{studentData.fatherName}} was a student of this institution. He left the school on {{studentData.dateOfLeaving}} because of {{studentData.reasonOfLeaving}}."
 
-Generate the certificate text using the provided student data and the specified certificate type. Be formal, and concise.
+Generate the certificate text using the provided student data and the specified certificate type. The response should be formal, and concise, containing only the certificate text itself.
 `,
 });
 
