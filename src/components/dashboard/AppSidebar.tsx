@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { BookOpen, Home, PlusCircle, User } from 'lucide-react';
+import { BookOpen, FileText, Home, PlusCircle, User } from 'lucide-react';
 import { Separator } from '../ui/separator';
 import { cn } from '@/lib/utils';
 
@@ -13,6 +13,7 @@ export function AppSidebar() {
   const navItems = [
     { href: '/dashboard', label: 'Students', icon: Home },
     { href: '/dashboard/add-student', label: 'Add Student', icon: PlusCircle },
+    { href: '/dashboard/generate-certificates', label: 'Generate Certificates', icon: FileText },
   ];
 
   return (
@@ -28,7 +29,7 @@ export function AppSidebar() {
           {navItems.map((item) => (
             <Link key={item.href} href={item.href}>
               <Button
-                variant={pathname === item.href ? 'secondary' : 'ghost'}
+                variant={pathname.startsWith(item.href) && item.href !== '/dashboard' || pathname === item.href ? 'secondary' : 'ghost'}
                 className="w-full justify-start"
               >
                 <item.icon className="mr-3 h-4 w-4" />

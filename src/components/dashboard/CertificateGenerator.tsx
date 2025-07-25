@@ -98,8 +98,8 @@ export function CertificateGenerator({ student }: { student: Student }) {
 
       <div className="md:col-span-2">
         {showCertificate ? (
-          <div className="printable-area">
-            <Card className="min-h-[500px] shadow-lg">
+           <div className="space-y-4">
+            <Card className="min-h-[500px] shadow-lg printable-area">
               <CardHeader className="items-center text-center">
                  <img src="https://placehold.co/100x100.png" alt="School Logo" className="w-24 h-24 mx-auto mb-4 rounded-full" data-ai-hint="school logo" />
                 <h2 className="text-3xl font-bold tracking-wider">CampusFlow School System</h2>
