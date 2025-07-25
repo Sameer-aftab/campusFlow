@@ -53,28 +53,27 @@ export function AppSidebar() {
         ))}
       </nav>
 
-        <div className="mt-auto flex flex-col gap-2 p-4 border-t">
+        <div className="mt-auto flex flex-col gap-y-2 border-t p-4">
             <div className={cn('flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground', isCollapsed && 'justify-center')}>
                 <User className="h-5 w-5" />
                 <span className={cn('font-medium', isCollapsed && 'sr-only')}>Admin</span>
             </div>
-            <Link 
-                href="/login" 
+            <Link
+                href="/login"
                 className={cn('flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary', isCollapsed && 'justify-center')}>
                 <LogOut className="h-5 w-5" />
                 <span className={cn('font-medium', isCollapsed && 'sr-only')}>Logout</span>
             </Link>
+            <Separator className="my-1"/>
+            <Button
+                variant="ghost"
+                onClick={toggleSidebar}
+                className={cn('flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary', isCollapsed && 'justify-center')}
+            >
+                {isCollapsed ? <PanelRight className="h-5 w-5" /> : <PanelLeft className="h-5 w-5" />}
+                <span className={cn('font-medium', isCollapsed && 'sr-only')}>Collapse</span>
+            </Button>
         </div>
-      
-      <Button
-        variant="ghost"
-        size="icon"
-        className="absolute -right-5 top-14 rounded-full"
-        onClick={toggleSidebar}
-      >
-        {isCollapsed ? <PanelRight className="h-5 w-5" /> : <PanelLeft className="h-5 w-5" />}
-      </Button>
-
     </div>
   );
 }
