@@ -136,20 +136,13 @@ export function BulkCertificateGenerator({ students }: { students: Student[] }) 
         break;
     }
 
-    const printContainer = document.getElementById('bulk-print-container');
-    if (printContainer) {
-        // Temporarily move the printable content to the body for printing
-        const parent = printContainer.parentElement;
-        document.body.appendChild(printContainer);
-        window.print();
-        // Move it back
-        parent?.appendChild(printContainer);
-    }
+    window.print();
   };
   
   const isLeavingCert = certificateType === 'School Leaving';
 
   return (
+    <>
     <div className="grid md:grid-cols-3 gap-8">
       <div className="md:col-span-1 no-print">
         <Card>
@@ -235,38 +228,6 @@ export function BulkCertificateGenerator({ students }: { students: Student[] }) 
       <div className="md:col-span-2">
         {showCertificates ? (
            <div className="space-y-4">
-                <div id="bulk-print-container">
-                    {generatedCertificates.map((cert, index) => (
-                        <Card key={index} className={`printable-area w-full shadow-lg flex flex-col justify-between p-8 ${isLeavingCert ? 'aspect-[1/1.414]' : 'aspect-[1.414/1]'}`}>
-                          <CardHeader className="items-center text-center">
-                              <h2 className="text-xl md:text-3xl font-bold tracking-wider">Govt: (N) NOOR MUHAMMAD HIGH SCHOOL HYDERABAD</h2>
-                              <img src="https://placehold.co/100x100.png" alt="School Logo" className="w-24 h-24 mx-auto mt-4 rounded-full" data-ai-hint="school logo" />
-                              <Separator className="my-4"/>
-                              <CardTitle className="text-xl md:text-2xl font-bold tracking-widest uppercase text-primary pt-4">
-                              {certificateType} Certificate
-                              </CardTitle>
-                          </CardHeader>
-                          <CardContent className="px-4 md:px-12 py-8 text-base md:text-lg leading-relaxed text-center flex-grow flex items-center justify-center">
-                              <div dangerouslySetInnerHTML={{ __html: cert.certificateText }}></div>
-                          </CardContent>
-                          <CardContent className="px-4 md:px-12 pb-12">
-                             <div className="flex justify-between items-end pt-8 mt-auto text-sm md:text-base">
-                                  <div className="text-center">
-                                      <p className="font-semibold">Date:</p>
-                                      <p>{format(new Date(), 'MMMM dd, yyyy')}</p>
-                                  </div>
-                                  <div className="text-center">
-                                      <p className="border-t-2 border-foreground pt-2 px-4 md:px-8">First Assistant</p>
-                                  </div>
-                                   <div className="text-center">
-                                      <p className="border-t-2 border-foreground pt-2 px-4 md:px-8">Headmaster</p>
-                                  </div>
-                              </div>
-                          </CardContent>
-                        </Card>
-                    ))}
-                </div>
-
                 <div className="mt-4 text-right no-print">
                     <Button onClick={handlePrint}>
                         <Printer className="mr-2 h-4 w-4"/>
@@ -332,5 +293,38 @@ export function BulkCertificateGenerator({ students }: { students: Student[] }) 
         )}
       </div>
     </div>
+    
+    <div id="bulk-print-container">
+        {showCertificates && generatedCertificates.map((cert, index) => (
+            <Card key={index} className={`printable-area w-full shadow-lg flex flex-col justify-between p-8 ${isLeavingCert ? 'aspect-[1/1.414]' : 'aspect-[1.414/1]'}`}>
+                <CardHeader className="items-center text-center">
+                    <h2 className="text-xl md:text-3xl font-bold tracking-wider">Govt: (N) NOOR MUHAMMAD HIGH SCHOOL HYDERABAD</h2>
+                    <img src="https://placehold.co/100x100.png" alt="School Logo" className="w-24 h-24 mx-auto mt-4 rounded-full" data-ai-hint="school logo" />
+                    <Separator className="my-4"/>
+                    <CardTitle className="text-xl md:text-2xl font-bold tracking-widest uppercase text-primary pt-4">
+                    {certificateType} Certificate
+                    </CardTitle>
+                </CardHeader>
+                <CardContent className="px-4 md:px-12 py-8 text-base md:text-lg leading-relaxed text-center flex-grow flex items-center justify-center">
+                    <div dangerouslySetInnerHTML={{ __html: cert.certificateText }}></div>
+                </CardContent>
+                <CardContent className="px-4 md:px-12 pb-12">
+                    <div className="flex justify-between items-end pt-8 mt-auto text-sm md:text-base">
+                        <div className="text-center">
+                            <p className="font-semibold">Date:</p>
+                            <p>{format(new Date(), 'MMMM dd, yyyy')}</p>
+                        </div>
+                        <div className="text-center">
+                            <p className="border-t-2 border-foreground pt-2 px-4 md:px-8">First Assistant</p>
+                        </div>
+                        <div className="text-center">
+                            <p className="border-t-2 border-foreground pt-2 px-4 md:px-8">Headmaster</p>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+        ))}
+    </div>
+    </>
   );
 }
