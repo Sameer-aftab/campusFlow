@@ -97,7 +97,7 @@
   .print-a4-portrait {
     @page {
       size: A4 portrait;
-      margin: 1in;
+      margin: 0;
     }
   }
 
