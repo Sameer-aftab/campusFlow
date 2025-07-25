@@ -75,10 +75,8 @@ export function CertificateGenerator({ student }: { student: Student }) {
     switch (certificateType) {
       case 'Appearance':
       case 'Character':
-        body.classList.add('print-a5-landscape');
-        break;
       case 'Pass':
-        body.classList.add('print-a5-portrait');
+        body.classList.add('print-a5-landscape');
         break;
       case 'School Leaving':
         body.classList.add('print-a4-portrait');
@@ -158,7 +156,7 @@ export function CertificateGenerator({ student }: { student: Student }) {
                     Print Certificate
                 </Button>
             </div>
-            <CertWrapper className={`printable-area w-full ${isLeavingCert ? 'bg-white p-8 text-black' : 'shadow-lg flex flex-col justify-between p-8 aspect-[1.414/1]'}`}>
+            <CertWrapper className={`printable-area w-full ${isLeavingCert ? 'bg-white text-black' : 'shadow-lg flex flex-col justify-between p-8 aspect-[1.414/1]'}`}>
               {isLeavingCert ? (
                  <div dangerouslySetInnerHTML={{ __html: generatedText }} />
               ) : (
