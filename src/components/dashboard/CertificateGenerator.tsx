@@ -91,7 +91,10 @@ export function CertificateGenerator({ student }: { student: Student }) {
               <Label className="font-semibold">Certificate Type</Label>
               <RadioGroup
                 value={certificateType}
-                onValueChange={(value: CertificateType) => setCertificateType(value)}
+                onValueChange={(value: CertificateType) => {
+                  setCertificateType(value);
+                  setShowCertificate(false);
+                }}
                 className="mt-2 space-y-2"
               >
                 {certificateTypes.map((type) => (

@@ -153,7 +153,10 @@ export function BulkCertificateGenerator({ students }: { students: Student[] }) 
               <Label className="font-semibold">Certificate Type</Label>
               <RadioGroup
                 value={certificateType}
-                onValueChange={(value: CertificateType) => setCertificateType(value)}
+                onValueChange={(value: CertificateType) => {
+                    setCertificateType(value);
+                    setShowCertificates(false);
+                }}
                 className="mt-2 space-y-2"
               >
                 {certificateTypes.map((type) => (
