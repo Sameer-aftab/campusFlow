@@ -235,7 +235,7 @@ export function BulkCertificateGenerator({ students }: { students: Student[] }) 
                   </div>
                   <div id="bulk-print-container">
                       {generatedCertificates.map((cert, index) => (
-                          <CertWrapper key={index} className={`printable-area w-full ${isLeavingCert ? 'bg-white p-8 text-black' : 'shadow-lg flex flex-col justify-between p-8 aspect-[1.414/1]'}`}>
+                          <CertWrapper key={index} className={`printable-area w-full ${isLeavingCert ? 'bg-white p-10 text-black' : 'shadow-lg flex flex-col justify-between p-8 aspect-[1.414/1]'}`}>
                               {isLeavingCert ? (
                                 <div dangerouslySetInnerHTML={{ __html: cert.certificateText }} />
                               ) : (
@@ -251,7 +251,7 @@ export function BulkCertificateGenerator({ students }: { students: Student[] }) 
                                 <CardContent className="px-4 md:px-12 py-8 text-base md:text-lg leading-relaxed text-center flex-grow flex items-center justify-center">
                                   <div dangerouslySetInnerHTML={{ __html: cert.certificateText }}></div>
                                 </CardContent>
-                                <CardContent className="px-4 md:px-12 pb-12">
+                                <CardContent className="pb-12">
                                   <div className="flex justify-between items-end pt-8 mt-auto text-sm md:text-base">
                                       <div className="text-center">
                                           <p className="font-semibold">Date:</p>

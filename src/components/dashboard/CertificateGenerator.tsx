@@ -156,7 +156,7 @@ export function CertificateGenerator({ student }: { student: Student }) {
                     Print Certificate
                 </Button>
             </div>
-            <CertWrapper className={`printable-area w-full ${isLeavingCert ? 'bg-white text-black' : 'shadow-lg flex flex-col justify-between p-8 aspect-[1.414/1]'}`}>
+            <CertWrapper className={`printable-area w-full ${isLeavingCert ? 'bg-white text-black p-10' : 'shadow-lg flex flex-col justify-between p-8 aspect-[1.414/1]'}`}>
               {isLeavingCert ? (
                  <div dangerouslySetInnerHTML={{ __html: generatedText }} />
               ) : (
@@ -172,7 +172,7 @@ export function CertificateGenerator({ student }: { student: Student }) {
                   <CardContent className="px-4 md:px-12 py-8 text-base md:text-lg leading-relaxed text-center flex-grow flex items-center justify-center">
                     <div dangerouslySetInnerHTML={{ __html: generatedText }} />
                   </CardContent>
-                  <CardContent className="px-4 md:px-12 pb-12">
+                  <CardContent className="pb-12">
                     <div className="flex justify-between items-end pt-8 mt-auto text-sm md:text-base">
                           <div className="text-center">
                               <p className="font-semibold">Date:</p>

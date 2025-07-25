@@ -104,7 +104,7 @@
   .print-a5-landscape {
     @page {
       size: A5 landscape;
-      margin: 0.5in;
+      margin: 0;
     }
   }
   .print-a5-portrait {
