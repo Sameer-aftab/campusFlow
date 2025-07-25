@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect } from 'react';
 import { format } from 'date-fns';
 import { Loader2, Printer } from 'lucide-react';
 
-import type { Student } from '@/lib/definitions';
+import type { Student, CertificateType } from '@/lib/definitions';
 import { useToast } from '@/hooks/use-toast';
 
 import { Button } from '@/components/ui/button';
@@ -17,7 +17,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Checkbox } from '@/components/ui/checkbox';
 import { generateCertificateText } from '@/lib/certificate-templates';
-import { CertificateType, certificateTypes } from '@/lib/definitions';
+import { certificateTypes } from '@/lib/definitions';
 
 type GeneratedCertificate = {
     studentName: string;
@@ -28,6 +28,8 @@ type GeneratedCertificate = {
 export function BulkCertificateGenerator({ students }: { students: Student[] }) {
   const { toast } = useToast();
   const [certificateType, setCertificateType] = useState<CertificateType>('Appearance');
+  const [grade, setGrade] = useState('');
+  const [character, setCharacter] = useState('');
   const [generatedCertificates, setGeneratedCertificates] = useState<GeneratedCertificate[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showCertificates, setShowCertificates] = useState(false);
@@ -80,6 +82,15 @@ export function BulkCertificateGenerator({ students }: { students: Student[] }) 
       });
       return;
     }
+     if (certificateType === 'Appearance' && !grade) {
+      toast({ variant: 'destructive', title: 'Grade Required', description: 'Please enter a grade for the Appearance certificate.' });
+      return;
+    }
+     if (certificateType === 'Character' && !character) {
+      toast({ variant: 'destructive', title: 'Character Required', description: 'Please enter a character description.' });
+      return;
+    }
+
 
     setIsLoading(true);
     setShowCertificates(false);
@@ -89,7 +100,7 @@ export function BulkCertificateGenerator({ students }: { students: Student[] }) 
 
     try {
       const results = await Promise.all(studentsToProcess.map(async (student) => {
-        const certificateText = await generateCertificateText(certificateType, student);
+        const certificateText = await generateCertificateText(certificateType, student, grade, character);
         return { studentName: student.studentName, certificateText, student };
       }));
       
@@ -132,6 +143,22 @@ export function BulkCertificateGenerator({ students }: { students: Student[] }) 
                 ))}
               </RadioGroup>
             </div>
+
+            {certificateType === 'Appearance' && (
+              <div>
+                <Label htmlFor="grade-bulk">Grade</Label>
+                <Input id="grade-bulk" value={grade} onChange={(e) => setGrade(e.target.value)} placeholder="e.g., A+" />
+              </div>
+            )}
+            
+            {certificateType === 'Character' && (
+              <div>
+                <Label htmlFor="character-bulk">Character</Label>
+                <Input id="character-bulk" value={character} onChange={(e) => setCharacter(e.target.value)} placeholder="e.g., Good" />
+              </div>
+            )}
+
+
             <Button onClick={handleGenerate} disabled={isLoading || selectedStudents.size === 0} className="w-full">
               {isLoading ? (
                 <>
@@ -176,7 +203,7 @@ export function BulkCertificateGenerator({ students }: { students: Student[] }) 
         {showCertificates ? (
            <div className="space-y-4">
                 {generatedCertificates.map((cert, index) => (
-                    <Card key={index} className="min-h-[700px] shadow-lg printable-area flex flex-col justify-between">
+                    <Card key={index} className="h-[210mm] w-[297mm] -translate-x-[15%] shadow-lg printable-area flex flex-col justify-between p-8">
                       <CardHeader className="items-center text-center">
                           <img src="https://placehold.co/100x100.png" alt="School Logo" className="w-24 h-24 mx-auto mb-4 rounded-full" data-ai-hint="school logo" />
                           <h2 className="text-3xl font-bold tracking-wider">Govt: (N) NOOR MUHAMMAD HIGH SCHOOL HYDERABAD</h2>
@@ -185,11 +212,11 @@ export function BulkCertificateGenerator({ students }: { students: Student[] }) 
                           {certificateType} Certificate
                           </CardTitle>
                       </CardHeader>
-                      <CardContent className="px-12 py-8 text-lg leading-relaxed text-center flex-grow">
+                      <CardContent className="px-12 py-8 text-lg leading-relaxed text-center flex-grow flex items-center justify-center">
                           <p dangerouslySetInnerHTML={{ __html: cert.certificateText }}></p>
                       </CardContent>
                       <CardContent className="px-12 pb-12">
-                         <div className="flex justify-between items-end pt-8">
+                         <div className="flex justify-between items-end pt-8 mt-auto">
                               <div className="text-center">
                                   <p className="font-semibold">Date:</p>
                                   <p>{format(new Date(), 'MMMM dd, yyyy')}</p>

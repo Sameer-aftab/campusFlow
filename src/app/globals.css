@@ -59,6 +59,10 @@
 }
 
 @media print {
+  @page {
+    size: A5 landscape;
+    margin: 0;
+  }
   body * {
     visibility: hidden;
   }
@@ -70,7 +74,7 @@
     left: 0;
     top: 0;
     width: 100%;
-    height: auto;
+    height: 100%;
     padding: 1rem;
     margin: 0;
     page-break-after: always;
