@@ -69,9 +69,8 @@ export function CertificateGenerator({ student }: { student: Student }) {
   };
 
   const handlePrint = () => {
-    // Set a class on the body to control @page CSS
     const body = document.body;
-    body.classList.remove('print-a5-landscape', 'print-a5-portrait', 'print-a4-portrait'); // Clear old classes
+    body.classList.remove('print-a5-landscape', 'print-a5-portrait', 'print-a4-portrait');
     
     switch (certificateType) {
       case 'Appearance':
@@ -167,7 +166,7 @@ export function CertificateGenerator({ student }: { student: Student }) {
                  <div className="flex justify-between items-end pt-8 mt-auto text-sm md:text-base">
                       <div className="text-center">
                           <p className="font-semibold">Date:</p>
-                          <p>{format(new Date(), 'MMMM dd, yyyy')}</p>
+                          <p>{format(new date(), 'MMMM dd, yyyy')}</p>
                       </div>
                       <div className="text-center">
                           <p className="border-t-2 border-foreground pt-2 px-4 md:px-8">First Assistant</p>
@@ -186,7 +185,7 @@ export function CertificateGenerator({ student }: { student: Student }) {
             </div>
           </div>
         ) : (
-          <Card className="min-h-[700px] flex items-center justify-center border-dashed">
+          <Card className="min-h-[700px] flex items-center justify-center border-dashed no-print">
             <div className="text-center text-muted-foreground">
               <p>Your generated certificate will appear here.</p>
             </div>
