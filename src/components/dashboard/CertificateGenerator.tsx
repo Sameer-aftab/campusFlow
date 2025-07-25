@@ -149,7 +149,7 @@ export function CertificateGenerator({ student }: { student: Student }) {
 
       <div className="md:col-span-2">
         {showCertificate ? (
-           <div className="space-y-4">
+          <div className="space-y-4">
             <div className="mb-4 text-right no-print">
                 <Button onClick={handlePrint}>
                     <Printer className="mr-2 h-4 w-4"/>

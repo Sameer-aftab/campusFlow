@@ -74,6 +74,7 @@
   }
 
   #bulk-print-container,
+  #bulk-print-container .printable-area,
   .printable-area {
     visibility: visible;
     position: absolute;
@@ -82,12 +83,12 @@
     width: 100%;
   }
 
-  .printable-area {
+  #bulk-print-container .printable-area {
     page-break-after: always;
   }
 
   /* This prevents an extra blank page from being printed after the last certificate. */
-  .printable-area:last-child {
+  #bulk-print-container .printable-area:last-child {
     page-break-after: avoid;
   }
   

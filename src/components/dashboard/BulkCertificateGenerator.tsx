@@ -143,187 +143,187 @@ export function BulkCertificateGenerator({ students }: { students: Student[] }) 
 
   return (
     <>
-    <div className="grid md:grid-cols-3 gap-8">
-      <div className="md:col-span-1 no-print">
-        <Card>
-          <CardHeader>
-            <CardTitle>Certificate Options</CardTitle>
-            <CardDescription>Select students and a certificate type to generate in bulk.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div>
-              <Label className="font-semibold">Certificate Type</Label>
-              <RadioGroup
-                value={certificateType}
-                onValueChange={(value: CertificateType) => {
-                    setCertificateType(value);
-                    setShowCertificates(false);
-                }}
-                className="mt-2 space-y-2"
-              >
-                {certificateTypes.map((type) => (
-                  <div key={type} className="flex items-center space-x-2">
-                    <RadioGroupItem value={type} id={`bulk-${type}`} />
-                    <Label htmlFor={`bulk-${type}`} className="font-normal">{type}</Label>
-                  </div>
-                ))}
-              </RadioGroup>
-            </div>
-
-            {(certificateType === 'Appearance' || certificateType === 'Pass' || isLeavingCert) && (
+      <div className="grid md:grid-cols-3 gap-8">
+        <div className="md:col-span-1 no-print">
+          <Card>
+            <CardHeader>
+              <CardTitle>Certificate Options</CardTitle>
+              <CardDescription>Select students and a certificate type to generate in bulk.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
               <div>
-                <Label htmlFor="grade-bulk">Grade</Label>
-                <Input id="grade-bulk" value={grade} onChange={(e) => setGrade(e.target.value)} placeholder="e.g., A+" />
+                <Label className="font-semibold">Certificate Type</Label>
+                <RadioGroup
+                  value={certificateType}
+                  onValueChange={(value: CertificateType) => {
+                      setCertificateType(value);
+                      setShowCertificates(false);
+                  }}
+                  className="mt-2 space-y-2"
+                >
+                  {certificateTypes.map((type) => (
+                    <div key={type} className="flex items-center space-x-2">
+                      <RadioGroupItem value={type} id={`bulk-${type}`} />
+                      <Label htmlFor={`bulk-${type}`} className="font-normal">{type}</Label>
+                    </div>
+                  ))}
+                </RadioGroup>
               </div>
-            )}
-            
-            {certificateType === 'Character' && (
-              <div>
-                <Label htmlFor="character-bulk">Character</Label>
-                <Input id="character-bulk" value={character} onChange={(e) => setCharacter(e.target.value)} placeholder="e.g., Good" />
-              </div>
-            )}
 
-
-            <Button onClick={handleGenerate} disabled={isLoading || selectedStudents.size === 0} className="w-full">
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Generating ({selectedStudents.size})...
-                </>
-              ) : (
-                `Generate ${selectedStudents.size > 0 ? `(${selectedStudents.size})` : ''} Certificate(s)`
+              {(certificateType === 'Appearance' || certificateType === 'Pass' || isLeavingCert) && (
+                <div>
+                  <Label htmlFor="grade-bulk">Grade</Label>
+                  <Input id="grade-bulk" value={grade} onChange={(e) => setGrade(e.target.value)} placeholder="e.g., A+" />
+                </div>
               )}
-            </Button>
-          </CardContent>
-        </Card>
-        <Card className="mt-4 no-print">
-            <CardHeader>
-                <CardTitle>Filter Students</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-                 <Input 
-                    placeholder="Search by student name..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                 />
-                <div className="flex gap-2">
-                <Select value={classFilter} onValueChange={setClassFilter}>
-                    <SelectTrigger><SelectValue placeholder="Filter by class" /></SelectTrigger>
-                    <SelectContent>
-                    {uniqueClasses.map(c => <SelectItem key={c} value={c}>{c === 'all' ? 'All Classes' : c}</SelectItem>)}
-                    </SelectContent>
-                </Select>
-                <Select value={sectionFilter} onValueChange={setSectionFilter}>
-                    <SelectTrigger><SelectValue placeholder="Filter by section" /></SelectTrigger>
-                    <SelectContent>
-                    {uniqueSections.map(s => <SelectItem key={s} value={s}>{s === 'all' ? 'All Sections' : s}</SelectItem>)}
-                    </SelectContent>
-                </Select>
+              
+              {certificateType === 'Character' && (
+                <div>
+                  <Label htmlFor="character-bulk">Character</Label>
+                  <Input id="character-bulk" value={character} onChange={(e) => setCharacter(e.target.value)} placeholder="e.g., Good" />
                 </div>
-            </CardContent>
-        </Card>
-      </div>
+              )}
 
-      <div className="md:col-span-2">
-        {showCertificates ? (
-           <div className="space-y-4">
-                <div className="mb-4 text-right no-print">
-                    <Button onClick={handlePrint}>
-                        <Printer className="mr-2 h-4 w-4"/>
-                        {generatedCertificates.length > 1 ? 'Print All Certificates' : 'Print Certificate'}
-                    </Button>
-                </div>
-                <div id="bulk-print-container">
-                    {generatedCertificates.map((cert, index) => (
-                        <Card key={index} className={`printable-area w-full shadow-lg flex flex-col justify-between p-8 ${isLeavingCert ? 'aspect-[1/1.414]' : 'aspect-[1.414/1]'}`}>
-                            <CardHeader className="items-center text-center">
-                                <h2 className="text-xl md:text-3xl font-bold tracking-wider">Govt: (N) NOOR MUHAMMAD HIGH SCHOOL HYDERABAD</h2>
-                                <img src="https://placehold.co/100x100.png" alt="School Logo" className="w-24 h-24 mx-auto mt-4 rounded-full" data-ai-hint="school logo" />
-                                <Separator className="my-4"/>
-                                <CardTitle className="text-xl md:text-2xl font-bold tracking-widest uppercase text-primary pt-4">
-                                {certificateType} Certificate
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent className="px-4 md:px-12 py-8 text-base md:text-lg leading-relaxed text-center flex-grow flex items-center justify-center">
-                                <div dangerouslySetInnerHTML={{ __html: cert.certificateText }}></div>
-                            </CardContent>
-                            <CardContent className="px-4 md:px-12 pb-12">
-                                <div className="flex justify-between items-end pt-8 mt-auto text-sm md:text-base">
-                                    <div className="text-center">
-                                        <p className="font-semibold">Date:</p>
-                                        <p>{format(new Date(), 'MMMM dd, yyyy')}</p>
-                                    </div>
-                                    <div className="text-center">
-                                        <p className="border-t-2 border-foreground pt-2 px-4 md:px-8">First Assistant</p>
-                                    </div>
-                                    <div className="text-center">
-                                        <p className="border-t-2 border-foreground pt-2 px-4 md:px-8">Headmaster</p>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    ))}
-                </div>
-          </div>
-        ) : (
-          <Card className="no-print">
-            <CardHeader>
-                <CardTitle>Select Students</CardTitle>
-                <CardDescription>
-                    Found {filteredStudents.length} students. 
-                    Selected {selectedStudents.size}.
-                </CardDescription>
-            </CardHeader>
-            <CardContent>
-                <div className="rounded-md border">
-                    <Table>
-                        <TableHeader>
-                        <TableRow>
-                            <TableHead padding="checkbox">
-                                <Checkbox
-                                    checked={selectedStudents.size > 0 && selectedStudents.size === filteredStudents.length}
-                                    onCheckedChange={(checked) => handleSelectAll(!!checked)}
-                                    aria-label="Select all"
-                                />
-                            </TableHead>
-                            <TableHead>Student Name</TableHead>
-                            <TableHead>Father's Name</TableHead>
-                            <TableHead>Class</TableHead>
-                        </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                        {filteredStudents.length > 0 ? (
-                            filteredStudents.map((student) => (
-                            <TableRow key={student.id} 
-                                data-state={selectedStudents.has(student.id) && "selected"}>
-                                <TableCell padding="checkbox">
-                                <Checkbox
-                                    checked={selectedStudents.has(student.id)}
-                                    onCheckedChange={(checked) => handleSelectStudent(student.id, !!checked)}
-                                    aria-label="Select row"
-                                />
-                                </TableCell>
-                                <TableCell className="font-medium">{student.studentName}</TableCell>
-                                <TableCell>{student.fatherName}</TableCell>
-                                <TableCell>{student.classStudying}-{student.section}</TableCell>
-                            </TableRow>
-                            ))
-                        ) : (
-                            <TableRow>
-                            <TableCell colSpan={4} className="h-24 text-center">
-                                No students found.
-                            </TableCell>
-                            </TableRow>
-                        )}
-                        </TableBody>
-                    </Table>
-                </div>
+
+              <Button onClick={handleGenerate} disabled={isLoading || selectedStudents.size === 0} className="w-full">
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Generating ({selectedStudents.size})...
+                  </>
+                ) : (
+                  `Generate ${selectedStudents.size > 0 ? `(${selectedStudents.size})` : ''} Certificate(s)`
+                )}
+              </Button>
             </CardContent>
           </Card>
-        )}
+          <Card className="mt-4 no-print">
+              <CardHeader>
+                  <CardTitle>Filter Students</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                  <Input 
+                      placeholder="Search by student name..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                  <div className="flex gap-2">
+                  <Select value={classFilter} onValueChange={setClassFilter}>
+                      <SelectTrigger><SelectValue placeholder="Filter by class" /></SelectTrigger>
+                      <SelectContent>
+                      {uniqueClasses.map(c => <SelectItem key={c} value={c}>{c === 'all' ? 'All Classes' : c}</SelectItem>)}
+                      </SelectContent>
+                  </Select>
+                  <Select value={sectionFilter} onValueChange={setSectionFilter}>
+                      <SelectTrigger><SelectValue placeholder="Filter by section" /></SelectTrigger>
+                      <SelectContent>
+                      {uniqueSections.map(s => <SelectItem key={s} value={s}>{s === 'all' ? 'All Sections' : s}</SelectItem>)}
+                      </SelectContent>
+                  </Select>
+                  </div>
+              </CardContent>
+          </Card>
+        </div>
+
+        <div className="md:col-span-2">
+          {showCertificates ? (
+            <div className="space-y-4">
+                  <div className="mb-4 text-right no-print">
+                      <Button onClick={handlePrint}>
+                          <Printer className="mr-2 h-4 w-4"/>
+                          {generatedCertificates.length > 1 ? 'Print All Certificates' : 'Print Certificate'}
+                      </Button>
+                  </div>
+                  <div id="bulk-print-container">
+                      {generatedCertificates.map((cert, index) => (
+                          <Card key={index} className={`printable-area w-full shadow-lg flex flex-col justify-between p-8 ${isLeavingCert ? 'aspect-[1/1.414]' : 'aspect-[1.414/1]'}`}>
+                              <CardHeader className="items-center text-center">
+                                  <h2 className="text-xl md:text-3xl font-bold tracking-wider">Govt: (N) NOOR MUHAMMAD HIGH SCHOOL HYDERABAD</h2>
+                                  <img src="https://placehold.co/100x100.png" alt="School Logo" className="w-24 h-24 mx-auto mt-4 rounded-full" data-ai-hint="school logo" />
+                                  <Separator className="my-4"/>
+                                  <CardTitle className="text-xl md:text-2xl font-bold tracking-widest uppercase text-primary pt-4">
+                                  {certificateType} Certificate
+                                  </CardTitle>
+                              </CardHeader>
+                              <CardContent className="px-4 md:px-12 py-8 text-base md:text-lg leading-relaxed text-center flex-grow flex items-center justify-center">
+                                  <div dangerouslySetInnerHTML={{ __html: cert.certificateText }}></div>
+                              </CardContent>
+                              <CardContent className="px-4 md:px-12 pb-12">
+                                  <div className="flex justify-between items-end pt-8 mt-auto text-sm md:text-base">
+                                      <div className="text-center">
+                                          <p className="font-semibold">Date:</p>
+                                          <p>{format(new Date(), 'MMMM dd, yyyy')}</p>
+                                      </div>
+                                      <div className="text-center">
+                                          <p className="border-t-2 border-foreground pt-2 px-4 md:px-8">First Assistant</p>
+                                      </div>
+                                      <div className="text-center">
+                                          <p className="border-t-2 border-foreground pt-2 px-4 md:px-8">Headmaster</p>
+                                      </div>
+                                  </div>
+                              </CardContent>
+                          </Card>
+                      ))}
+                  </div>
+            </div>
+          ) : (
+            <Card className="no-print">
+              <CardHeader>
+                  <CardTitle>Select Students</CardTitle>
+                  <CardDescription>
+                      Found {filteredStudents.length} students. 
+                      Selected {selectedStudents.size}.
+                  </CardDescription>
+              </CardHeader>
+              <CardContent>
+                  <div className="rounded-md border">
+                      <Table>
+                          <TableHeader>
+                          <TableRow>
+                              <TableHead padding="checkbox">
+                                  <Checkbox
+                                      checked={selectedStudents.size > 0 && selectedStudents.size === filteredStudents.length}
+                                      onCheckedChange={(checked) => handleSelectAll(!!checked)}
+                                      aria-label="Select all"
+                                  />
+                              </TableHead>
+                              <TableHead>Student Name</TableHead>
+                              <TableHead>Father's Name</TableHead>
+                              <TableHead>Class</TableHead>
+                          </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                          {filteredStudents.length > 0 ? (
+                              filteredStudents.map((student) => (
+                              <TableRow key={student.id} 
+                                  data-state={selectedStudents.has(student.id) && "selected"}>
+                                  <TableCell padding="checkbox">
+                                  <Checkbox
+                                      checked={selectedStudents.has(student.id)}
+                                      onCheckedChange={(checked) => handleSelectStudent(student.id, !!checked)}
+                                      aria-label="Select row"
+                                  />
+                                  </TableCell>
+                                  <TableCell className="font-medium">{student.studentName}</TableCell>
+                                  <TableCell>{student.fatherName}</TableCell>
+                                  <TableCell>{student.classStudying}-{student.section}</TableCell>
+                              </TableRow>
+                              ))
+                          ) : (
+                              <TableRow>
+                              <TableCell colSpan={4} className="h-24 text-center">
+                                  No students found.
+                              </TableCell>
+                              </TableRow>
+                          )}
+                          </TableBody>
+                      </Table>
+                  </div>
+              </CardContent>
+            </Card>
+          )}
+        </div>
       </div>
-    </div>
     </>
   );
 }

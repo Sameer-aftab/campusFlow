@@ -53,34 +53,34 @@ export async function generateCertificateText(type: CertificateType, student: St
             return `This is to certify that <b>${studentName}</b>, S/O <b>${fatherName}</b> has passed the examination from this institution with grade <b>${finalGrade}</b>.`;
 
         case 'School Leaving':
-        return `<div class="w-full text-left space-y-2 text-sm leading-snug">
-            <div class="grid grid-cols-2 gap-x-4">
-                <p>Name of Student: <span class="border-b border-black flex-1">${studentName}</span></p>
-                <p class="text-right">G.R No: <span class="border-b border-black">${grNo}</span></p>
+        return `<div class="w-full text-left space-y-3 text-base leading-relaxed">
+            <div class="flex justify-between">
+                <p><span class="font-bold">Name of Student:</span> <span class="border-b-2 border-black px-4">${studentName}</span></p>
+                <p><span class="font-bold">G.R No:</span> <span class="border-b-2 border-black px-4">${grNo}</span></p>
             </div>
-            <p>Father's Name: <span class="border-b border-black flex-1">${fatherName}</span></p>
-            <p>Race and Caste (With Sub-Caste): <span class="border-b border-black flex-1">${raceAndCaste}</span></p>
-            <p>Religion: <span class="border-b border-black flex-1">${religion}</span></p>
-            <p>Place of Birth: <span class="border-b border-black flex-1">${placeOfBirth}</span></p>
-            <p>Date of Birth (in Figures): <span class="border-b border-black flex-1">${formatDate(dateOfBirth)}</span></p>
-            <p>Date of Birth (in words): <span class="border-b border-black flex-1">${dateOfBirthInWords}</span></p>
-            <p>Last School Attended: <span class="border-b border-black flex-1">${lastSchoolAttended}</span></p>
-            <p>Date of Admission: <span class="border-b border-black flex-1">${formatDate(admissionDate)}</span></p>
-            <p>Class in which admitted: <span class="border-b border-black flex-1">${classInWhichAdmitted}</span></p>
-            <div class="grid grid-cols-2 gap-x-4">
-                 <p>Class in which studying: <span class="border-b border-black flex-1">${classStudying}</span></p>
-                 <p>Conduct: <span class="border-b border-black flex-1">${conduct}</span></p>
+            <p><span class="font-bold">Father's Name:</span> <span class="border-b-2 border-black px-4">${fatherName}</span></p>
+            <p><span class="font-bold">Race and Caste (With Sub-Caste):</span> <span class="border-b-2 border-black px-4">${raceAndCaste}</span></p>
+            <p><span class="font-bold">Religion:</span> <span class="border-b-2 border-black px-4">${religion}</span></p>
+            <p><span class="font-bold">Place of Birth:</span> <span class="border-b-2 border-black px-4">${placeOfBirth}</span></p>
+            <p><span class="font-bold">Date of Birth (in Figures):</span> <span class="border-b-2 border-black px-4">${formatDate(dateOfBirth)}</span></p>
+            <p><span class="font-bold">Date of Birth (in words):</span> <span class="border-b-2 border-black px-4">${dateOfBirthInWords}</span></p>
+            <p><span class="font-bold">Last School Attended:</span> <span class="border-b-2 border-black px-4">${lastSchoolAttended}</span></p>
+            <p><span class="font-bold">Date of Admission:</span> <span class="border-b-2 border-black px-4">${formatDate(admissionDate)}</span></p>
+            <p><span class="font-bold">Class in which admitted:</span> <span class="border-b-2 border-black px-4">${classInWhichAdmitted}</span></p>
+            <div class="flex justify-between">
+                 <p><span class="font-bold">Class in which studying:</span> <span class="border-b-2 border-black px-4">${classStudying}</span></p>
+                 <p><span class="font-bold">Conduct:</span> <span class="border-b-2 border-black px-4">${conduct}</span></p>
             </div>
-             <p>Progress: <span class="border-b border-black flex-1">${progress}</span></p>
-            <p>Date of Leaving the School: <span class="border-b border-black flex-1">${dateOfLeaving ? formatDate(dateOfLeaving) : 'N/A'}</span></p>
-            <p>Reason of Leaving the School: Passed S.S.C Part-II Annual / Supplementary <span class="border-b border-black flex-1">${reasonOfLeaving}</span></p>
-            <div class="grid grid-cols-3 gap-x-4">
-                <p>Examination: <span class="border-b border-black flex-1">${examination}</span></p>
-                <p>Under Seat No: <span class="border-b border-black flex-1">${underSeatNo}</span></p>
-                <p>Grade: <span class="border-b border-black flex-1">${finalGrade}</span></p>
+             <p><span class="font-bold">Progress:</span> <span class="border-b-2 border-black px-4">${progress}</span></p>
+            <p><span class="font-bold">Date of Leaving the School:</span> <span class="border-b-2 border-black px-4">${dateOfLeaving ? formatDate(dateOfLeaving) : 'N/A'}</span></p>
+            <p><span class="font-bold">Reason of Leaving the School:</span> Passed S.S.C Part-II Annual / Supplementary <span class="border-b-2 border-black px-4">${reasonOfLeaving}</span></p>
+            <div class="flex justify-between">
+                <p><span class="font-bold">Examination:</span> <span class="border-b-2 border-black px-4">${examination}</span></p>
+                <p><span class="font-bold">Under Seat No:</span> <span class="border-b-2 border-black px-4">${underSeatNo}</span></p>
+                <p><span class="font-bold">Grade:</span> <span class="border-b-2 border-black px-4">${finalGrade}</span></p>
             </div>
             <br/>
-            <p>Certified that the above information is in accordance with the school General Register.</p>
+            <p class="font-bold">Certified that the above information is in accordance with the school General Register.</p>
         </div>`
             
         default:
