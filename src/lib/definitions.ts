@@ -1,0 +1,28 @@
+export type Student = {
+  id: string;
+  grNo: string;
+  studentName: string;
+  fatherName: string;
+  caste: string;
+  gender: 'Male' | 'Female' | 'Other';
+  bForm: string;
+  dateOfBirth: Date;
+  religion: string;
+  admissionDate: Date;
+  cnic: string;
+  guardianName: string;
+  guardianCnic: string;
+  relationshipWithGuardian: string;
+  contactNo: string;
+  disability: string;
+  vaccine: 'Yes' | 'No';
+  classStudying: string;
+  section: string;
+  newEnrolReEnrol: 'New Enrol' | 'Re-Enrol';
+  remarks: string;
+  dateOfLeaving?: Date | null;
+  reasonOfLeaving: string;
+  progress: 'Excellent' | 'Good' | 'Average' | 'Poor';
+  conduct: 'Excellent' | 'Good' | 'Average' | 'Poor';
+  grade: string;
+};
