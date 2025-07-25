@@ -4,7 +4,6 @@ export type Student = {
   studentName: string;
   fatherName: string;
   caste: string;
-  gender: 'Male' | 'Female' | 'Other';
   bForm: string;
   dateOfBirth: Date;
   religion: string;

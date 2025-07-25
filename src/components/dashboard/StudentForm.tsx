@@ -30,7 +30,6 @@ export function StudentForm({ student }: StudentFormProps) {
   const form = useForm<StudentFormValues>({
     resolver: zodResolver(studentSchema),
     defaultValues: student || {
-      gender: undefined,
       vaccine: undefined,
       newEnrolReEnrol: undefined,
       progress: undefined,
@@ -68,9 +67,6 @@ export function StudentForm({ student }: StudentFormProps) {
                 )} />
                 <FormField control={form.control} name="fatherName" render={({ field }) => (
                   <FormItem><FormLabel>Father's Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                )} />
-                <FormField control={form.control} name="gender" render={({ field }) => (
-                  <FormItem><FormLabel>Gender</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue placeholder="Select gender" /></SelectTrigger></FormControl><SelectContent><SelectItem value="Male">Male</SelectItem><SelectItem value="Female">Female</SelectItem><SelectItem value="Other">Other</SelectItem></SelectContent></Select><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="dateOfBirth" render={({ field }) => (
                   <FormItem><FormLabel>Date of Birth</FormLabel><FormControl><DatePicker value={field.value} onChange={field.onChange} /></FormControl><FormMessage /></FormItem>

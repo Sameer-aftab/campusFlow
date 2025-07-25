@@ -10,7 +10,6 @@ export const studentSchema = z.object({
   studentName: z.string().min(1, 'Student name is required'),
   fatherName: z.string().min(1, "Father's name is required"),
   caste: z.string().min(1, 'Caste is required'),
-  gender: z.enum(['Male', 'Female', 'Other'], { required_error: 'Gender is required' }),
   bForm: z.string().min(1, 'B. Form is required'),
   dateOfBirth: z.date({ required_error: 'Date of Birth is required' }),
   religion: z.string().min(1, 'Religion is required'),
