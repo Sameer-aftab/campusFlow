@@ -31,6 +31,11 @@ export async function getStudentById(id: string) {
 }
 
 export async function addStudent(values: z.infer<typeof studentSchema>) {
+  const existingStudent = students.find(student => student.grNo === values.grNo);
+  if (existingStudent) {
+    return { error: 'A student with this G.R. No. already exists.' };
+  }
+
   const newStudent: Student = {
     ...values,
     id: String(Date.now()),
@@ -43,7 +48,11 @@ export async function addStudent(values: z.infer<typeof studentSchema>) {
 export async function updateStudent(id: string, values: z.infer<typeof studentSchema>) {
   const index = students.findIndex(s => s.id === id);
   if (index !== -1) {
-    students[index] = { ...students[index], ...values };
+    const existingStudentWithSameGrNo = students.find(s => s.grNo === values.grNo && s.id !== id);
+    if (existingStudentWithSameGrNo) {
+      return { error: 'Another student with this G.R. No. already exists.' };
+    }
+    students[index] = { ...students[index], ...values, id: id };
     revalidatePath('/dashboard');
     revalidatePath(`/dashboard/edit-student/${id}`);
     return { success: 'Student updated successfully.' };

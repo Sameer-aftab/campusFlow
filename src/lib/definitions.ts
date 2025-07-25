@@ -30,6 +30,8 @@ export type Student = {
   progress: 'Excellent' | 'Good' | 'Average' | 'Poor';
   conduct: 'Excellent' | 'Good' | 'Average' | 'Poor';
   grade: string;
+  sscType?: 'SSC I' | 'SSC II';
+  sscRollNo?: string;
 };
 
 export const certificateTypes = ['Appearance', 'Character', 'Pass', 'School Leaving'] as const;

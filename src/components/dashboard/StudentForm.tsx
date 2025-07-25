@@ -42,6 +42,8 @@ export function StudentForm({ student }: StudentFormProps) {
       classInWhichAdmitted: '',
       examination: '',
       underSeatNo: '',
+      sscType: undefined,
+      sscRollNo: '',
     },
   });
 
@@ -184,6 +186,19 @@ export function StudentForm({ student }: StudentFormProps) {
                 )} />
                  <FormField control={form.control} name="grade" render={({ field }) => (
                   <FormItem><FormLabel>Grade</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
+              </CardContent>
+            </Card>
+             <Card>
+              <CardHeader>
+                <CardTitle>SSC Information</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <FormField control={form.control} name="sscType" render={({ field }) => (
+                    <FormItem><FormLabel>SSC Type</FormLabel><FormControl><RadioGroup onValueChange={field.onChange} value={field.value} className="flex items-center space-x-4"><FormItem className="flex items-center space-x-2"><FormControl><RadioGroupItem value="SSC I" /></FormControl><FormLabel className="font-normal">SSC I</FormLabel></FormItem><FormItem className="flex items-center space-x-2"><FormControl><RadioGroupItem value="SSC II" /></FormControl><FormLabel className="font-normal">SSC II</FormLabel></FormItem></RadioGroup></FormControl><FormMessage /></FormItem>
+                )} />
+                <FormField control={form.control} name="sscRollNo" render={({ field }) => (
+                  <FormItem><FormLabel>SSC Roll No.</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
               </CardContent>
             </Card>

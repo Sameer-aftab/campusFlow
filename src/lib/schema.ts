@@ -36,6 +36,8 @@ export const studentSchema = z.object({
   progress: z.enum(['Excellent', 'Good', 'Average', 'Poor'], { required_error: 'Progress is required' }),
   conduct: z.enum(['Excellent', 'Good', 'Average', 'Poor'], { required_error: 'Conduct is required' }),
   grade: z.string().min(1, 'Grade is required'),
+  sscType: z.enum(['SSC I', 'SSC II']).optional(),
+  sscRollNo: z.string().optional(),
 });
 
 export type StudentFormValues = z.infer<typeof studentSchema>;
