@@ -261,7 +261,7 @@ export function BulkCertificateGenerator({ students }: { students: Student[] }) 
                 <div className="mt-4 text-right no-print">
                     <Button onClick={handlePrint}>
                         <Printer className="mr-2 h-4 w-4"/>
-                        Print All Certificates
+                        {generatedCertificates.length > 1 ? 'Print All Certificates' : 'Print Certificate'}
                     </Button>
                 </div>
           </div>
