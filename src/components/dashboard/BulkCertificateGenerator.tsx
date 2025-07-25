@@ -18,6 +18,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Checkbox } from '@/components/ui/checkbox';
 import { generateCertificateText } from '@/lib/certificate-templates';
 import { certificateTypes } from '@/lib/definitions';
+import { SchoolLogo } from './SchoolLogo';
 
 type GeneratedCertificate = {
     studentName: string;
@@ -242,7 +243,7 @@ export function BulkCertificateGenerator({ students }: { students: Student[] }) 
                                 <>
                                 <CardHeader className="items-center text-center">
                                   <h2 className="text-xl md:text-3xl font-bold tracking-wider">Govt: (N) NOOR MUHAMMAD HIGH SCHOOL HYDERABAD</h2>
-                                  <img src="https://placehold.co/100x100.png" alt="School Logo" className="w-24 h-24 mx-auto mt-4 rounded-full" data-ai-hint="school logo" />
+                                   <div className="w-24 h-24 mx-auto mt-4"><SchoolLogo /></div>
                                   <Separator className="my-4"/>
                                   <CardTitle className="text-xl md:text-2xl font-bold tracking-widest uppercase text-primary pt-4">
                                   {certificateType} Certificate
