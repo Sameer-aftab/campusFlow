@@ -5,7 +5,6 @@ import { format } from 'date-fns';
 import { Loader2, Printer } from 'lucide-react';
 
 import type { Student } from '@/lib/definitions';
-import { generateCertificate, type GenerateCertificateOutput } from '@/ai/flows/generate-certificate';
 import { useToast } from '@/hooks/use-toast';
 
 import { Button } from '@/components/ui/button';
@@ -17,14 +16,12 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Checkbox } from '@/components/ui/checkbox';
-
-type CertificateType = 'Appearance' | 'Character' | 'Pass' | 'School Leaving';
-
-const certificateTypes: CertificateType[] = ['Appearance', 'Character', 'Pass', 'School Leaving'];
+import { generateCertificateText, CertificateType, certificateTypes } from '@/lib/certificate-templates';
 
 type GeneratedCertificate = {
     studentName: string;
     certificateText: string;
+    student: Student;
 }
 
 export function BulkCertificateGenerator({ students }: { students: Student[] }) {
@@ -90,23 +87,11 @@ export function BulkCertificateGenerator({ students }: { students: Student[] }) 
     const studentsToProcess = students.filter(s => selectedStudents.has(s.id));
 
     try {
-      const promises = studentsToProcess.map(student => {
-        const studentDataForAI = {
-          ...student,
-          dateOfBirth: format(new Date(student.dateOfBirth), 'yyyy-MM-dd'),
-          admissionDate: format(new Date(student.admissionDate), 'yyyy-MM-dd'),
-          dateOfLeaving: student.dateOfLeaving ? format(new Date(student.dateOfLeaving), 'yyyy-MM-dd') : 'N/A',
-          cnic: student.cnic || 'N/A',
-          remarks: student.remarks || 'N/A',
-          reasonOfLeaving: student.reasonOfLeaving || 'N/A',
-        };
-        return generateCertificate({
-          studentData: studentDataForAI,
-          certificateType,
-        }).then(result => ({ studentName: student.studentName, ...result }));
+      const results = studentsToProcess.map(student => {
+        const certificateText = generateCertificateText(certificateType, student);
+        return { studentName: student.studentName, certificateText, student };
       });
       
-      const results = await Promise.all(promises);
       setGeneratedCertificates(results);
       setShowCertificates(true);
 
@@ -190,29 +175,32 @@ export function BulkCertificateGenerator({ students }: { students: Student[] }) 
         {showCertificates ? (
            <div className="space-y-4">
                 {generatedCertificates.map((cert, index) => (
-                    <Card key={index} className="min-h-[500px] shadow-lg printable-area">
-                    <CardHeader className="items-center text-center">
-                        <img src="https://placehold.co/100x100.png" alt="School Logo" className="w-24 h-24 mx-auto mb-4 rounded-full" data-ai-hint="school logo" />
-                        <h2 className="text-3xl font-bold tracking-wider">CampusFlow School System</h2>
-                        <p className="text-muted-foreground">Knowledge is Power</p>
-                        <Separator className="my-4"/>
-                        <CardTitle className="text-2xl font-bold tracking-widest uppercase text-primary pt-4">
-                        {certificateType} Certificate
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent className="px-12 py-8 text-lg leading-relaxed">
-                        <p>{cert.certificateText}</p>
-                        
-                        <div className="flex justify-between mt-24 pt-8 border-t-2 border-dashed">
-                            <div className="text-center">
-                                <p className="border-t-2 border-foreground pt-2">Principal's Signature</p>
-                            </div>
-                            <div className="text-center">
-                                <p className="font-semibold">Date of Issue:</p>
-                                <p>{format(new Date(), 'MMMM dd, yyyy')}</p>
-                            </div>
-                        </div>
-                    </CardContent>
+                    <Card key={index} className="min-h-[700px] shadow-lg printable-area flex flex-col justify-between">
+                      <CardHeader className="items-center text-center">
+                          <img src="https://placehold.co/100x100.png" alt="School Logo" className="w-24 h-24 mx-auto mb-4 rounded-full" data-ai-hint="school logo" />
+                          <h2 className="text-3xl font-bold tracking-wider">Govt: (N) NOOR MUHAMMAD HIGH SCHOOL HYDERABAD</h2>
+                          <Separator className="my-4"/>
+                          <CardTitle className="text-2xl font-bold tracking-widest uppercase text-primary pt-4">
+                          {certificateType} Certificate
+                          </CardTitle>
+                      </CardHeader>
+                      <CardContent className="px-12 py-8 text-lg leading-relaxed text-center flex-grow">
+                          <p dangerouslySetInnerHTML={{ __html: cert.certificateText }}></p>
+                      </CardContent>
+                      <CardContent className="px-12 pb-12">
+                         <div className="flex justify-between items-end pt-8">
+                              <div className="text-center">
+                                  <p className="font-semibold">Date:</p>
+                                  <p>{format(new Date(), 'MMMM dd, yyyy')}</p>
+                              </div>
+                              <div className="text-center">
+                                  <p className="border-t-2 border-foreground pt-2 px-8">First Assistant</p>
+                              </div>
+                               <div className="text-center">
+                                  <p className="border-t-2 border-foreground pt-2 px-8">Headmaster</p>
+                              </div>
+                          </div>
+                      </CardContent>
                     </Card>
                 ))}
 

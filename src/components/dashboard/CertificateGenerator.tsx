@@ -5,7 +5,6 @@ import { format } from 'date-fns';
 import { Loader2, Printer } from 'lucide-react';
 
 import type { Student } from '@/lib/definitions';
-import { generateCertificate } from '@/ai/flows/generate-certificate';
 import { useToast } from '@/hooks/use-toast';
 
 import { Button } from '@/components/ui/button';
@@ -13,10 +12,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+import { generateCertificateText, CertificateType, certificateTypes } from '@/lib/certificate-templates';
 
-type CertificateType = 'Appearance' | 'Character' | 'Pass' | 'School Leaving';
-
-const certificateTypes: CertificateType[] = ['Appearance', 'Character', 'Pass', 'School Leaving'];
 
 export function CertificateGenerator({ student }: { student: Student }) {
   const { toast } = useToast();
@@ -29,22 +26,9 @@ export function CertificateGenerator({ student }: { student: Student }) {
     setIsLoading(true);
     setShowCertificate(false);
     
-    const studentDataForAI = {
-      ...student,
-      dateOfBirth: format(new Date(student.dateOfBirth), 'yyyy-MM-dd'),
-      admissionDate: format(new Date(student.admissionDate), 'yyyy-MM-dd'),
-      dateOfLeaving: student.dateOfLeaving ? format(new Date(student.dateOfLeaving), 'yyyy-MM-dd') : 'N/A',
-      cnic: student.cnic || 'N/A',
-      remarks: student.remarks || 'N/A',
-      reasonOfLeaving: student.reasonOfLeaving || 'N/A',
-    };
-
     try {
-      const result = await generateCertificate({
-        studentData: studentDataForAI,
-        certificateType,
-      });
-      setGeneratedText(result.certificateText);
+      const text = generateCertificateText(certificateType, student);
+      setGeneratedText(text);
       setShowCertificate(true);
     } catch (error) {
       console.error('Error generating certificate:', error);
@@ -99,28 +83,31 @@ export function CertificateGenerator({ student }: { student: Student }) {
       <div className="md:col-span-2">
         {showCertificate ? (
            <div className="space-y-4">
-            <Card className="min-h-[500px] shadow-lg printable-area">
+            <Card className="min-h-[700px] shadow-lg printable-area flex flex-col justify-between">
               <CardHeader className="items-center text-center">
                  <img src="https://placehold.co/100x100.png" alt="School Logo" className="w-24 h-24 mx-auto mb-4 rounded-full" data-ai-hint="school logo" />
-                <h2 className="text-3xl font-bold tracking-wider">CampusFlow School System</h2>
-                <p className="text-muted-foreground">Knowledge is Power</p>
+                <h2 className="text-3xl font-bold tracking-wider">Govt: (N) NOOR MUHAMMAD HIGH SCHOOL HYDERABAD</h2>
                 <Separator className="my-4"/>
                 <CardTitle className="text-2xl font-bold tracking-widest uppercase text-primary pt-4">
                   {certificateType} Certificate
                 </CardTitle>
               </CardHeader>
-              <CardContent className="px-12 py-8 text-lg leading-relaxed">
-                <p>{generatedText}</p>
-                
-                <div className="flex justify-between mt-24 pt-8 border-t-2 border-dashed">
-                    <div className="text-center">
-                        <p className="border-t-2 border-foreground pt-2">Principal's Signature</p>
-                    </div>
-                    <div className="text-center">
-                        <p className="font-semibold">Date of Issue:</p>
-                        <p>{format(new Date(), 'MMMM dd, yyyy')}</p>
-                    </div>
-                </div>
+              <CardContent className="px-12 py-8 text-lg leading-relaxed text-center flex-grow">
+                <p dangerouslySetInnerHTML={{ __html: generatedText }} />
+              </CardContent>
+               <CardContent className="px-12 pb-12">
+                 <div className="flex justify-between items-end pt-8">
+                      <div className="text-center">
+                          <p className="font-semibold">Date:</p>
+                          <p>{format(new Date(), 'MMMM dd, yyyy')}</p>
+                      </div>
+                      <div className="text-center">
+                          <p className="border-t-2 border-foreground pt-2 px-8">First Assistant</p>
+                      </div>
+                       <div className="text-center">
+                          <p className="border-t-2 border-foreground pt-2 px-8">Headmaster</p>
+                      </div>
+                  </div>
               </CardContent>
             </Card>
             <div className="mt-4 text-right no-print">
@@ -131,7 +118,7 @@ export function CertificateGenerator({ student }: { student: Student }) {
             </div>
           </div>
         ) : (
-          <Card className="min-h-[500px] flex items-center justify-center border-dashed">
+          <Card className="min-h-[700px] flex items-center justify-center border-dashed">
             <div className="text-center text-muted-foreground">
               <p>Your generated certificate will appear here.</p>
             </div>
