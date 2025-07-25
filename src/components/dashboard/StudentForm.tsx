@@ -69,6 +69,7 @@ export function StudentForm({ student }: StudentFormProps) {
         cnic: values.cnic || '',
         remarks: values.remarks || '',
         reasonOfLeaving: values.reasonOfLeaving || '',
+        underSeatNo: values.underSeatNo || '',
     };
     
     const result = student ? await updateStudent(student.id, cleanedValues) : await addStudent(cleanedValues);
@@ -154,18 +155,18 @@ export function StudentForm({ student }: StudentFormProps) {
 
              <Card>
               <CardHeader>
-                <CardTitle>Leaving Information</CardTitle>
+                <CardTitle>Leaving Information (Optional)</CardTitle>
               </CardHeader>
               <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
                  <FormField control={form.control} name="dateOfLeaving" render={({ field }) => (
-                  <FormItem><FormLabel>Date of Leaving (Optional)</FormLabel><FormControl><DatePicker value={field.value || undefined} onChange={field.onChange} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel>Date of Leaving</FormLabel><FormControl><DatePicker value={field.value || undefined} onChange={field.onChange} /></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="reasonOfLeaving" render={({ field }) => (
-                  <FormItem><FormLabel>Reason for Leaving (Optional)</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel>Reason for Leaving</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
                   <FormField control={form.control} name="examination" render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Examination</FormLabel>
+                    <FormLabel>Examination Passed</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
@@ -185,7 +186,7 @@ export function StudentForm({ student }: StudentFormProps) {
                   <FormItem><FormLabel>Under Seat No:</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
                  <FormField control={form.control} name="remarks" render={({ field }) => (
-                  <FormItem className="md:col-span-2"><FormLabel>Remarks (Optional)</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem className="md:col-span-2"><FormLabel>Remarks</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
               </CardContent>
             </Card>
@@ -228,7 +229,7 @@ export function StudentForm({ student }: StudentFormProps) {
             </Card>
              <Card>
               <CardHeader>
-                <CardTitle>SSC Information</CardTitle>
+                <CardTitle>SSC Information (Optional)</CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 <FormField control={form.control} name="妣ype" render={({ field }) => (
