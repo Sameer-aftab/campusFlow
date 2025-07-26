@@ -163,19 +163,19 @@ export async function generateCertificateText(type: CertificateType, student: St
              return `This is to certify that <b>${studentName}</b>, S/O <b>${fatherName}</b> is a student of this institution. As far as my knowledge goes he bears a <b>${finalCharacter}</b> character.`;
 
         case 'Pass':
-            return `This is to certify that Mr. <b>${formatValue(studentName)}</b> S/o <b>${formatValue(fatherName)}</b> by Caste <b>${formatValue(raceAndCaste)}</b>
+            return `this is certify that Mr. <b>${formatValue(studentName)}</b> S/o <b>${formatValue(fatherName)}</b> by Caste <b>${formatValue(raceAndCaste)}</b>
             <br/><br/>
-            was enrolled under G.R.No: <b>${formatValue(grNo)}</b> and has been a bonafied student of this school from <b>${formatDate(admissionDate)}</b> to <b>${dateOfLeaving ? formatDate(dateOfLeaving) : formatDate(new Date())}</b>. He has Passed class <b>${formatValue(examination)}</b>.
+            was enrolled under G.R.No: <b>${formatValue(grNo)}</b> and has been a bonafied student of this school from <b>${formatDate(admissionDate)}</b> to <b>${dateOfLeaving ? formatDate(dateOfLeaving) : formatDate(new Date())}</b> He has Passed class <b>${formatValue(examination)}</b>
             <br/><br/>
-            According to School Record his date of Birth is <b>${formatDate(dateOfBirth)}</b> is in words <b>${formatValue(dateOfBirthInWords)}</b>.
+            According to School Record his date of Birth is <b>${formatDate(dateOfBirth)}</b>is in words<b>${formatValue(dateOfBirthInWords)}</b>
             <br/><br/>
-            He bears a good moral and I wish him success in future.`;
+            he bears a good moral and i wish him success in future`;
 
         case 'School Leaving':
         return `<div class="w-full text-black font-sans bg-white p-10" style="height: 100vh; display: flex; flex-direction: column;">
           <div class="w-full h-full relative border-2 border-black" style="padding: 2rem;">
             ${getAjrakBorderSvg()}
-             <div class="p-8 flex flex-col justify-between h-full">
+             <div class="p-8 flex flex-col justify-between h-full" style="padding: 2rem;">
                 <header class="text-center space-y-2 mb-6">
                   <h1 class="text-3xl font-bold tracking-wide">Govt: (N) NOOR MUHAMMAD HIGH SCHOOL HYDERABAD</h1>
                   ${getLogoSvg()}
