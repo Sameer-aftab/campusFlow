@@ -65,61 +65,25 @@ function getLogoSvg() {
     `;
 }
 
-function getAjrakBorderSvg() {
+function getUniformBorderSvg() {
     return `
-    <svg width="100%" height="100%" style="position: absolute; top: 0; left: 0; z-index: 1;" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-        <defs>
-            <pattern id="ajrak-top-print" patternUnits="userSpaceOnUse" width="100" height="30">
-                <rect width="100" height="30" fill="#6699CC" />
-                <rect y="12" width="100" height="6" fill="#09090b" />
-                <g fill="#f8fafc">
-                    <circle cx="10" cy="15" r="2" />
-                    <rect x="20" y="13" width="10" height="4" />
-                    <circle cx="40" cy="15" r="2" />
-                    <rect x="50" y="13" width="10" height="4" />
-                    <circle cx="70" cy="15" r="2" />
-                    <rect x="80" y="13" width="10" height="4" />
-                    <circle cx="100" cy="15" r="2" />
-                </g>
-                 <g fill="#f8fafc">
-                    <circle cx="5" cy="5" r="1" /> <circle cx="15" cy="5" r="1" /> <circle cx="25" cy="5" r="1" /> <circle cx="35" cy="5" r="1" /> <circle cx="45" cy="5" r="1" />
-                    <circle cx="55" cy="5" r="1" /> <circle cx="65" cy="5" r="1" /> <circle cx="75" cy="5" r="1" /> <circle cx="85" cy="5" r="1" /> <circle cx="95" cy="5" r="1" />
-                    <circle cx="5" cy="25" r="1" /> <circle cx="15" cy="25" r="1" /> <circle cx="25" cy="25" r="1" /> <circle cx="35" cy="25" r="1" /> <circle cx="45" cy="25" r="1" />
-                    <circle cx="55" cy="25" r="1" /> <circle cx="65" cy="25" r="1" /> <circle cx="75" cy="25" r="1" /> <circle cx="85" cy="25" r="1" /> <circle cx="95" cy="25" r="1" />
-                </g>
-            </pattern>
-            <pattern id="ajrak-main-print" patternUnits="userSpaceOnUse" width="120" height="120">
-                <rect width="120" height="120" fill="#09090b" />
-                <path d="M60 10 C 30 10, 10 30, 10 60 C 10 90, 30 110, 60 110 C 90 110, 110 90, 110 60 C 110 30, 90 10, 60 10 Z" fill="#6699CC"/>
-                <circle cx="60" cy="60" r="15" fill="#09090b"/>
-                <circle cx="60" cy="60" r="8" fill="#6699CC"/>
-                <g fill="#f8fafc" transform="translate(60,60)">
-                    <path transform="rotate(0)" d="M 0 -18 C 5 -18, 5 -28, 0 -28 C -5 -28, -5 -18, 0 -18 Z" />
-                    <path transform="rotate(45)" d="M 0 -18 C 5 -18, 5 -28, 0 -28 C -5 -28, -5 -18, 0 -18 Z" />
-                    <path transform="rotate(90)" d="M 0 -18 C 5 -18, 5 -28, 0 -28 C -5 -28, -5 -18, 0 -18 Z" />
-                    <path transform="rotate(135)" d="M 0 -18 C 5 -18, 5 -28, 0 -28 C -5 -28, -5 -18, 0 -18 Z" />
-                    <path transform="rotate(180)" d="M 0 -18 C 5 -18, 5 -28, 0 -28 C -5 -28, -5 -18, 0 -18 Z" />
-                    <path transform="rotate(225)" d="M 0 -18 C 5 -18, 5 -28, 0 -28 C -5 -28, -5 -18, 0 -18 Z" />
-                    <path transform="rotate(270)" d="M 0 -18 C 5 -18, 5 -28, 0 -28 C -5 -28, -5 -18, 0 -18 Z" />
-                    <path transform="rotate(315)" d="M 0 -18 C 5 -18, 5 -28, 0 -28 C -5 -28, -5 -18, 0 -18 Z" />
-                </g>
-                <g fill="#f8fafc">
-                    <path d="M10 60 C 20 40, 20 20, 40 10 L 30 30 C 30 30, 40 50, 10 60 Z"/>
-                    <path d="M110 60 C 100 40, 100 20, 80 10 L 90 30 C 90 30, 80 50, 110 60 Z"/>
-                    <path d="M10 60 C 20 80, 20 100, 40 110 L 30 90 C 30 90, 40 70, 10 60 Z"/>
-                    <path d="M110 60 C 100 80, 100 100, 80 110 L 90 90 C 90 90, 80 70, 110 60 Z"/>
-                    <path d="M60 10 C 40 20, 20 20, 10 40 L 30 30 C 30 30, 50 40, 60 10 Z" transform="rotate(90, 60, 60)"/>
-                    <path d="M60 110 C 40 100, 20 100, 10 80 L 30 90 C 30 90, 50 80, 60 110 Z" transform="rotate(90, 60, 60)"/>
-                    <path d="M60 10 C 80 20, 100 20, 110 40 L 90 30 C 90 30, 70 40, 60 10 Z" transform="rotate(-90, 60, 60)"/>
-                    <path d="M60 110 C 80 100, 100 100, 110 80 L 90 90 C 90 90, 70 80, 60 110 Z" transform="rotate(-90, 60, 60)"/>
-                </g>
-            </pattern>
-        </defs>
-        
-        <rect x="0" y="0" width="100%" height="30" fill="url(#ajrak-top-print)" />
-        <rect x="0" y="30" width="30" height="calc(100% - 60px)" fill="url(#ajrak-main-print)" />
-        <rect x="calc(100% - 30px)" y="30" width="30" height="calc(100% - 60px)" fill="url(#ajrak-main-print)" />
-        <rect x="0" y="calc(100% - 30px)" width="100%" height="30" fill="url(#ajrak-top-print)" />
+    <svg
+      viewBox="0 0 100 100"
+      preserveAspectRatio="none"
+      style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <pattern id="border-pattern" patternUnits="userSpaceOnUse" width="5" height="5">
+          <rect width="5" height="5" fill="white" />
+          <path d="M0,0 L2.5,2.5 L0,5 Z" fill="black" />
+          <path d="M5,0 L2.5,2.5 L5,5 Z" fill="black" />
+        </pattern>
+      </defs>
+      <rect x="0" y="0" width="100" height="5" fill="url(#border-pattern)" />
+      <rect x="0" y="95" width="100" height="5" fill="url(#border-pattern)" />
+      <rect x="0" y="5" width="5" height="90" fill="url(#border-pattern)" />
+      <rect x="95" y="5" width="5" height="90" fill="url(#border-pattern)" />
     </svg>
     `;
 }
@@ -174,7 +138,7 @@ export async function generateCertificateText(type: CertificateType, student: St
         case 'School Leaving':
         return `<div class="w-full text-black font-sans bg-white p-10" style="height: 100vh; display: flex; flex-direction: column;">
           <div class="w-full h-full relative border-2 border-black" style="padding: 2rem;">
-            ${getAjrakBorderSvg()}
+            ${getUniformBorderSvg()}
              <div class="p-8 flex flex-col justify-between h-full" style="padding: 2rem;">
                 <header class="text-center space-y-2 mb-6">
                   <h1 class="text-3xl font-bold tracking-wide">Govt: (N) NOOR MUHAMMAD HIGH SCHOOL HYDERABAD</h1>
