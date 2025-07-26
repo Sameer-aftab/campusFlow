@@ -4,42 +4,6 @@ export function AjrakBorder() {
   return (
     <svg width="100%" height="100%" style={{ position: 'absolute', top: 0, left: 0, zIndex: 1 }} xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
         <defs>
-            <pattern id="ajrak-top" patternUnits="userSpaceOnUse" width="100" height="30" patternTransform="scale(1)">
-                <rect width="100" height="30" fill="hsl(var(--primary))" />
-                <rect y="12" width="100" height="6" fill="hsl(var(--foreground))" />
-                {/* Simple representation of the top pattern */}
-                <g fill="hsl(var(--primary-foreground))">
-                    <circle cx="10" cy="15" r="2" />
-                    <rect x="20" y="13" width="10" height="4" />
-                    <circle cx="40" cy="15" r="2" />
-                    <rect x="50" y="13" width="10" height="4" />
-                    <circle cx="70" cy="15" r="2" />
-                    <rect x="80" y="13" width="10" height="4" />
-                    <circle cx="100" cy="15" r="2" />
-                </g>
-                 <g fill="hsl(var(--primary-foreground))">
-                    <circle cx="5" cy="5" r="1" />
-                    <circle cx="15" cy="5" r="1" />
-                    <circle cx="25" cy="5" r="1" />
-                    <circle cx="35" cy="5" r="1" />
-                    <circle cx="45" cy="5" r="1" />
-                    <circle cx="55" cy="5" r="1" />
-                    <circle cx="65" cy="5" r="1" />
-                    <circle cx="75" cy="5" r="1" />
-                    <circle cx="85" cy="5" r="1" />
-                    <circle cx="95" cy="5" r="1" />
-                    <circle cx="5" cy="25" r="1" />
-                    <circle cx="15" cy="25" r="1" />
-                    <circle cx="25" cy="25" r="1" />
-                    <circle cx="35" cy="25" r="1" />
-                    <circle cx="45" cy="25" r="1" />
-                    <circle cx="55" cy="25" r="1" />
-                    <circle cx="65" cy="25" r="1" />
-                    <circle cx="75" cy="25" r="1" />
-                    <circle cx="85" cy="25" r="1" />
-                    <circle cx="95" cy="25" r="1" />
-                </g>
-            </pattern>
             <pattern id="ajrak-main" patternUnits="userSpaceOnUse" width="120" height="120" patternTransform="scale(1)">
                 <rect width="120" height="120" fill="hsl(var(--foreground))" />
                 {/* Central Medallion */}
@@ -67,14 +31,14 @@ export function AjrakBorder() {
         </defs>
         
         {/* Top Border */}
-        <rect x="0" y="0" width="100%" height="30" fill="url(#ajrak-top)" />
+        <rect x="0" y="0" width="100%" height="30" fill="url(#ajrak-main)" />
 
         {/* Main Content Area Border */}
         <rect x="0" y="30" width="30" height="calc(100% - 60px)" fill="url(#ajrak-main)" />
         <rect x="calc(100% - 30px)" y="30" width="30" height="calc(100% - 60px)" fill="url(#ajrak-main)" />
 
         {/* Bottom Border */}
-        <rect x="0" y="calc(100% - 30px)" width="100%" height="30" fill="url(#ajrak-top)" />
+        <rect x="0" y="calc(100% - 30px)" width="100%" height="30" fill="url(#ajrak-main)" />
     </svg>
   );
 }
