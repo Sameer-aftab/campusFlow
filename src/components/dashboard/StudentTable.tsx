@@ -133,9 +133,10 @@ export function StudentTable({ students }: { students: Student[] }) {
 
   const filteredStudents = useMemo(() => {
     return students.filter(student => {
+      if (!student) return false;
       const lowerCaseSearchTerm = searchTerm.toLowerCase();
-      const searchMatch = student.studentName.toLowerCase().includes(lowerCaseSearchTerm) ||
-                          student.grNo.toLowerCase().includes(lowerCaseSearchTerm);
+      const searchMatch = (student.studentName && student.studentName.toLowerCase().includes(lowerCaseSearchTerm)) ||
+                          (student.grNo && student.grNo.toLowerCase().includes(lowerCaseSearchTerm));
       const classMatch = classFilter === 'all' || student.classStudying === classFilter;
       const sectionMatch = sectionFilter === 'all' || student.section === sectionFilter;
       return searchMatch && classMatch && sectionMatch;
