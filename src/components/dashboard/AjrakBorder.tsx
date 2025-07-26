@@ -17,9 +17,6 @@ export function AjrakBorder() {
         </pattern>
       </defs>
 
-      {/* Red background */}
-      <rect width="100" height="100" fill="red" />
-
       {/* Top border */}
       <rect x="0" y="0" width="100" height="5" fill="url(#border-pattern)" />
 
