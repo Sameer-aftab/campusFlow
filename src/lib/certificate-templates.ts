@@ -225,7 +225,7 @@ export async function generateCertificateText(type: CertificateType, student: St
                           First Assistant
                       </div>
                       <div style="text-align: center; border-top: 1px solid black; padding: 4px 48px 0;">
-                          Headmaster
+                          Chief Headmaster
                       </div>
                   </div>
               </footer>

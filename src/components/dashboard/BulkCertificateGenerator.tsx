@@ -264,7 +264,7 @@ export function BulkCertificateGenerator({ students }: { students: Student[] }) 
                                               <p className="border-t-2 border-foreground pt-2 px-4 md:px-8">First Assistant</p>
                                           </div>
                                           <div className="text-center">
-                                              <p className="border-t-2 border-foreground pt-2 px-4 md:px-8">Headmaster</p>
+                                              <p className="border-t-2 border-foreground pt-2 px-4 md:px-8">Chief Headmaster</p>
                                           </div>
                                       </div>
                                     </CardContent>
