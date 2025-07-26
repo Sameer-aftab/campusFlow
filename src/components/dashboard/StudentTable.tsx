@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { MoreHorizontal, Pencil, Trash2, FileText, FileSpreadsheet, File, Search } from 'lucide-react';
+import { MoreHorizontal, Pencil, Trash2, FileText, FileSpreadsheet, File, Search, Upload } from 'lucide-react';
 import {
   Table,
   TableBody,
@@ -30,7 +30,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import type { Student } from '@/lib/definitions';
-import { deleteStudent } from '@/lib/actions';
+import { deleteStudent, importFromExcel } from '@/lib/actions';
 import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -61,6 +61,62 @@ function downloadAsCSV(data: Student[], filename: string) {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+}
+
+function ExcelUploadButton() {
+  const router = useRouter();
+  const { toast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    setIsUploading(true);
+    
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const fileContent = e.target?.result;
+      if (typeof fileContent === 'string') {
+        const result = await importFromExcel(fileContent);
+        if (result.success) {
+          toast({ title: 'Success', description: result.success });
+          router.refresh();
+        } else {
+          toast({ variant: 'destructive', title: 'Error', description: result.error });
+        }
+      }
+      setIsUploading(false);
+       // Reset the file input so the same file can be uploaded again
+      if(fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    };
+    reader.readAsBinaryString(file);
+  };
+
+  const handleClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  return (
+    <>
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        className="hidden"
+        accept=".xlsx, .xls"
+      />
+      <Button variant="outline" onClick={handleClick} disabled={isUploading}>
+        <Upload className="mr-2 h-4 w-4" />
+        {isUploading ? 'Importing...' : 'Import from Excel'}
+      </Button>
+    </>
+  );
 }
 
 export function StudentTable({ students }: { students: Student[] }) {
@@ -137,6 +193,7 @@ export function StudentTable({ students }: { students: Student[] }) {
         </div>
       </div>
       <div className="mb-4 flex justify-end gap-2">
+         <ExcelUploadButton />
         <Button variant="outline" onClick={() => downloadAsCSV(filteredStudents, 'students.csv')}>
           <FileSpreadsheet className="mr-2 h-4 w-4" /> Export to Excel (CSV)
         </Button>

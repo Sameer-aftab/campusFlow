@@ -1,6 +1,6 @@
 import type { Student } from './definitions';
 
-export const students: Student[] = [
+export let students: Student[] = [
   {
     id: '1',
     grNo: '1001',
