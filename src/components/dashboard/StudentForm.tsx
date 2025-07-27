@@ -1,9 +1,9 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
 import { studentSchema, type StudentFormValues } from '@/lib/schema';
 import type { Student } from '@/lib/definitions';
@@ -17,6 +17,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { DatePicker } from './DatePicker';
 import { Textarea } from '@/components/ui/textarea';
+import { ToWords } from 'to-words';
+import { format } from 'date-fns';
 
 interface StudentFormProps {
   student?: Student;
@@ -29,6 +31,31 @@ const examinationOptions = [
   'S.S.C Part-I Annual',
   'S.S.C Part-II Annual',
 ];
+
+const toWords = new ToWords({
+  localeCode: 'en-IN',
+  converterOptions: {
+    currency: false,
+  },
+});
+
+function capitalize(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function dateToWords(date: Date): string {
+  if (!date || !(date instanceof Date) || isNaN(date.getTime())) {
+    return '';
+  }
+  const day = date.getDate();
+  const month = format(date, 'MMMM');
+  const year = date.getFullYear();
+
+  const dayInWords = capitalize(toWords.convert(day, { doNotAddOnly: true }));
+  const yearInWords = capitalize(toWords.convert(year, { doNotAddOnly: true }));
+
+  return `${dayInWords} ${month} ${yearInWords}`;
+}
 
 export function StudentForm({ student }: StudentFormProps) {
   const router = useRouter();
@@ -80,6 +107,21 @@ export function StudentForm({ student }: StudentFormProps) {
           section: '',
         },
   });
+
+  const dateOfBirthValue = useWatch({
+    control: form.control,
+    name: 'dateOfBirth',
+  });
+
+  useEffect(() => {
+    if (dateOfBirthValue) {
+      const words = dateToWords(dateOfBirthValue);
+      form.setValue('dateOfBirthInWords', words.toUpperCase(), {
+        shouldValidate: true,
+      });
+    }
+  }, [dateOfBirthValue, form]);
+
 
   async function onSubmit(values: StudentFormValues) {
     setIsSubmitting(true);
