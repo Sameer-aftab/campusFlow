@@ -37,42 +37,65 @@ export function StudentForm({ student }: StudentFormProps) {
 
   const form = useForm<StudentFormValues>({
     resolver: zodResolver(studentSchema),
-    defaultValues: student || {
-      vaccine: undefined,
-      newEnrolReEnrol: undefined,
-      progress: undefined,
-      conduct: undefined,
-      disability: 'None',
-      raceAndCaste: '',
-      placeOfBirth: '',
-      dateOfBirthInWords: '',
-      lastSchoolAttended: '',
-      classInWhichAdmitted: '',
-      examination: undefined,
-      underSeatNo: '',
-      grade: '',
-      reasonOfLeaving: '',
-      remarks: '',
-      sscRollNo: '',
-      cnic: '',
-      dateOfLeaving: null,
-      妣ype: undefined,
-    },
+    defaultValues: student
+      ? {
+          ...student,
+          dateOfLeaving: student.dateOfLeaving || null,
+          cnic: student.cnic || '',
+          sscRollNo: student.sscRollNo || '',
+          remarks: student.remarks || '',
+          reasonOfLeaving: student.reasonOfLeaving || '',
+          underSeatNo: student.underSeatNo || '',
+        }
+      : {
+          grNo: '',
+          studentName: '',
+          fatherName: '',
+          vaccine: undefined,
+          newEnrolReEnrol: undefined,
+          progress: undefined,
+          conduct: undefined,
+          disability: 'None',
+          raceAndCaste: '',
+          placeOfBirth: '',
+          dateOfBirthInWords: '',
+          lastSchoolAttended: '',
+          classInWhichAdmitted: '',
+          examination: undefined,
+          underSeatNo: '',
+          grade: '',
+          reasonOfLeaving: '',
+          remarks: '',
+          sscRollNo: '',
+          cnic: '',
+          dateOfLeaving: null,
+          妣ype: undefined,
+          bForm: '',
+          religion: '',
+          guardianName: '',
+          guardianCnic: '',
+          relationshipWithGuardian: '',
+          contactNo: '',
+          classStudying: '',
+          section: '',
+        },
   });
 
   async function onSubmit(values: StudentFormValues) {
     setIsSubmitting(true);
     // Ensure optional fields that are empty strings are not sent as such if they should be undefined
     const cleanedValues = {
-        ...values,
-        sscRollNo: values.sscRollNo || '',
-        cnic: values.cnic || '',
-        remarks: values.remarks || '',
-        reasonOfLeaving: values.reasonOfLeaving || '',
-        underSeatNo: values.underSeatNo || '',
+      ...values,
+      sscRollNo: values.sscRollNo || '',
+      cnic: values.cnic || '',
+      remarks: values.remarks || '',
+      reasonOfLeaving: values.reasonOfLeaving || '',
+      underSeatNo: values.underSeatNo || '',
     };
-    
-    const result = student ? await updateStudent(student.id, cleanedValues) : await addStudent(cleanedValues);
+
+    const result = student
+      ? await updateStudent(student.id, cleanedValues)
+      : await addStudent(cleanedValues);
 
     if (result.success) {
       toast({ title: 'Success', description: result.success });
