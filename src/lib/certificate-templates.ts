@@ -1,5 +1,3 @@
-
-
 'use server';
 
 import { format } from 'date-fns';
@@ -116,7 +114,7 @@ export async function generateCertificateText(type: CertificateType, student: St
 
     switch (type) {
         case 'Appearance':
-            return `This is to certify that <b>${studentName}</b> S/O <b>${fatherName}</b> was a bonafide student of this School from ${formatDate(admissionDate)} to ${dateOfLeaving ? formatDate(dateOfLeaving) : formatDate(new Date())}. He has filled the form of SSC part II Annual Examination ${currentYear} and that he will secure atleast grade <b>${finalGrade}</b> at the above said Examination.
+            return `This is to certify that <b>${studentName}</b> S/O <b>${fatherName}</b> was a bonafide student of this School from ${formatDate(admissionDate)} to ${dateOfLeaving ? formatDate(dateOfLeaving) : formatDate(new Date())}. He has filled the form of SSC part II Annual Examination ${currentYear} and it is expected that he will secure atleast Grade <b>${finalGrade}</b> at the above said Examination.
             <br/><br/>
             His date of birth as entered in this School General Register is <b>${formatDate(dateOfBirth)}</b>.
             <br/><br/>
@@ -124,7 +122,7 @@ export async function generateCertificateText(type: CertificateType, student: St
         
         case 'Character':
              const finalCharacter = characterOverride || conduct;
-             return `This is to certify that <b>${studentName}</b>, S/O <b>${fatherName}</b> is a student of this institution. As far as my knowledge goes he bears a <b>${finalCharacter}</b> character.`;
+             return `This is to certify that <b>${studentName}</b>, S/O <b>${fatherName}</b> was a bonafide student of this School from <b>${formatDate(admissionDate)}</b> to <b>${dateOfLeaving ? formatDate(dateOfLeaving) : formatDate(new Date())}</b>.To the best of my knowledge he bears a <b>${finalCharacter}</b> Moral character I wist him good`;
 
         case 'Pass':
             return `this is certify that Mr. <b>${formatValue(studentName)}</b> S/o <b>${formatValue(fatherName)}</b> by Caste <b>${formatValue(raceAndCaste)}</b>
@@ -142,7 +140,8 @@ export async function generateCertificateText(type: CertificateType, student: St
              <div class="p-8 flex flex-col justify-between h-full" style="padding: 2rem;">
                 <header class="text-center space-y-2 mb-6">
                   <h1 class="text-3xl font-bold tracking-wide">Govt: (N) NOOR MUHAMMAD HIGH SCHOOL HYDERABAD</h1>
-                  ${getLogoSvg()}
+                  <!-- LOGO_PLACEHOLDER -->
+                  <div style="height: 120px; margin: 20px 0;"></div>
                   <h2 class="text-2xl font-bold tracking-widest uppercase text-black pt-2">SCHOOL LEAVING CERTIFICATE</h2>
                 </header>
 
@@ -202,4 +201,4 @@ export async function generateCertificateText(type: CertificateType, student: St
     }
 }
 
-    
+

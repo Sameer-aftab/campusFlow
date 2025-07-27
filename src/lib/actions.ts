@@ -14,7 +14,7 @@ import * as XLSX from 'xlsx';
 
 export async function login(values: z.infer<typeof loginSchema>) {
   // In a real app, you'd validate against a database
-  if (values.email === 'admin@campusflow.com' && values.password === 'password123') {
+  if (values.email === 'ahmedaun1409@gmail.com' && values.password === '14aunmuhammad2728') {
     redirect('/dashboard');
   } else {
     return { error: 'Invalid email or password.' };

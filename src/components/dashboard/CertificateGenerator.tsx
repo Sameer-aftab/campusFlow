@@ -56,7 +56,8 @@ export function CertificateGenerator({ student }: { student: Student }) {
 
     try {
       const text = await generateCertificateText(certificateType, student, grade, character);
-      setGeneratedText(text);
+      // Replace the logo placeholder with empty string - the logo will be added in the JSX
+      setGeneratedText(text.replace('<!-- LOGO_PLACEHOLDER -->', ''));
       setShowCertificate(true);
     } catch (error) {
       console.error('Error generating certificate:', error);
@@ -160,7 +161,13 @@ export function CertificateGenerator({ student }: { student: Student }) {
             </div>
             <CertWrapper className={`printable-area w-full relative ${isLeavingCert ? 'bg-white text-black' : 'shadow-lg flex flex-col justify-between aspect-[1.414/1]'}`}>
               {isLeavingCert ? (
-                 <div dangerouslySetInnerHTML={{ __html: generatedText }} />
+                <div className="p-6 md:p-8 my-4 mx-4 md:mx-6 border border-gray-200 rounded">
+                  <div className="text-sm md:text-base" dangerouslySetInnerHTML={{ __html: generatedText }} />
+                  {/* Insert the logo at the right position */}
+                  <div className="w-24 h-24 mx-auto absolute top-[165px] left-1/2 transform -translate-x-1/2">
+                    <SchoolLogo />
+                  </div>
+                </div>
               ) : (
                 <>
                   <AjrakBorder />
