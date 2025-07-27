@@ -40,6 +40,7 @@ const toWords = new ToWords({
 });
 
 function capitalize(str: string) {
+  if (!str) return '';
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
@@ -73,6 +74,7 @@ export function StudentForm({ student }: StudentFormProps) {
           remarks: student.remarks || '',
           reasonOfLeaving: student.reasonOfLeaving || '',
           underSeatNo: student.underSeatNo || '',
+          妣ype: student.妣ype || undefined,
         }
       : {
           grNo: '',
@@ -116,16 +118,19 @@ export function StudentForm({ student }: StudentFormProps) {
   useEffect(() => {
     if (dateOfBirthValue) {
       const words = dateToWords(dateOfBirthValue);
-      form.setValue('dateOfBirthInWords', words.toUpperCase(), {
-        shouldValidate: true,
-      });
+      // Only set value if it's different to prevent re-renders
+      if (form.getValues('dateOfBirthInWords') !== words.toUpperCase()) {
+        form.setValue('dateOfBirthInWords', words.toUpperCase(), {
+          shouldValidate: true,
+          shouldDirty: true,
+        });
+      }
     }
-  }, [dateOfBirthValue, form]);
+  }, [dateOfBirthValue?.getTime(), form]);
 
 
   async function onSubmit(values: StudentFormValues) {
     setIsSubmitting(true);
-    // Ensure optional fields that are empty strings are not sent as such if they should be undefined
     const cleanedValues = {
       ...values,
       sscRollNo: values.sscRollNo || '',
@@ -169,7 +174,7 @@ export function StudentForm({ student }: StudentFormProps) {
                   <FormItem><FormLabel>Date of Birth (in figures)</FormLabel><FormControl><DatePicker value={field.value} onChange={field.onChange} /></FormControl><FormMessage /></FormItem>
                 )} />
                  <FormField control={form.control} name="dateOfBirthInWords" render={({ field }) => (
-                  <FormItem><FormLabel>Date of Birth (in words)</FormLabel><FormControl><Input {...field} className="uppercase-input" /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel>Date of Birth (in words)</FormLabel><FormControl><Input {...field} readOnly className="uppercase-input" /></FormControl><FormMessage /></FormItem>
                 )} />
                  <FormField control={form.control} name="placeOfBirth" render={({ field }) => (
                   <FormItem><FormLabel>Place of Birth</FormLabel><FormControl><Input {...field} className="uppercase-input" /></FormControl><FormMessage /></FormItem>
