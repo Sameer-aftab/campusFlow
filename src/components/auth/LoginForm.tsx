@@ -48,7 +48,7 @@ export function LoginForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="admin@campusflow.com" {...field} />
+                <Input placeholder="Enter Username" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -61,7 +61,7 @@ export function LoginForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="password123" {...field} />
+                <Input type="password" placeholder="Enter Your Password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
