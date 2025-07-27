@@ -95,37 +95,37 @@ export function StudentForm({ student }: StudentFormProps) {
               </CardHeader>
               <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <FormField control={form.control} name="studentName" render={({ field }) => (
-                  <FormItem><FormLabel>Student Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel>Student Name</FormLabel><FormControl><Input {...field} className="uppercase-input" /></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="fatherName" render={({ field }) => (
-                  <FormItem><FormLabel>Father's Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel>Father's Name</FormLabel><FormControl><Input {...field} className="uppercase-input" /></FormControl><FormMessage /></FormItem>
                 )} />
                  <FormField control={form.control} name="dateOfBirth" render={({ field }) => (
                   <FormItem><FormLabel>Date of Birth (in figures)</FormLabel><FormControl><DatePicker value={field.value} onChange={field.onChange} /></FormControl><FormMessage /></FormItem>
                 )} />
                  <FormField control={form.control} name="dateOfBirthInWords" render={({ field }) => (
-                  <FormItem><FormLabel>Date of Birth (in words)</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel>Date of Birth (in words)</FormLabel><FormControl><Input {...field} className="uppercase-input" /></FormControl><FormMessage /></FormItem>
                 )} />
                  <FormField control={form.control} name="placeOfBirth" render={({ field }) => (
-                  <FormItem><FormLabel>Place of Birth</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel>Place of Birth</FormLabel><FormControl><Input {...field} className="uppercase-input" /></FormControl><FormMessage /></FormItem>
                 )} />
                  <FormField control={form.control} name="lastSchoolAttended" render={({ field }) => (
-                  <FormItem><FormLabel>Last School Attended</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel>Last School Attended</FormLabel><FormControl><Input {...field} className="uppercase-input" /></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="religion" render={({ field }) => (
-                  <FormItem><FormLabel>Religion</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel>Religion</FormLabel><FormControl><Input {...field} className="uppercase-input" /></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="raceAndCaste" render={({ field }) => (
-                  <FormItem><FormLabel>Race and Caste</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel>Race and Caste</FormLabel><FormControl><Input {...field} className="uppercase-input" /></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="bForm" render={({ field }) => (
-                  <FormItem><FormLabel>B. Form #</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel>B. Form #</FormLabel><FormControl><Input {...field} className="uppercase-input" /></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="cnic" render={({ field }) => (
-                  <FormItem><FormLabel>Student CNIC # (Optional)</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel>Student CNIC # (Optional)</FormLabel><FormControl><Input {...field} className="uppercase-input" /></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="disability" render={({ field }) => (
-                  <FormItem className="md:col-span-2"><FormLabel>Disability if any</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem className="md:col-span-2"><FormLabel>Disability if any</FormLabel><FormControl><Input {...field} className="uppercase-input" /></FormControl><FormMessage /></FormItem>
                 )} />
                  <FormField control={form.control} name="vaccine" render={({ field }) => (
                   <FormItem><FormLabel>Vaccinated</FormLabel><FormControl><RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex items-center space-x-4"><FormItem className="flex items-center space-x-2"><FormControl><RadioGroupItem value="Yes" /></FormControl><FormLabel className="font-normal">Yes</FormLabel></FormItem><FormItem className="flex items-center space-x-2"><FormControl><RadioGroupItem value="No" /></FormControl><FormLabel className="font-normal">No</FormLabel></FormItem></RadioGroup></FormControl><FormMessage /></FormItem>
@@ -139,16 +139,16 @@ export function StudentForm({ student }: StudentFormProps) {
               </CardHeader>
               <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <FormField control={form.control} name="guardianName" render={({ field }) => (
-                  <FormItem><FormLabel>Guardian Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel>Guardian Name</FormLabel><FormControl><Input {...field} className="uppercase-input" /></FormControl><FormMessage /></FormItem>
                 )} />
                  <FormField control={form.control} name="relationshipWithGuardian" render={({ field }) => (
-                  <FormItem><FormLabel>Relationship</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel>Relationship</FormLabel><FormControl><Input {...field} className="uppercase-input" /></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="guardianCnic" render={({ field }) => (
-                  <FormItem><FormLabel>Guardian CNIC #</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel>Guardian CNIC #</FormLabel><FormControl><Input {...field} className="uppercase-input" /></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="contactNo" render={({ field }) => (
-                  <FormItem><FormLabel>Contact No.</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel>Contact No.</FormLabel><FormControl><Input {...field} className="uppercase-input" /></FormControl><FormMessage /></FormItem>
                 )} />
               </CardContent>
             </Card>
@@ -162,7 +162,7 @@ export function StudentForm({ student }: StudentFormProps) {
                   <FormItem><FormLabel>Date of Leaving</FormLabel><FormControl><DatePicker value={field.value || undefined} onChange={field.onChange} /></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="reasonOfLeaving" render={({ field }) => (
-                  <FormItem><FormLabel>Reason for Leaving</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel>Reason for Leaving</FormLabel><FormControl><Input {...field} className="uppercase-input" /></FormControl><FormMessage /></FormItem>
                 )} />
                   <FormField control={form.control} name="examination" render={({ field }) => (
                   <FormItem>
@@ -183,10 +183,10 @@ export function StudentForm({ student }: StudentFormProps) {
                   </FormItem>
                 )} />
                 <FormField control={form.control} name="underSeatNo" render={({ field }) => (
-                  <FormItem><FormLabel>Under Seat No:</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel>Under Seat No:</FormLabel><FormControl><Input {...field} className="uppercase-input" /></FormControl><FormMessage /></FormItem>
                 )} />
                  <FormField control={form.control} name="remarks" render={({ field }) => (
-                  <FormItem className="md:col-span-2"><FormLabel>Remarks</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem className="md:col-span-2"><FormLabel>Remarks</FormLabel><FormControl><Textarea {...field} className="uppercase-input" /></FormControl><FormMessage /></FormItem>
                 )} />
               </CardContent>
             </Card>
@@ -199,19 +199,19 @@ export function StudentForm({ student }: StudentFormProps) {
               </CardHeader>
               <CardContent className="space-y-6">
                  <FormField control={form.control} name="grNo" render={({ field }) => (
-                  <FormItem><FormLabel>G.R No.</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel>G.R No.</FormLabel><FormControl><Input {...field} className="uppercase-input" /></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="admissionDate" render={({ field }) => (
                   <FormItem><FormLabel>Admission Date</FormLabel><FormControl><DatePicker value={field.value} onChange={field.onChange} /></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="classInWhichAdmitted" render={({ field }) => (
-                  <FormItem><FormLabel>Class in which admitted</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel>Class in which admitted</FormLabel><FormControl><Input {...field} className="uppercase-input" /></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="classStudying" render={({ field }) => (
-                  <FormItem><FormLabel>Class in which studying</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel>Class in which studying</FormLabel><FormControl><Input {...field} className="uppercase-input" /></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="section" render={({ field }) => (
-                  <FormItem><FormLabel>Section</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel>Section</FormLabel><FormControl><Input {...field} className="uppercase-input" /></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="newEnrolReEnrol" render={({ field }) => (
                   <FormItem><FormLabel>Enrollment Type</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue placeholder="Select type" /></SelectTrigger></FormControl><SelectContent><SelectItem value="New Enrol">New Enrol</SelectItem><SelectItem value="Re-Enrol">Re-Enrol</SelectItem></SelectContent></Select><FormMessage /></FormItem>
@@ -223,7 +223,7 @@ export function StudentForm({ student }: StudentFormProps) {
                   <FormItem><FormLabel>Conduct</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue placeholder="Select conduct" /></SelectTrigger></FormControl><SelectContent><SelectItem value="Excellent">Excellent</SelectItem><SelectItem value="Good">Good</SelectItem><SelectItem value="Average">Average</SelectItem><SelectItem value="Poor">Poor</SelectItem></SelectContent></Select><FormMessage /></FormItem>
                 )} />
                  <FormField control={form.control} name="grade" render={({ field }) => (
-                  <FormItem><FormLabel>Grade</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel>Grade</FormLabel><FormControl><Input {...field} className="uppercase-input" /></FormControl><FormMessage /></FormItem>
                 )} />
               </CardContent>
             </Card>
@@ -236,7 +236,7 @@ export function StudentForm({ student }: StudentFormProps) {
                     <FormItem><FormLabel>SSC Type</FormLabel><FormControl><RadioGroup onValueChange={field.onChange} value={field.value} className="flex items-center space-x-4"><FormItem className="flex items-center space-x-2"><FormControl><RadioGroupItem value="SSC I" /></FormControl><FormLabel className="font-normal">SSC I</FormLabel></FormItem><FormItem className="flex items-center space-x-2"><FormControl><RadioGroupItem value="SSC II" /></FormControl><FormLabel className="font-normal">SSC II</FormLabel></FormItem></RadioGroup></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="sscRollNo" render={({ field }) => (
-                  <FormItem><FormLabel>SSC Roll No.</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel>SSC Roll No.</FormLabel><FormControl><Input {...field} className="uppercase-input" /></FormControl><FormMessage /></FormItem>
                 )} />
               </CardContent>
             </Card>

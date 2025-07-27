@@ -58,6 +58,15 @@
   }
 }
 
+@layer utilities {
+    .uppercase-input {
+        text-transform: uppercase;
+    }
+    .uppercase-input::placeholder {
+        text-transform: none;
+    }
+}
+
 @media print {
   body {
     visibility: hidden;
