@@ -32,6 +32,9 @@ const examinationOptions = [
   'S.S.C Part-II Annual',
 ];
 
+const classOptions = ['6', '7', '8', '9', '10'];
+const sectionOptions = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'CADET'];
+
 const toWords = new ToWords({
   localeCode: 'en-IN',
   converterOptions: {
@@ -105,8 +108,8 @@ export function StudentForm({ student }: StudentFormProps) {
           guardianCnic: '',
           relationshipWithGuardian: '',
           contactNo: '',
-          classStudying: '',
-          section: '',
+          classStudying: undefined,
+          section: undefined,
         },
   });
 
@@ -278,10 +281,28 @@ export function StudentForm({ student }: StudentFormProps) {
                   <FormItem><FormLabel>Class in which admitted</FormLabel><FormControl><Input {...field} className="uppercase-input" /></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="classStudying" render={({ field }) => (
-                  <FormItem><FormLabel>Class in which studying</FormLabel><FormControl><Input {...field} className="uppercase-input" /></FormControl><FormMessage /></FormItem>
+                  <FormItem>
+                    <FormLabel>Class in which studying</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl><SelectTrigger><SelectValue placeholder="Select class" /></SelectTrigger></FormControl>
+                      <SelectContent>
+                        {classOptions.map(option => <SelectItem key={option} value={option}>{option}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
                 )} />
                 <FormField control={form.control} name="section" render={({ field }) => (
-                  <FormItem><FormLabel>Section</FormLabel><FormControl><Input {...field} className="uppercase-input" /></FormControl><FormMessage /></FormItem>
+                   <FormItem>
+                    <FormLabel>Section</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl><SelectTrigger><SelectValue placeholder="Select section" /></SelectTrigger></FormControl>
+                      <SelectContent>
+                        {sectionOptions.map(option => <SelectItem key={option} value={option}>{option}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
                 )} />
                 <FormField control={form.control} name="newEnrolReEnrol" render={({ field }) => (
                   <FormItem><FormLabel>Enrollment Type</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue placeholder="Select type" /></SelectTrigger></FormControl><SelectContent><SelectItem value="New Enrol">New Enrol</SelectItem><SelectItem value="Re-Enrol">Re-Enrol</SelectItem></SelectContent></Select><FormMessage /></FormItem>
