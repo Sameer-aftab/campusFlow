@@ -103,12 +103,16 @@ export function BulkCertificateGenerator({ students }: { students: Student[] }) 
     try {
       const results = await Promise.all(studentsToProcess.map(async (student) => {
         const certificateText = await generateCertificateText(certificateType, student, grade, character);
-        return { studentName: student.studentName, certificateText, student };
+        // Replace the logo placeholder with empty string - the logo will be added in the JSX
+        return { 
+          studentName: student.studentName, 
+          certificateText: certificateText.replace('<!-- LOGO_PLACEHOLDER -->', ''), 
+          student 
+        };
       }));
       
       setGeneratedCertificates(results);
       setShowCertificates(true);
-
     } catch (error) {
       console.error('Error generating certificates:', error);
       toast({
@@ -238,7 +242,13 @@ export function BulkCertificateGenerator({ students }: { students: Student[] }) 
                       {generatedCertificates.map((cert, index) => (
                           <CertWrapper key={index} className={`printable-area w-full relative ${isLeavingCert ? 'bg-white text-black' : 'shadow-lg flex flex-col justify-between aspect-[1.414/1]'}`}>
                               {isLeavingCert ? (
-                                <div dangerouslySetInnerHTML={{ __html: cert.certificateText }} />
+                                <div>
+                                  <div dangerouslySetInnerHTML={{ __html: cert.certificateText }} />
+                                  {/* Insert the logo at the right position */}
+                                  <div className="w-24 h-24 mx-auto absolute top-[165px] left-1/2 transform -translate-x-1/2">
+                                    <SchoolLogo />
+                                  </div>
+                                </div>
                               ) : (
                                 <>
                                   <AjrakBorder />
