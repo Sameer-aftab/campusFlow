@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useMemo, useRef } from 'react';
@@ -136,7 +137,9 @@ export function StudentTable({ students }: { students: Student[] }) {
       if (!student) return false;
       const lowerCaseSearchTerm = searchTerm.toLowerCase();
       const searchMatch = (student.studentName && student.studentName.toLowerCase().includes(lowerCaseSearchTerm)) ||
-                          (student.grNo && student.grNo.toLowerCase().includes(lowerCaseSearchTerm));
+                          (student.grNo && student.grNo.toLowerCase().includes(lowerCaseSearchTerm)) ||
+                          (student.fatherName && student.fatherName.toLowerCase().includes(lowerCaseSearchTerm)) ||
+                          (student.guardianCnic && student.guardianCnic.toLowerCase().includes(lowerCaseSearchTerm));
       const classMatch = classFilter === 'all' || student.classStudying === classFilter;
       const sectionMatch = sectionFilter === 'all' || student.section === sectionFilter;
       return searchMatch && classMatch && sectionMatch;
@@ -168,7 +171,7 @@ export function StudentTable({ students }: { students: Student[] }) {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input 
-            placeholder="Search by name or G.R. No..."
+            placeholder="Search by Name, G.R. No, Father's Name, or Guardian CNIC..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10"
