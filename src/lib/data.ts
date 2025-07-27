@@ -1,70 +1,35 @@
-import type { Student } from './definitions';
 
-export let students: Student[] = [
-  {
-    id: '1',
-    grNo: '1001',
-    studentName: 'Ahmed Khan',
-    fatherName: 'Zahid Khan',
-    raceAndCaste: 'Khan',
-    bForm: '12345-6789012-3',
-    placeOfBirth: 'Hyderabad',
-    dateOfBirth: new Date('2010-05-15'),
-    dateOfBirthInWords: 'Fifteenth May Two Thousand Ten',
-    religion: 'Islam',
-    lastSchoolAttended: 'Little Folks School',
-    admissionDate: new Date('2022-08-01'),
-    classInWhichAdmitted: '4',
-    cnic: 'N/A',
-    guardianName: 'Zahid Khan',
-    guardianCnic: '32102-1234567-8',
-    relationshipWithGuardian: 'Father',
-    contactNo: '0300-1234567',
-    disability: 'None',
-    vaccine: 'Yes',
-    classStudying: '5',
-    section: 'A',
-    newEnrolReEnrol: 'New Enrol',
-    remarks: 'A bright student.',
-    dateOfLeaving: null,
-    reasonOfLeaving: 'Passed S.S.C Part-II Annual',
-    examination: 'S.S.C Part-II Annual',
-    underSeatNo: '12345',
-    progress: 'Excellent',
-    conduct: 'Good',
-    grade: 'A+',
-  },
-  {
-    id: '2',
-    grNo: '1002',
-    studentName: 'Bilal Ahmed',
-    fatherName: 'Ali Raza',
-    raceAndCaste: 'Mughal',
-    bForm: '23456-7890123-4',
-    placeOfBirth: 'Karachi',
-    dateOfBirth: new Date('2011-02-20'),
-    dateOfBirthInWords: 'Twentieth February Two Thousand Eleven',
-    religion: 'Islam',
-    lastSchoolAttended: 'City School',
-    admissionDate: new Date('2022-08-01'),
-    classInWhichAdmitted: '3',
-    cnic: 'N/A',
-    guardianName: 'Ali Raza',
-    guardianCnic: '32102-8765432-1',
-    relationshipWithGuardian: 'Father',
-    contactNo: '0321-9876543',
-    disability: 'None',
-    vaccine: 'Yes',
-    classStudying: '4',
-    section: 'B',
-    newEnrolReEnrol: 'New Enrol',
-    remarks: '',
-    dateOfLeaving: null,
-    reasonOfLeaving: 'Passed S.S.C Part-II Annual',
-    examination: 'S.S.C Part-II Annual',
-    underSeatNo: '54321',
-    progress: 'Good',
-    conduct: 'Excellent',
-    grade: 'A',
-  },
-];
+import type { Student } from './definitions';
+import { promises as fs } from 'fs';
+import path from 'path';
+
+const dataFilePath = path.join(process.cwd(), 'data/students.json');
+
+// Helper function to read students from the JSON file
+export async function readStudents(): Promise<Student[]> {
+  try {
+    const fileContent = await fs.readFile(dataFilePath, 'utf8');
+    const students = JSON.parse(fileContent);
+    // Dates are stored as strings in JSON, so we need to convert them back to Date objects
+    return students.map((student: any) => ({
+      ...student,
+      dateOfBirth: new Date(student.dateOfBirth),
+      admissionDate: new Date(student.admissionDate),
+      dateOfLeaving: student.dateOfLeaving ? new Date(student.dateOfLeaving) : null,
+    }));
+  } catch (error) {
+    console.error('Could not read students.json:', error);
+    // If the file doesn't exist or is empty, return an empty array
+    return [];
+  }
+}
+
+// Helper function to write students to the JSON file
+export async function writeStudents(students: Student[]): Promise<void> {
+  try {
+    const data = JSON.stringify(students, null, 2);
+    await fs.writeFile(dataFilePath, data, 'utf8');
+  } catch (error) {
+    console.error('Could not write to students.json:', error);
+  }
+}

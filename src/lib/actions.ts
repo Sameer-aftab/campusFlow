@@ -1,9 +1,10 @@
+
 'use server';
 
 import { z } from 'zod';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
-import { students } from './data';
+import { readStudents, writeStudents } from './data';
 import type { Student } from './definitions';
 import { loginSchema, studentSchema } from './schema';
 import * as XLSX from 'xlsx';
@@ -25,14 +26,17 @@ export async function login(values: z.infer<typeof loginSchema>) {
 export async function getStudents() {
   // Simulate network latency
   await new Promise(resolve => setTimeout(resolve, 500));
+  const students = await readStudents();
   return students;
 }
 
 export async function getStudentById(id: string) {
+  const students = await readStudents();
   return students.find(student => student.id === id);
 }
 
 export async function addStudent(values: z.infer<typeof studentSchema>) {
+  const students = await readStudents();
   const existingStudent = students.find(student => student.grNo === values.grNo);
   if (existingStudent) {
     return { error: 'A student with this G.R. No. already exists.' };
@@ -42,12 +46,16 @@ export async function addStudent(values: z.infer<typeof studentSchema>) {
     ...values,
     id: String(Date.now()),
   };
-  students.unshift(newStudent); // Add to the beginning of the array
+  
+  const updatedStudents = [newStudent, ...students];
+  await writeStudents(updatedStudents);
+
   revalidatePath('/dashboard');
   return { success: 'Student added successfully.' };
 }
 
 export async function updateStudent(id: string, values: z.infer<typeof studentSchema>) {
+  const students = await readStudents();
   const index = students.findIndex(s => s.id === id);
   if (index !== -1) {
     const existingStudentWithSameGrNo = students.find(s => s.grNo === values.grNo && s.id !== id);
@@ -55,6 +63,7 @@ export async function updateStudent(id: string, values: z.infer<typeof studentSc
       return { error: 'Another student with this G.R. No. already exists.' };
     }
     students[index] = { ...students[index], ...values, id: id };
+    await writeStudents(students);
     revalidatePath('/dashboard');
     revalidatePath(`/dashboard/edit-student/${id}`);
     return { success: 'Student updated successfully.' };
@@ -63,9 +72,11 @@ export async function updateStudent(id: string, values: z.infer<typeof studentSc
 }
 
 export async function deleteStudent(id: string) {
+  let students = await readStudents();
   const index = students.findIndex(s => s.id === id);
   if (index !== -1) {
-    students.splice(index, 1);
+    students = students.filter(s => s.id !== id);
+    await writeStudents(students);
     revalidatePath('/dashboard');
     return { success: 'Student deleted successfully.' };
   }
@@ -124,8 +135,7 @@ export async function importFromExcel(fileContent: string) {
     });
 
     // Replace the old student data with the new data
-    students.length = 0;
-    students.push(...newStudents);
+    await writeStudents(newStudents);
 
     revalidatePath('/dashboard');
     return { success: `Successfully imported ${newStudents.length} students.` };
