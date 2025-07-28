@@ -137,7 +137,7 @@ export async function generateCertificateText(type: CertificateType, student: St
         return `<div class="w-full text-black font-sans bg-white p-10" style="height: 100vh; display: flex; flex-direction: column;">
           <div class="w-full h-full relative border-2 border-black" style="padding: 2rem;">
             ${getUniformBorderSvg()}
-             <div class="p-8 flex flex-col justify-between h-full" style="padding: 2rem;">
+             <div class="p-8 flex flex-col justify-between h-full" style="padding: 3rem;">
                 <header class="text-center space-y-2 mb-6">
                   <h1 class="text-3xl font-bold tracking-wide">Govt: (N) NOOR MUHAMMAD HIGH SCHOOL HYDERABAD</h1>
                   <!-- LOGO_PLACEHOLDER -->
@@ -162,10 +162,9 @@ export async function generateCertificateText(type: CertificateType, student: St
                   
                   <div style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 1rem;">
                       <span><b>Class in which studying:</b> <u style="padding: 0 8px;">${formatValue(classStudying)}</u></span>
-                      <span><b>Conduct:</b> <u style="padding: 0 8px;">${formatValue(conduct)}</u></span>
                   </div>
                   
-                  <div style="margin-bottom: 1rem;"><b>Progress:</b> <u style="padding: 0 8px;">${formatValue(progress)}</u></div>
+                  <div style="margin-bottom: 1rem;"><b>Progress:</b> <u style="padding: 0 8px;">${formatValue(progress)}</u> <span><b>Conduct:</b> <u style="padding: 0 8px;">${formatValue(conduct)}</u></span></div>
                   <div style="margin-bottom: 1rem;"><b>Date of Leaving the School:</b> <u style="padding: 0 8px;">${dateOfLeaving ? formatDate(dateOfLeaving) : 'N/A'}</u></div>
                   <div style="margin-bottom: 1rem;"><b>Reason of Leaving the School:</b> <u style="padding: 0 8px;">${formatValue(reasonOfLeaving)}</u></div>
 
