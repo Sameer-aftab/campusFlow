@@ -1,3 +1,4 @@
+
 'use server';
 
 import { format } from 'date-fns';
@@ -134,41 +135,41 @@ export async function generateCertificateText(type: CertificateType, student: St
             he bears a good moral and i wish him success in future`;
 
         case 'School Leaving':
-        return `<div class="w-full text-black font-sans bg-white p-10 flex flex-col">
-          <div class="w-full h-full relative border-2 border-black" style="padding: 2rem;">
+        return `<div class="w-full text-black font-sans bg-white flex flex-col">
+          <div class="w-full h-full relative border-2 border-black" style="padding: 1.5rem;">
             ${getUniformBorderSvg()}
-             <div class="p-8 flex flex-col justify-between h-full" style="padding: 3rem;">
-                <header class="text-center space-y-2 mb-6">
+             <div class="p-4 flex flex-col justify-between h-full" style="padding: 1rem;">
+                <header class="text-center space-y-2 mb-4">
                   <h1 class="text-3xl font-bold tracking-wide">Govt: (N) NOOR MUHAMMAD HIGH SCHOOL HYDERABAD</h1>
                   <!-- LOGO_PLACEHOLDER -->
-                  <div style="height: 120px; margin: 20px 0;"></div>
+                  <div style="height: 120px; margin: 10px 0;"></div>
                   <h2 class="text-2xl font-bold tracking-widest uppercase text-black pt-2">SCHOOL LEAVING CERTIFICATE</h2>
                 </header>
 
-              <main class="text-lg leading-relaxed my-4 space-y-4">
-                  <div style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 1rem;">
+              <main class="text-base leading-relaxed my-3 space-y-3">
+                  <div style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 0.5rem;">
                       <span><b>Name of Student:</b> <u style="padding: 0 8px;">${formatValue(studentName)}</u></span>
                       <span><b>G.R No:</b> <u style="padding: 0 8px;">${formatValue(grNo)}</u></span>
                   </div>
-                  <div style="margin-bottom: 1rem;"><b>Father's Name:</b> <u style="padding: 0 8px;">${formatValue(fatherName)}</u></div>
-                  <div style="margin-bottom: 1rem;"><b>Race and Caste (With Sub-Caste):</b> <u style="padding: 0 8px;">${formatValue(raceAndCaste)}</u></div>
-                  <div style="margin-bottom: 1rem;"><b>Religion:</b> <u style="padding: 0 8px;">${formatValue(religion)}</u></div>
-                  <div style="margin-bottom: 1rem;"><b>Place of Birth:</b> <u style="padding: 0 8px;">${formatValue(placeOfBirth)}</u></div>
-                  <div style="margin-bottom: 1rem;"><b>Date of Birth (in Figures):</b> <u style="padding: 0 8px;">${formatDate(dateOfBirth)}</u></div>
-                  <div style="margin-bottom: 1rem;"><b>Date of Birth (in words):</b> <u style="padding: 0 8px;">${formatValue(dateOfBirthInWords)}</u></div>
-                  <div style="margin-bottom: 1rem;"><b>Last School Attended:</b> <u style="padding: 0 8px;">${formatValue(lastSchoolAttended)}</u></div>
-                  <div style="margin-bottom: 1rem;"><b>Date of Admission:</b> <u style="padding: 0 8px;">${formatDate(admissionDate)}</u></div>
-                  <div style="margin-bottom: 1rem;"><b>Class in which admitted:</b> <u style="padding: 0 8px;">${formatValue(classInWhichAdmitted)}</u></div>
+                  <div style="margin-bottom: 0.5rem;"><b>Father's Name:</b> <u style="padding: 0 8px;">${formatValue(fatherName)}</u></div>
+                  <div style="margin-bottom: 0.5rem;"><b>Race and Caste (With Sub-Caste):</b> <u style="padding: 0 8px;">${formatValue(raceAndCaste)}</u></div>
+                  <div style="margin-bottom: 0.5rem;"><b>Religion:</b> <u style="padding: 0 8px;">${formatValue(religion)}</u></div>
+                  <div style="margin-bottom: 0.5rem;"><b>Place of Birth:</b> <u style="padding: 0 8px;">${formatValue(placeOfBirth)}</u></div>
+                  <div style="margin-bottom: 0.5rem;"><b>Date of Birth (in Figures):</b> <u style="padding: 0 8px;">${formatDate(dateOfBirth)}</u></div>
+                  <div style="margin-bottom: 0.5rem;"><b>Date of Birth (in words):</b> <u style="padding: 0 8px;">${formatValue(dateOfBirthInWords)}</u></div>
+                  <div style="margin-bottom: 0.5rem;"><b>Last School Attended:</b> <u style="padding: 0 8px;">${formatValue(lastSchoolAttended)}</u></div>
+                  <div style="margin-bottom: 0.5rem;"><b>Date of Admission:</b> <u style="padding: 0 8px;">${formatDate(admissionDate)}</u></div>
+                  <div style="margin-bottom: 0.5rem;"><b>Class in which admitted:</b> <u style="padding: 0 8px;">${formatValue(classInWhichAdmitted)}</u></div>
                   
-                  <div style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 1rem;">
+                  <div style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 0.5rem;">
                       <span><b>Class in which studying:</b> <u style="padding: 0 8px;">${formatValue(classStudying)}</u></span>
                   </div>
                   
-                  <div style="margin-bottom: 1rem;"><b>Progress:</b> <u style="padding: 0 8px;">${formatValue(progress)}</u> <span><b>Conduct:</b> <u style="padding: 0 8px;">${formatValue(conduct)}</u></span></div>
-                  <div style="margin-bottom: 1rem;"><b>Date of Leaving the School:</b> <u style="padding: 0 8px;">${dateOfLeaving ? formatDate(dateOfLeaving) : 'N/A'}</u></div>
-                  <div style="margin-bottom: 1rem;"><b>Reason of Leaving the School:</b> <u style="padding: 0 8px;">${formatValue(reasonOfLeaving)}</u></div>
+                  <div style="margin-bottom: 0.5rem;"><b>Progress:</b> <u style="padding: 0 8px;">${formatValue(progress)}</u> <span><b>Conduct:</b> <u style="padding: 0 8px;">${formatValue(conduct)}</u></span></div>
+                  <div style="margin-bottom: 0.5rem;"><b>Date of Leaving the School:</b> <u style="padding: 0 8px;">${dateOfLeaving ? formatDate(dateOfLeaving) : 'N/A'}</u></div>
+                  <div style="margin-bottom: 0.5rem;"><b>Reason of Leaving the School:</b> <u style="padding: 0 8px;">${formatValue(reasonOfLeaving)}</u></div>
 
-                  <div style="display: flex; justify-content: space-between; width: 100%; align-items: baseline; flex-wrap: wrap; margin-bottom: 1rem;">
+                  <div style="display: flex; justify-content: space-between; width: 100%; align-items: baseline; flex-wrap: wrap; margin-bottom: 0.5rem;">
                       <span style="margin-right: 1.5rem;"><b>Examination:</b> <u style="padding: 0 8px;">${formatValue(examination)}</u></span>
                       <span style="margin-right: 1.5rem;"><b>Under Seat No:</b> <u style="padding: 0 8px;">${formatValue(underSeatNo)}</u></span>
                       <span><b>Grade:</b> <u style="padding: 0 8px;">${formatValue(finalGrade)}</u></span>
@@ -177,7 +178,7 @@ export async function generateCertificateText(type: CertificateType, student: St
                   <p style="margin-top: 1.5rem;"><b>Certified that the above information is in accordance with the school General Register.</b></p>
               </main>
 
-              <footer class="pt-16 mt-auto">
+              <footer class="pt-12 mt-auto">
                   <div style="display: flex; justify-content: space-between; align-items: flex-end; width: 100%; font-size: 1rem;">
                       <div style="text-align: center;">
                           <span><b>Date:</b></span>
