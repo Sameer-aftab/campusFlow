@@ -1,4 +1,3 @@
-
 import jsPDF from 'jspdf';
 import { format } from 'date-fns';
 import type { Student, CertificateType } from './definitions';
@@ -19,12 +18,37 @@ function formatDate(date: Date | null | undefined): string {
 }
 
 // Function to fetch image and convert to Base64
+// async function getBase64Image(url: string): Promise<string> {
+//     try {
+//         const response = await fetch(url);
+//         if (!response.ok) {
+//             throw new Error(`Failed to fetch image: ${response.statusText}`);
+//         }
+//         const blob = await response.blob();
+//         return new Promise((resolve, reject) => {
+//             const reader = new FileReader();
+//             reader.onloadend = () => resolve(reader.result as string);
+//             reader.onerror = reject;
+//             reader.readAsDataURL(blob);
+//         });
+//     } catch (error) {
+//         console.error(`Error fetching or converting image from ${url}:`, error);
+//         return '';
+//     }
+// }
+
+
 async function getBase64Image(url: string): Promise<string> {
     try {
-        const response = await fetch(url);
+        // Convert GitHub URL to raw content URL
+        const rawUrl = url.replace('github.com', 'raw.githubusercontent.com')
+            .replace('/blob/', '/');
+
+        const response = await fetch(rawUrl);
         if (!response.ok) {
             throw new Error(`Failed to fetch image: ${response.statusText}`);
         }
+
         const blob = await response.blob();
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -33,10 +57,11 @@ async function getBase64Image(url: string): Promise<string> {
             reader.readAsDataURL(blob);
         });
     } catch (error) {
-        console.error(`Error fetching or converting image from ${url}:`, error);
+        console.error(`Error fetching or converting image:`, error);
         return '';
     }
 }
+
 
 
 function drawTextWithBoldAndUnderline(doc: jsPDF, text: string, x: number, y: number, maxWidth: number, lineSpacing: number, align: 'left' | 'center' | 'right') {
@@ -134,7 +159,7 @@ function drawFooter(doc: jsPDF, pageHeight: number, margin: number, pageWidth: n
     const faX = pageWidth / 2 - faWidth / 2;
     const chX = pageWidth - margin - chWidth;
     
-    const signatureLineY = footerY - 2;
+    const signatureLineY = footerY - 6;
 
     // Draw lines for signatures ABOVE text
     doc.line(faX, signatureLineY, faX + faWidth, signatureLineY);
@@ -150,8 +175,7 @@ function drawFooter(doc: jsPDF, pageHeight: number, margin: number, pageWidth: n
 // --- CERTIFICATE DRAWING FUNCTIONS ---
 
 async function drawAppearanceCertificate(doc: jsPDF, student: Student, grade?: string) {
-    const logoBase64 = await getBase64Image(window.location.origin + '/Logo.png');
-    
+    const logoBase64 = await getBase64Image('https://github.com/Sameer-aftab/campusFlow/blob/main/src/app/public/Logo.png');    
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
     const margin = 15;
@@ -193,8 +217,7 @@ async function drawAppearanceCertificate(doc: jsPDF, student: Student, grade?: s
 }
 
 async function drawCharacterCertificate(doc: jsPDF, student: Student, character?: string) {
-    const logoBase64 = await getBase64Image(window.location.origin + '/Logo.png');
-    const pageWidth = doc.internal.pageSize.getWidth();
+    const logoBase64 = await getBase64Image('https://github.com/Sameer-aftab/campusFlow/blob/main/src/app/public/Logo.png');    const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
     const margin = 15;
     const contentWidth = pageWidth - (margin * 2);
@@ -232,8 +255,7 @@ async function drawCharacterCertificate(doc: jsPDF, student: Student, character?
 }
 
 async function drawPassCertificate(doc: jsPDF, student: Student) {
-    const logoBase64 = await getBase64Image(window.location.origin + '/Logo.png');
-    const pageWidth = doc.internal.pageSize.getWidth();
+    const logoBase64 = await getBase64Image('https://github.com/Sameer-aftab/campusFlow/blob/main/src/app/public/Logo.png');    const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
     const margin = 15;
     const contentWidth = pageWidth - (margin * 2);
@@ -271,8 +293,7 @@ async function drawPassCertificate(doc: jsPDF, student: Student) {
 
 
 async function drawLeavingCertificate(doc: jsPDF, student: Student, grade?: string) {
-    const logoBase64 = await getBase64Image(window.location.origin + '/Logo.png');
-    const pageWidth = doc.internal.pageSize.getWidth();
+    const logoBase64 = await getBase64Image('https://github.com/Sameer-aftab/campusFlow/blob/main/src/app/public/Logo.png');    const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
     const margin = 15;
     let y = 15;
@@ -372,7 +393,7 @@ async function drawLeavingCertificate(doc: jsPDF, student: Student, grade?: stri
     const faX = pageWidth / 2 - (doc.getTextWidth(firstAssistantText) / 2);
     const chX = pageWidth - margin - doc.getTextWidth(chiefHeadmasterText);
 
-    const signatureLineYFinal = footerYFinal - 2;
+    const signatureLineYFinal = footerYFinal - 6;
     doc.line(faX, signatureLineYFinal, faX + doc.getTextWidth(firstAssistantText), signatureLineYFinal);
     doc.line(chX, signatureLineYFinal, chX + doc.getTextWidth(chiefHeadmasterText), signatureLineYFinal);
 

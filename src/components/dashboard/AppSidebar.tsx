@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { FileText, Home, PlusCircle, User, LogOut, PanelLeft, PanelRight } from 'lucide-react';
-import { SchoolLogo } from './SchoolLogo';
+import {SchoolLogo} from './SchoolLogo';
 
 const navItems = [
   { href: '/dashboard', label: 'Students', icon: Home },
@@ -32,7 +32,7 @@ export function AppSidebar() {
     >
         <div className="flex h-16 shrink-0 items-center px-6">
             <Link href="/dashboard" className="flex items-center gap-3">
-                 <SchoolLogo className="h-7 w-7 text-primary" />
+                 <SchoolLogo />
                 <span className={cn("text-xl font-semibold", isCollapsed && "hidden")}>CampusFlow</span>
             </Link>
         </div>
