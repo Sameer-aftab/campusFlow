@@ -65,6 +65,14 @@
     .uppercase-input::placeholder {
         text-transform: none;
     }
+     .a4-container {
+      width: 210mm;
+      height: 297mm;
+      margin: 0 auto;
+      background: white;
+      color: black;
+      position: relative;
+    }
 }
 
 @media print {
@@ -72,10 +80,16 @@
     visibility: hidden;
     margin: 0;
     padding: 0;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
   .no-print {
     display: none !important;
+  }
+  
+  .print\:p-0 {
+    padding: 0 !important;
   }
 
   .printable-area {
@@ -101,6 +115,7 @@
 
   @page {
     margin: 0;
+    padding: 0;
   }
   
   .print-a4-portrait {

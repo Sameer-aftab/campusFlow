@@ -134,7 +134,7 @@ export async function generateCertificateText(type: CertificateType, student: St
             he bears a good moral and i wish him success in future`;
 
         case 'School Leaving':
-        return `<div class="w-full text-black font-sans bg-white p-10" style="height: 100vh; display: flex; flex-direction: column;">
+        return `<div class="w-full text-black font-sans bg-white p-10 flex flex-col">
           <div class="w-full h-full relative border-2 border-black" style="padding: 2rem;">
             ${getUniformBorderSvg()}
              <div class="p-8 flex flex-col justify-between h-full" style="padding: 3rem;">
@@ -199,5 +199,3 @@ export async function generateCertificateText(type: CertificateType, student: St
             return 'Invalid certificate type.';
     }
 }
-
-

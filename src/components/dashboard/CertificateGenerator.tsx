@@ -159,9 +159,9 @@ export function CertificateGenerator({ student }: { student: Student }) {
                     Print Certificate
                 </Button>
             </div>
-            <CertWrapper className={`printable-area w-full relative ${isLeavingCert ? 'bg-white text-black' : 'shadow-lg flex flex-col justify-between aspect-[1.414/1]'}`}>
+            <CertWrapper className={`printable-area w-full relative ${isLeavingCert ? 'bg-white text-black print:shadow-none print:border-none' : 'shadow-lg flex flex-col justify-between aspect-[1.414/1]'}`}>
               {isLeavingCert ? (
-                <div className="p-6 md:p-8 my-4 mx-4 md:mx-6 border border-gray-200 rounded">
+                <div className="a4-container">
                   <div className="text-sm md:text-base" dangerouslySetInnerHTML={{ __html: generatedText }} />
                   {/* Insert the logo at the right position */}
                   <div className="w-24 h-24 mx-auto absolute top-[165px] left-1/2 transform -translate-x-1/2">
