@@ -66,13 +66,4 @@
     .uppercase-input::placeholder {
         text-transform: none;
     }
-     .a4-container {
-      width: 210mm;
-      min-height: 297mm;
-      padding: 1rem;
-      margin: 0 auto;
-      background: white;
-      color: black;
-      position: relative;
-    }
 }
