@@ -3,9 +3,6 @@
 import { useState, useRef } from 'react';
 import { format } from 'date-fns';
 import { Loader2, Download } from 'lucide-react';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
-
 
 import type { Student, CertificateType } from '@/lib/definitions';
 import { useToast } from '@/hooks/use-toast';
@@ -17,6 +14,7 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
 import { generateCertificateText } from '@/lib/certificate-templates';
+import { generatePdf } from '@/lib/pdf-generator';
 import { certificateTypes } from '@/lib/definitions';
 import { SchoolLogo } from './SchoolLogo';
 import { AjrakBorder } from './AjrakBorder';
@@ -77,39 +75,11 @@ export function CertificateGenerator({ student }: { student: Student }) {
   };
 
   const handleDownloadPdf = async () => {
-    if (!certificateRef.current) return;
+    if (!student) return;
     setIsDownloading(true);
 
     try {
-      const canvas = await html2canvas(certificateRef.current, {
-        scale: 3,
-        useCORS: true,
-        backgroundColor: '#ffffff',
-      });
-      
-      const imgData = canvas.toDataURL('image/png');
-      
-      let pdf;
-      if (isLeavingCert) {
-        pdf = new jsPDF({
-          orientation: 'portrait',
-          unit: 'mm',
-          format: 'a4',
-        });
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      } else {
-        pdf = new jsPDF({
-          orientation: 'landscape',
-          unit: 'mm',
-          format: 'a5',
-        });
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      }
-
+      const pdf = await generatePdf(certificateType, [student], grade, character);
       pdf.save(`${student.studentName}-${certificateType}-Certificate.pdf`);
 
     } catch (error) {

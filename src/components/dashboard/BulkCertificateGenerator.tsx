@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect, useRef } from 'react';
 import { format } from 'date-fns';
 import { Loader2, Download } from 'lucide-react';
 import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+
 
 import type { Student, CertificateType } from '@/lib/definitions';
 import { useToast } from '@/hooks/use-toast';
@@ -19,6 +19,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Checkbox } from '@/components/ui/checkbox';
 import { generateCertificateText } from '@/lib/certificate-templates';
+import { generatePdf } from '@/lib/pdf-generator';
 import { certificateTypes } from '@/lib/definitions';
 import { SchoolLogo } from './SchoolLogo';
 import { AjrakBorder } from './AjrakBorder';
@@ -136,43 +137,23 @@ export function BulkCertificateGenerator({ students }: { students: Student[] }) 
   };
 
   const handleDownloadPdf = async () => {
-      if (certificateRefs.current.length === 0) return;
-      setIsDownloading(true);
+    if (generatedCertificates.length === 0) return;
+    setIsDownloading(true);
 
-      let pdf;
-      if (isLeavingCert) {
-        pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-      } else {
-        pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a5' });
-      }
-
-      try {
-        for (let i = 0; i < certificateRefs.current.length; i++) {
-            const element = certificateRefs.current[i];
-            if (element) {
-                const canvas = await html2canvas(element, { scale: 3, useCORS: true, backgroundColor: '#ffffff' });
-                const imgData = canvas.toDataURL('image/png');
-
-                if (i > 0) {
-                    pdf.addPage();
-                }
-                
-                const pdfWidth = pdf.internal.pageSize.getWidth();
-                const pdfHeight = pdf.internal.pageSize.getHeight();
-                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-            }
-        }
-        pdf.save(`Certificates-${certificateType}-${format(new Date(), 'yyyy-MM-dd')}.pdf`);
-      } catch (error) {
-          console.error("Error generating PDF:", error);
-          toast({
-              variant: "destructive",
-              title: "PDF Download Failed",
-              description: "An error occurred while trying to download the PDF."
-          });
-      } finally {
-        setIsDownloading(false);
-      }
+    try {
+      const studentsToProcess = generatedCertificates.map(cert => cert.student);
+      const pdf = await generatePdf(certificateType, studentsToProcess, grade, character);
+      pdf.save(`Certificates-${certificateType}-${format(new Date(), 'yyyy-MM-dd')}.pdf`);
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      toast({
+        variant: "destructive",
+        title: "PDF Download Failed",
+        description: "An error occurred while trying to download the PDF."
+      });
+    } finally {
+      setIsDownloading(false);
+    }
   };
   
   const isLeavingCert = certificateType === 'School Leaving';
