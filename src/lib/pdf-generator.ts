@@ -91,7 +91,7 @@ function drawStyledText(doc: jsPDF, text: string, x: number, y: number, maxWidth
 
 
 function drawFooter(doc: jsPDF, pageHeight: number, margin: number, pageWidth: number) {
-    const footerY = pageHeight - 30; // Move footer down
+    const footerY = pageHeight - 20; // Position from the bottom
     doc.setFontSize(12);
     doc.setFont('helvetica', 'normal');
 
@@ -106,9 +106,11 @@ function drawFooter(doc: jsPDF, pageHeight: number, margin: number, pageWidth: n
     const chX = pageWidth - margin - chWidth;
 
     // Draw lines for signatures
+    const signatureLineY = footerY - 2;
     doc.setLineWidth(0.3);
-    doc.line(faX, footerY - 2, faX + faWidth, footerY - 2); // Line for First Assistant
-    doc.line(chX, footerY - 2, chX + chWidth, footerY - 2); // Line for Chief Headmaster
+    doc.line(margin, signatureLineY, margin + doc.getTextWidth(dateText), signatureLineY); // Line for Date
+    doc.line(faX, signatureLineY, faX + faWidth, signatureLineY); // Line for First Assistant
+    doc.line(chX, signatureLineY, chX + chWidth, signatureLineY); // Line for Chief Headmaster
 
     // Draw text below lines
     doc.text(dateText, margin, footerY);
@@ -144,7 +146,7 @@ async function drawAppearanceCertificate(doc: jsPDF, student: Student, grade?: s
       y += 5;
       doc.addImage(logoBase64, 'PNG', (pageWidth / 2) - 15, y, 30, 30);
     }
-    y += 30; // Content moved up
+    y += 35; 
     
     doc.setFontSize(14);
     doc.text('APPEARANCE CERTIFICATE', pageWidth / 2, y, { align: 'center' });
@@ -185,7 +187,7 @@ async function drawCharacterCertificate(doc: jsPDF, student: Student, character?
       y += 5;
       doc.addImage(logoBase64, 'PNG', (pageWidth / 2) - 15, y, 30, 30);
     }
-    y += 30; // Content moved up
+    y += 35;
     
     doc.setFontSize(14);
     doc.text('CHARACTER CERTIFICATE', pageWidth / 2, y, { align: 'center' });
@@ -224,7 +226,7 @@ async function drawPassCertificate(doc: jsPDF, student: Student) {
       y += 5;
       doc.addImage(logoBase64, 'PNG', (pageWidth / 2) - 15, y, 30, 30);
     }
-    y += 30; // Content moved up
+    y += 35;
     
     doc.setFontSize(14);
     doc.text('PASS CERTIFICATE', pageWidth / 2, y, { align: 'center' });
@@ -331,7 +333,7 @@ async function drawLeavingCertificate(doc: jsPDF, student: Student, grade?: stri
     doc.text('Certified that the above information is in accordance with the school General Register.', margin, y);
     
     // --- Footer ---
-    const footerY = doc.internal.pageSize.getHeight() - 30;
+    const footerY = doc.internal.pageSize.getHeight() - 20;
     doc.setFontSize(12);
     doc.setFont('helvetica', 'normal');
     drawField('Date:', format(new Date(), 'MMMM dd, yyyy'), margin, footerY);
