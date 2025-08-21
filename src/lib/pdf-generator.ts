@@ -81,7 +81,7 @@ function drawStyledText(doc: jsPDF, text: string, x: number, y: number, maxWidth
                 const textHeight = doc.getLineHeight() * 0.35;
                 doc.setDrawColor(0);
                 doc.setLineWidth(0.2);
-                doc.line(currentX, currentY + 1, currentX + doc.getTextWidth(segment.text), currentY + 1);
+                doc.line(currentX, currentY + 1, currentX + doc.getTextWidth(segment.text.trimEnd()), currentY + 1);
             }
             currentX += segment.width;
         });
@@ -91,7 +91,7 @@ function drawStyledText(doc: jsPDF, text: string, x: number, y: number, maxWidth
 
 
 function drawFooter(doc: jsPDF, pageHeight: number, margin: number, pageWidth: number) {
-    const footerY = pageHeight - 40;
+    const footerY = pageHeight - 30; // Move footer down
     doc.setFontSize(12);
     doc.setFont('helvetica', 'normal');
 
@@ -99,7 +99,6 @@ function drawFooter(doc: jsPDF, pageHeight: number, margin: number, pageWidth: n
     const faText = 'First Assistant';
     const chText = 'Chief Headmaster';
     
-    const dateWidth = doc.getTextWidth(dateText);
     const faWidth = doc.getTextWidth(faText);
     const chWidth = doc.getTextWidth(chText);
 
@@ -108,13 +107,13 @@ function drawFooter(doc: jsPDF, pageHeight: number, margin: number, pageWidth: n
 
     // Draw lines for signatures
     doc.setLineWidth(0.3);
-    doc.line(faX, footerY, faX + faWidth, footerY); // Line for First Assistant
-    doc.line(chX, footerY, chX + chWidth, footerY); // Line for Chief Headmaster
+    doc.line(faX, footerY - 2, faX + faWidth, footerY - 2); // Line for First Assistant
+    doc.line(chX, footerY - 2, chX + chWidth, footerY - 2); // Line for Chief Headmaster
 
     // Draw text below lines
-    doc.text(dateText, margin, footerY + 5);
-    doc.text(faText, faX, footerY + 5);
-    doc.text(chText, chX, footerY + 5);
+    doc.text(dateText, margin, footerY);
+    doc.text(faText, faX, footerY);
+    doc.text(chText, chX, footerY);
 }
 
 
@@ -145,7 +144,7 @@ async function drawAppearanceCertificate(doc: jsPDF, student: Student, grade?: s
       y += 5;
       doc.addImage(logoBase64, 'PNG', (pageWidth / 2) - 15, y, 30, 30);
     }
-    y += 40;
+    y += 30; // Content moved up
     
     doc.setFontSize(14);
     doc.text('APPEARANCE CERTIFICATE', pageWidth / 2, y, { align: 'center' });
@@ -186,7 +185,7 @@ async function drawCharacterCertificate(doc: jsPDF, student: Student, character?
       y += 5;
       doc.addImage(logoBase64, 'PNG', (pageWidth / 2) - 15, y, 30, 30);
     }
-    y += 40;
+    y += 30; // Content moved up
     
     doc.setFontSize(14);
     doc.text('CHARACTER CERTIFICATE', pageWidth / 2, y, { align: 'center' });
@@ -225,7 +224,7 @@ async function drawPassCertificate(doc: jsPDF, student: Student) {
       y += 5;
       doc.addImage(logoBase64, 'PNG', (pageWidth / 2) - 15, y, 30, 30);
     }
-    y += 40;
+    y += 30; // Content moved up
     
     doc.setFontSize(14);
     doc.text('PASS CERTIFICATE', pageWidth / 2, y, { align: 'center' });
