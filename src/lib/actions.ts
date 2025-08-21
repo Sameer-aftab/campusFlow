@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { readStudents, writeStudents } from './data';
 import type { Student } from './definitions';
-import { loginSchema, studentSchema } from './schema';
+import { loginSchema, studentSchema, type StudentFormValues } from './schema';
 import * as XLSX from 'xlsx';
 
 
@@ -35,7 +35,7 @@ export async function getStudentById(id: string) {
   return students.find(student => student.id === id);
 }
 
-export async function addStudent(values: z.infer<typeof studentSchema>) {
+export async function addStudent(values: StudentFormValues) {
   const students = await readStudents();
   const existingStudent = students.find(student => student.grNo === values.grNo);
   if (existingStudent) {
@@ -43,7 +43,7 @@ export async function addStudent(values: z.infer<typeof studentSchema>) {
   }
 
   const newStudent: Student = {
-    ...values,
+    ...studentSchema.parse(values),
     id: String(Date.now()),
   };
   
@@ -54,7 +54,7 @@ export async function addStudent(values: z.infer<typeof studentSchema>) {
   return { success: 'Student added successfully.' };
 }
 
-export async function updateStudent(id: string, values: z.infer<typeof studentSchema>) {
+export async function updateStudent(id: string, values: StudentFormValues) {
   const students = await readStudents();
   const index = students.findIndex(s => s.id === id);
   if (index !== -1) {
@@ -62,7 +62,7 @@ export async function updateStudent(id: string, values: z.infer<typeof studentSc
     if (existingStudentWithSameGrNo) {
       return { error: 'Another student with this G.R. No. already exists.' };
     }
-    students[index] = { ...students[index], ...values, id: id };
+    students[index] = { ...students[index], ...studentSchema.parse(values), id: id };
     await writeStudents(students);
     revalidatePath('/dashboard');
     revalidatePath(`/dashboard/edit-student/${id}`);
@@ -94,13 +94,21 @@ export async function importFromExcel(fileContent: string) {
       return { error: 'Excel file is empty or invalid.' };
     }
 
-    const newStudents: Student[] = data.map((row, index) => {
-        // Basic data transformation and validation could happen here
-        // For now, we assume a direct mapping.
-        // Dates from xlsx need to be handled carefully.
-        const student: Student = {
-            id: row.id || String(Date.now() + index),
-            grNo: String(row.grNo),
+    const currentStudents = await readStudents();
+    const grNumbers = new Set(currentStudents.map(s => s.grNo));
+
+    const newStudents: Student[] = [];
+    for (const [index, row] of data.entries()) {
+        const grNo = String(row.grNo);
+        if (grNumbers.has(grNo)) {
+            // Optionally, skip or handle duplicates
+            console.log(`Skipping duplicate G.R. No: ${grNo}`);
+            continue;
+        }
+
+        // Basic data transformation and validation
+        const studentData = {
+            grNo,
             studentName: row.studentName,
             fatherName: row.fatherName,
             raceAndCaste: row.raceAndCaste,
@@ -112,7 +120,7 @@ export async function importFromExcel(fileContent: string) {
             lastSchoolAttended: row.lastSchoolAttended,
             admissionDate: new Date(row.admissionDate),
             classInWhichAdmitted: String(row.classInWhichAdmitted),
-            cnic: row.cnic || 'N/A',
+            cnic: row.cnic ? String(row.cnic) : '',
             guardianName: row.guardianName,
             guardianCnic: row.guardianCnic,
             relationshipWithGuardian: row.relationshipWithGuardian,
@@ -125,22 +133,32 @@ export async function importFromExcel(fileContent: string) {
             remarks: row.remarks || '',
             dateOfLeaving: row.dateOfLeaving ? new Date(row.dateOfLeaving) : null,
             reasonOfLeaving: row.reasonOfLeaving || '',
-            examination: row.examination || '',
+            examination: row.examination || undefined,
             underSeatNo: row.underSeatNo || '',
             progress: row.progress || 'Good',
             conduct: row.conduct || 'Good',
             grade: row.grade || '',
+            妣ype: row.妣ype || undefined,
+            sscRollNo: row.sscRollNo || '',
         };
-        return student;
-    });
 
-    // Replace the old student data with the new data
-    await writeStudents(newStudents);
+        const parsed = studentSchema.safeParse(studentData);
+        if (parsed.success) {
+            newStudents.push({ ...parsed.data, id: String(Date.now() + index) });
+            grNumbers.add(grNo);
+        } else {
+            console.error(`Row ${index + 2} is invalid:`, parsed.error.flatten().fieldErrors);
+            return { error: `Row ${index + 2} has invalid data. Please check the file and try again.` };
+        }
+    }
+
+    const updatedStudents = [...currentStudents, ...newStudents];
+    await writeStudents(updatedStudents);
 
     revalidatePath('/dashboard');
-    return { success: `Successfully imported ${newStudents.length} students.` };
+    return { success: `Successfully imported ${newStudents.length} new students.` };
   } catch (error) {
     console.error(error);
-    return { error: 'Failed to process the Excel file.' };
+    return { error: 'Failed to process the Excel file. Ensure columns match the required format.' };
   }
 }
