@@ -71,10 +71,8 @@ function drawFooter(doc: jsPDF, pageHeight: number, margin: number, pageWidth: n
     doc.setFont('helvetica', 'normal');
     doc.text(`Date: ${format(new Date(), 'MMMM dd, yyyy')}`, margin, footerY + 15);
 
-    doc.line(pageWidth / 2 - 40, footerY + 5, pageWidth / 2 + 40, footerY + 5);
     doc.text('First Assistant', pageWidth / 2, footerY + 10, { align: 'center' });
 
-    doc.line(pageWidth - margin - 60, footerY + 5, pageWidth - margin, footerY + 5);
     doc.text('Chief Headmaster', pageWidth - margin - 30, footerY + 10, { align: 'center' });
 }
 
@@ -114,7 +112,7 @@ async function drawAppearanceCertificate(doc: jsPDF, student: Student, grade?: s
     const finalGrade = grade || student.grade;
     const bodyText = `This is to certify that <b>${student.studentName}</b> S/O <b>${student.fatherName}</b> was a bonafide student of this School from <b>${formatDate(student.admissionDate)}</b> to <b>${student.dateOfLeaving ? formatDate(student.dateOfLeaving) : formatDate(new Date())}</b>. He has filled the form of SSC part II Annual Examination <b>${currentYear}</b> and it is expected that he will secure atleast Grade <b>${finalGrade}</b> at the above said Examination. His date of birth as entered in this School General Register is <b>${formatDate(student.dateOfBirth)}</b>. He bears a good Character and I wish him success in future.`;
     
-    drawTextWithBold(doc, bodyText, margin, 90, contentWidth, 8);
+    drawTextWithBold(doc, bodyText, margin, 90, contentWidth, 6);
 
     drawFooter(doc, pageHeight, margin, pageWidth);
 }
@@ -147,7 +145,7 @@ async function drawCharacterCertificate(doc: jsPDF, student: Student, character?
     const finalCharacter = character || student.conduct;
     const bodyText = `This is to certify that <b>${student.studentName}</b>, S/O <b>${student.fatherName}</b> was a bonafide student of this School from <b>${formatDate(student.admissionDate)}</b> to <b>${student.dateOfLeaving ? formatDate(student.dateOfLeaving) : formatDate(new Date())}</b>. To the best of my knowledge he bears a <b>${finalCharacter}</b> Moral character. I wish him good luck.`;
     
-    drawTextWithBold(doc, bodyText, margin, 90, contentWidth, 8);
+    drawTextWithBold(doc, bodyText, margin, 90, contentWidth, 6);
 
     drawFooter(doc, pageHeight, margin, pageWidth);
 }
@@ -180,7 +178,7 @@ async function drawPassCertificate(doc: jsPDF, student: Student) {
     doc.setFontSize(12);
     const bodyText = `This is to certify that Mr. <b>${formatValue(student.studentName)}</b> S/o <b>${formatValue(student.fatherName)}</b> by Caste <b>${formatValue(student.raceAndCaste)}</b> was enrolled under G.R.No: <b>${formatValue(student.grNo)}</b> and has been a bonafied student of this school from <b>${formatDate(student.admissionDate)}</b> to <b>${student.dateOfLeaving ? formatDate(student.dateOfLeaving) : formatDate(new Date())}</b>. He has Passed class <b>${formatValue(student.examination)}</b>. According to School Record his date of Birth is <b>${formatDate(student.dateOfBirth)}</b> is in words <b>${formatValue(student.dateOfBirthInWords)}</b>. He bears a good moral and I wish him success in future.`;
     
-    drawTextWithBold(doc, bodyText, margin, 90, contentWidth, 8);
+    drawTextWithBold(doc, bodyText, margin, 90, contentWidth, 6);
     
     drawFooter(doc, pageHeight, margin, pageWidth);
 }
@@ -189,13 +187,14 @@ async function drawPassCertificate(doc: jsPDF, student: Student) {
 async function drawLeavingCertificate(doc: jsPDF, student: Student, grade?: string) {
     const logoBase64 = await getBase64Image(window.location.origin + '/Logo.png');
     const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
     const margin = 15;
     let y = 20;
 
     // --- Border ---
     doc.setDrawColor(0);
     doc.setLineWidth(1.5);
-    doc.rect(5, 5, pageWidth - 10, doc.internal.pageSize.getHeight() - 10);
+    doc.rect(5, 5, pageWidth - 10, pageHeight - 10);
     
     // --- Header ---
     doc.setFont('helvetica', 'bold');
@@ -287,10 +286,8 @@ async function drawLeavingCertificate(doc: jsPDF, student: Student, grade?: stri
     const faX = pageWidth / 2 - (doc.getTextWidth(firstAssistantText) / 2);
     const chX = pageWidth - margin - doc.getTextWidth(chiefHeadmasterText);
 
-    doc.line(faX - 5, footerY + 5, faX + doc.getTextWidth(firstAssistantText) + 5, footerY + 5);
     doc.text(firstAssistantText, faX, footerY + 10);
     
-    doc.line(chX - 5, footerY + 5, chX + doc.getTextWidth(chiefHeadmasterText) + 5, footerY + 5);
     doc.text(chiefHeadmasterText, chX, footerY + 10);
 }
 
