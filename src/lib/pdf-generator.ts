@@ -40,62 +40,84 @@ async function getBase64Image(url: string): Promise<string> {
 
 
 function drawStyledText(doc: jsPDF, text: string, x: number, y: number, maxWidth: number, lineSpacing: number) {
-    const parts = text.split(/(<b><u>.*?<\/u><\/b>)/g).filter(p => p);
-    const lines: { text: string; isBold: boolean; isUnderlined: boolean; width: number }[][] = [];
-    let currentLine: { text: string; isBold: boolean; isUnderlined: boolean; width: number }[] = [];
+    // Split by tags, keeping the tags
+    const parts = text.split(/(<\/?b>|<\/?u>)/g).filter(p => p);
+
+    let isBold = false;
+    let isUnderlined = false;
+    let currentX = x;
+    let currentY = y;
+    const spaceWidth = doc.getTextWidth(' ');
+
+    const lines: { text: string; isBold: boolean; isUnderlined: boolean; }[][] = [];
+    let currentLine: { text: string; isBold: boolean; isUnderlined: boolean; }[] = [];
     let currentLineWidth = 0;
 
-    parts.forEach(part => {
+    const words = text.replace(/<\/?[bu]>/g, '').split(' ');
+    
+    // Simplified logic: This does not handle nested or complex tags, but works for the current case.
+    const styledWords = text.split(' ').map(word => {
+        let isB = (word.includes('<b>') || text.startsWith('<b>')) && !word.includes('</b>');
+        let isU = (word.includes('<u>') || text.startsWith('<u>')) && !word.includes('</u>');
+        return {
+            text: word.replace(/<\/?[bu]>/g, ''),
+            isBold: isB,
+            isUnderlined: isU,
+        }
+    });
+
+    const bodyParts = text.split(/(<b><u>.*?<\/u><\/b>)/g).filter(p => p);
+
+    let accumulatedX = x;
+
+    bodyParts.forEach(part => {
         const isStyled = part.startsWith('<b><u>') && part.endsWith('</u></b>');
         const cleanPart = part.replace(/<b><u>|<\/u><\/b>/g, '');
-        const words = cleanPart.split(' ');
+        
+        doc.setFont('helvetica', isStyled ? 'bold' : 'normal');
 
+        const words = cleanPart.split(' ');
         words.forEach(word => {
             if (!word) return;
             const wordWithSpace = word + ' ';
-            doc.setFont('helvetica', isStyled ? 'bold' : 'normal');
             const wordWidth = doc.getTextWidth(wordWithSpace);
 
-            if (currentLineWidth + wordWidth > maxWidth) {
-                lines.push(currentLine);
-                currentLine = [];
-                currentLineWidth = 0;
+            if (accumulatedX + wordWidth > x + maxWidth) {
+                currentY += lineSpacing;
+                accumulatedX = x;
             }
 
-            currentLine.push({ text: wordWithSpace, isBold: isStyled, isUnderlined: isStyled, width: wordWidth });
-            currentLineWidth += wordWidth;
-        });
-    });
-    lines.push(currentLine);
+            doc.text(wordWithSpace, accumulatedX, currentY);
 
-    let currentY = y;
-    lines.forEach(line => {
-        const totalLineWidth = line.reduce((sum, part) => sum + part.width, 0);
-        let currentX = x + (maxWidth - totalLineWidth) / 2; // Center align the line
-
-        line.forEach(segment => {
-            doc.setFont('helvetica', segment.isBold ? 'bold' : 'normal');
-            doc.text(segment.text, currentX, currentY);
-
-            if (segment.isUnderlined) {
-                const textHeight = doc.getLineHeight() * 0.35;
-                doc.setDrawColor(0);
-                doc.setLineWidth(0.2);
-                doc.line(currentX, currentY + 1, currentX + doc.getTextWidth(segment.text.trimEnd()), currentY + 1);
+            if (isStyled) {
+                const underlineY = currentY + 1;
+                doc.setLineWidth(0.3);
+                doc.line(accumulatedX, underlineY, accumulatedX + doc.getTextWidth(word), underlineY);
             }
-            currentX += segment.width;
+
+            accumulatedX += wordWidth;
         });
-        currentY += lineSpacing;
     });
 }
 
 
 function drawFooter(doc: jsPDF, pageHeight: number, margin: number, pageWidth: number) {
-    const footerY = pageHeight - 20; // Position from the bottom
+    const footerY = pageHeight - 10;
     doc.setFontSize(12);
     doc.setFont('helvetica', 'normal');
 
-    const dateText = `Date: ${format(new Date(), 'MMMM dd, yyyy')}`;
+    // Date
+    const dateLabel = 'Date: ';
+    const dateValue = format(new Date(), 'MMMM dd, yyyy');
+    doc.text(dateLabel, margin, footerY);
+    const dateLabelWidth = doc.getTextWidth(dateLabel);
+    const dateValueWidth = doc.getTextWidth(dateValue);
+    doc.text(dateValue, margin + dateLabelWidth, footerY);
+    doc.setLineWidth(0.3);
+    doc.line(margin + dateLabelWidth, footerY + 1, margin + dateLabelWidth + dateValueWidth, footerY + 1);
+
+
+    // Titles
     const faText = 'First Assistant';
     const chText = 'Chief Headmaster';
     
@@ -104,16 +126,15 @@ function drawFooter(doc: jsPDF, pageHeight: number, margin: number, pageWidth: n
 
     const faX = pageWidth / 2 - faWidth / 2;
     const chX = pageWidth - margin - chWidth;
-
-    // Draw lines for signatures
+    
     const signatureLineY = footerY - 2;
-    doc.setLineWidth(0.3);
-    doc.line(margin, signatureLineY, margin + doc.getTextWidth(dateText), signatureLineY); // Line for Date
+
+    // Draw lines for signatures ABOVE text
     doc.line(faX, signatureLineY, faX + faWidth, signatureLineY); // Line for First Assistant
     doc.line(chX, signatureLineY, chX + chWidth, signatureLineY); // Line for Chief Headmaster
 
+
     // Draw text below lines
-    doc.text(dateText, margin, footerY);
     doc.text(faText, faX, footerY);
     doc.text(chText, chX, footerY);
 }
@@ -146,7 +167,7 @@ async function drawAppearanceCertificate(doc: jsPDF, student: Student, grade?: s
       y += 5;
       doc.addImage(logoBase64, 'PNG', (pageWidth / 2) - 15, y, 30, 30);
     }
-    y += 35; 
+    y += 40; 
     
     doc.setFontSize(14);
     doc.text('APPEARANCE CERTIFICATE', pageWidth / 2, y, { align: 'center' });
@@ -187,7 +208,7 @@ async function drawCharacterCertificate(doc: jsPDF, student: Student, character?
       y += 5;
       doc.addImage(logoBase64, 'PNG', (pageWidth / 2) - 15, y, 30, 30);
     }
-    y += 35;
+    y += 40;
     
     doc.setFontSize(14);
     doc.text('CHARACTER CERTIFICATE', pageWidth / 2, y, { align: 'center' });
@@ -226,7 +247,7 @@ async function drawPassCertificate(doc: jsPDF, student: Student) {
       y += 5;
       doc.addImage(logoBase64, 'PNG', (pageWidth / 2) - 15, y, 30, 30);
     }
-    y += 35;
+    y += 40;
     
     doc.setFontSize(14);
     doc.text('PASS CERTIFICATE', pageWidth / 2, y, { align: 'center' });
