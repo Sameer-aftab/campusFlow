@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
-import Logo from '../../app/Logo.png'
 
-export function SchoolLogo({ className, ...props }: React.SVGProps<SVGSVGElement>) {
+export function SchoolLogo({ className, ...props }: React.ComponentProps<"img">) {
   return (
-   <Image src={Logo} alt="School Logo" className={cn(className)} {...props} />
+   <Image src="/Logo.png" alt="School Logo" width={100} height={100} className={cn(className)} {...props} />
   );
 }

@@ -77,6 +77,9 @@ export function StudentForm({ student }: StudentFormProps) {
           remarks: student.remarks || '',
           reasonOfLeaving: student.reasonOfLeaving || '',
           underSeatNo: student.underSeatNo || '',
+          examination: student.examination || undefined,
+          progress: student.progress || undefined,
+          conduct: student.conduct || undefined,
           妣ype: student.妣ype || undefined,
         }
       : {
@@ -134,18 +137,10 @@ export function StudentForm({ student }: StudentFormProps) {
 
   async function onSubmit(values: StudentFormValues) {
     setIsSubmitting(true);
-    const cleanedValues = {
-      ...values,
-      sscRollNo: values.sscRollNo || '',
-      cnic: values.cnic || '',
-      remarks: values.remarks || '',
-      reasonOfLeaving: values.reasonOfLeaving || '',
-      underSeatNo: values.underSeatNo || '',
-    };
-
+    
     const result = student
-      ? await updateStudent(student.id, cleanedValues)
-      : await addStudent(cleanedValues);
+      ? await updateStudent(student.id, values)
+      : await addStudent(values);
 
     if (result.success) {
       toast({ title: 'Success', description: result.success });
