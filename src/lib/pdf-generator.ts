@@ -39,84 +39,37 @@ async function getBase64Image(url: string): Promise<string> {
 }
 
 function drawTextWithBold(doc: jsPDF, text: string, x: number, y: number, maxWidth: number, lineSpacing: number) {
-    const parts = text.split(/<b>(.*?)<\/b>/g);
-    let currentX = x;
+    // Split the text into lines, respecting the max width
+    const lines = doc.splitTextToSize(text.replace(/<b>|<\/b>/g, ''), maxWidth);
     let currentY = y;
-    const initialX = x;
 
-    const splitOptions = { maxWidth: maxWidth, align: 'center' };
-    const lines = doc.splitTextToSize(text.replace(/<b>/g, '').replace(/<\/b>/g, ''), maxWidth);
-
-    let textCursor = 0;
     lines.forEach((line: string) => {
-        let offsetX = 0;
-        const lineLength = line.length;
+        // For each line, split it into bold and normal segments
+        const segments = line.split(/(<b>.*?<\/b>)/g).filter(p => p);
         
-        let segment = '';
-        let isBold = false;
+        // Calculate the total width of the line to center it
+        const totalLineWidth = doc.getTextWidth(segments.join('').replace(/<b>|<\/b>/g, ''));
+        let segmentX = x + (maxWidth - totalLineWidth) / 2;
 
-        const originalLineText = text.replace(/<b>/g, '').replace(/<\/b>/g, '').substring(textCursor, textCursor + lineLength);
-        
-        // Very complex to handle bolding with auto-wrapping. For now, we will draw the line as is.
-        // A more robust solution might require a different library or a much more complex parser.
-        // The key is to fix the layout first.
-        
-        // Simple approach: find bold tags in the original text and apply style if the line contains it.
-        // This is not perfect but will fix the broken layout.
-        
-        doc.setFont('helvetica', 'normal');
-        let tempLine = line;
-
-        // A simplified bold implementation
-        const boldRegex = /<b>(.*?)<\/b>/;
-        // This simplified logic can't handle split bold tags across lines, but will bold if a tag is fully within a line.
-        // Given the templates, this is a reasonable compromise to fix the layout destruction.
-        const bodyParts = text.split(/<b>(.*?)<\/b>/g);
-        let startX = x;
-
-        // We will manually split text for now to control bolding.
-        const words = text.split(' ');
-        let currentLine = '';
-        const wrappedLines = [];
-
-        words.forEach(word => {
-            const potentialLine = currentLine ? `${currentLine} ${word}` : word;
-            const potentialLineWidth = doc.getTextWidth(potentialLine.replace(/<b>|<\/b>/g, ''));
-
-            if (potentialLineWidth > maxWidth) {
-                wrappedLines.push(currentLine);
-                currentLine = word;
-            } else {
-                currentLine = potentialLine;
-            }
-        });
-        wrappedLines.push(currentLine);
-
-
-        wrappedLines.forEach(lineTxt => {
-            const segments = lineTxt.split(/<b>(.*?)<\/b>/g).filter(p => p);
-            const totalLineWidth = doc.getTextWidth(segments.join(''));
-            let segmentX = x + (maxWidth - totalLineWidth) / 2;
-
-            segments.forEach((segment, index) => {
-                const originalSegment = segment;
-                const isSegmentBold = lineTxt.includes(`<b>${segment}</b>`);
-                doc.setFont('helvetica', isSegmentBold ? 'bold' : 'normal');
-                doc.text(segment, segmentX, currentY);
-                segmentX += doc.getTextWidth(segment);
-            });
-            currentY += lineSpacing;
+        segments.forEach((segment) => {
+            const isBold = segment.startsWith('<b>') && segment.endsWith('</b>');
+            const cleanSegment = segment.replace(/<b>|<\/b>/g, '');
+            
+            doc.setFont('helvetica', isBold ? 'bold' : 'normal');
+            doc.text(cleanSegment, segmentX, currentY);
+            segmentX += doc.getTextWidth(cleanSegment); // Move X for the next segment
         });
 
-        textCursor += lineLength + 1; // Move cursor past the current line and a space/newline
+        currentY += lineSpacing; // Move Y for the next line
     });
 }
+
 
 function drawFooter(doc: jsPDF, pageHeight: number, margin: number, pageWidth: number) {
     const footerY = pageHeight - 40;
     doc.setFontSize(12);
     doc.setFont('helvetica', 'normal');
-    doc.text(`Date: ${format(new Date(), 'MMMM dd, yyyy')}`, margin, footerY);
+    doc.text(`Date: ${format(new Date(), 'MMMM dd, yyyy')}`, margin, footerY + 15);
 
     doc.line(pageWidth / 2 - 40, footerY + 5, pageWidth / 2 + 40, footerY + 5);
     doc.text('First Assistant', pageWidth / 2, footerY + 10, { align: 'center' });
@@ -161,7 +114,7 @@ async function drawAppearanceCertificate(doc: jsPDF, student: Student, grade?: s
     const finalGrade = grade || student.grade;
     const bodyText = `This is to certify that <b>${student.studentName}</b> S/O <b>${student.fatherName}</b> was a bonafide student of this School from <b>${formatDate(student.admissionDate)}</b> to <b>${student.dateOfLeaving ? formatDate(student.dateOfLeaving) : formatDate(new Date())}</b>. He has filled the form of SSC part II Annual Examination <b>${currentYear}</b> and it is expected that he will secure atleast Grade <b>${finalGrade}</b> at the above said Examination. His date of birth as entered in this School General Register is <b>${formatDate(student.dateOfBirth)}</b>. He bears a good Character and I wish him success in future.`;
     
-    drawTextWithBold(doc, bodyText, margin, 95, contentWidth, 8);
+    drawTextWithBold(doc, bodyText, margin, 90, contentWidth, 8);
 
     drawFooter(doc, pageHeight, margin, pageWidth);
 }
@@ -194,7 +147,7 @@ async function drawCharacterCertificate(doc: jsPDF, student: Student, character?
     const finalCharacter = character || student.conduct;
     const bodyText = `This is to certify that <b>${student.studentName}</b>, S/O <b>${student.fatherName}</b> was a bonafide student of this School from <b>${formatDate(student.admissionDate)}</b> to <b>${student.dateOfLeaving ? formatDate(student.dateOfLeaving) : formatDate(new Date())}</b>. To the best of my knowledge he bears a <b>${finalCharacter}</b> Moral character. I wish him good luck.`;
     
-    drawTextWithBold(doc, bodyText, margin, 95, contentWidth, 8);
+    drawTextWithBold(doc, bodyText, margin, 90, contentWidth, 8);
 
     drawFooter(doc, pageHeight, margin, pageWidth);
 }
@@ -227,7 +180,7 @@ async function drawPassCertificate(doc: jsPDF, student: Student) {
     doc.setFontSize(12);
     const bodyText = `This is to certify that Mr. <b>${formatValue(student.studentName)}</b> S/o <b>${formatValue(student.fatherName)}</b> by Caste <b>${formatValue(student.raceAndCaste)}</b> was enrolled under G.R.No: <b>${formatValue(student.grNo)}</b> and has been a bonafied student of this school from <b>${formatDate(student.admissionDate)}</b> to <b>${student.dateOfLeaving ? formatDate(student.dateOfLeaving) : formatDate(new Date())}</b>. He has Passed class <b>${formatValue(student.examination)}</b>. According to School Record his date of Birth is <b>${formatDate(student.dateOfBirth)}</b> is in words <b>${formatValue(student.dateOfBirthInWords)}</b>. He bears a good moral and I wish him success in future.`;
     
-    drawTextWithBold(doc, bodyText, margin, 95, contentWidth, 8);
+    drawTextWithBold(doc, bodyText, margin, 90, contentWidth, 8);
     
     drawFooter(doc, pageHeight, margin, pageWidth);
 }
