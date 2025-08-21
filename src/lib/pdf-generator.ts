@@ -38,6 +38,61 @@ async function getBase64Image(url: string): Promise<string> {
     }
 }
 
+function drawTextWithBold(doc: jsPDF, text: string, x: number, y: number, options: any, lineSpacing: number = 7) {
+    const parts = text.split(/<b>(.*?)<\/b>/g);
+    let currentX = x;
+    let currentY = y;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const margin = options.align === 'center' ? 0 : x;
+    
+    let lineParts: { text: string, isBold: boolean }[] = [];
+
+    parts.forEach((part, index) => {
+        if (!part) return;
+        const isBold = index % 2 === 1;
+        
+        const words = part.split(' ');
+        words.forEach(word => {
+            doc.setFont('helvetica', isBold ? 'bold' : 'normal');
+            const currentLineText = lineParts.map(p => p.text).join('');
+            const wordWidth = doc.getTextWidth(word + ' ');
+            const currentLineWidth = doc.getTextWidth(currentLineText);
+            
+            if (options.align === 'center' || (currentLineWidth + wordWidth > pageWidth - (margin * 2))) {
+                // Render the current line
+                let lineX = margin;
+                const totalLineWidth = doc.getTextWidth(lineParts.map(p => p.text).join(''));
+                if (options.align === 'center') {
+                    lineX = (pageWidth - totalLineWidth) / 2;
+                }
+                
+                lineParts.forEach(linePart => {
+                    doc.setFont('helvetica', linePart.isBold ? 'bold' : 'normal');
+                    doc.text(linePart.text, lineX, currentY);
+                    lineX += doc.getTextWidth(linePart.text);
+                });
+
+                currentY += lineSpacing;
+                lineParts = []; // Start a new line
+            }
+            lineParts.push({ text: word + ' ', isBold });
+        });
+    });
+
+    // Render the last line
+    let lineX = margin;
+     const totalLineWidth = doc.getTextWidth(lineParts.map(p => p.text).join(''));
+    if (options.align === 'center') {
+        lineX = (pageWidth - totalLineWidth) / 2;
+    }
+    lineParts.forEach(linePart => {
+        doc.setFont('helvetica', linePart.isBold ? 'bold' : 'normal');
+        doc.text(linePart.text, lineX, currentY);
+        lineX += doc.getTextWidth(linePart.text);
+    });
+
+}
+
 
 // --- CERTIFICATE DRAWING FUNCTIONS ---
 
@@ -59,33 +114,32 @@ async function drawAppearanceCertificate(doc: jsPDF, student: Student, grade?: s
     // --- Header ---
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(16);
-    doc.text('Govt: (N) NOOR MUHAMMAD HIGH SCHOOL HYDERABAD', pageWidth / 2, 20, { align: 'center' });
+    doc.text('Govt: (N) NOOR MUHAMMAD', pageWidth / 2, 20, { align: 'center' });
+    doc.text('HIGH SCHOOL HYDERABAD', pageWidth / 2, 28, { align: 'center' });
+
     
     if (logoBase64) {
-      doc.addImage(logoBase64, 'PNG', (pageWidth / 2) - 15, 25, 30, 30);
+      doc.addImage(logoBase64, 'PNG', (pageWidth / 2) - 15, 33, 30, 30);
     }
     
-    doc.setLineWidth(0.5);
-    doc.line(margin, 60, pageWidth - margin, 60);
-
     doc.setFontSize(14);
-    doc.text('APPEARANCE CERTIFICATE', pageWidth / 2, 70, { align: 'center' });
+    doc.text('APPEARANCE CERTIFICATE', pageWidth / 2, 75, { align: 'center' });
 
     // --- Body ---
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(12);
 
     const currentYear = new Date().getFullYear();
-    const bodyText = `This is to certify that ${student.studentName} S/O ${student.fatherName} was a bonafide student of this School from ${formatDate(student.admissionDate)} to ${student.dateOfLeaving ? formatDate(student.dateOfLeaving) : formatDate(new Date())}. He has filled the form of SSC part II Annual Examination ${currentYear} and it is expected that he will secure atleast Grade ${grade || student.grade} at the above said Examination.\n\nHis date of birth as entered in this School General Register is ${formatDate(student.dateOfBirth)}.\n\nHe bears a good Character and I wish him success in future.`;
+    const finalGrade = grade || student.grade;
+
+    const bodyText = `This is to certify that <b>${student.studentName}</b> S/O <b>${student.fatherName}</b> was a bonafide student of this School from <b>${formatDate(student.admissionDate)}</b> to <b>${student.dateOfLeaving ? formatDate(student.dateOfLeaving) : formatDate(new Date())}</b>. He has filled the form of SSC part II Annual Examination <b>${currentYear}</b> and it is expected that he will secure atleast Grade <b>${finalGrade}</b> at the above said Examination. His date of birth as entered in this School General Register is <b>${formatDate(student.dateOfBirth)}</b>. He bears a good Character and I wish him success in future.`;
     
-    const splitText = doc.splitTextToSize(bodyText, pageWidth - (margin * 2));
-    doc.text(splitText, margin, 85);
+    drawTextWithBold(doc, bodyText, margin, 90, { align: 'center' }, 8);
 
     // --- Footer ---
-    const footerY = pageHeight - 30;
+    const footerY = pageHeight - 40;
     doc.text(`Date: ${format(new Date(), 'MMMM dd, yyyy')}`, margin, footerY);
     
-    doc.setLineWidth(0.5);
     doc.line(pageWidth / 2 - 25, footerY + 5, pageWidth / 2 + 25, footerY + 5);
     doc.text('First Assistant', pageWidth / 2, footerY + 10, { align: 'center' });
 
@@ -107,25 +161,25 @@ async function drawCharacterCertificate(doc: jsPDF, student: Student, character?
     doc.rect(7, 7, pageWidth - 14, pageHeight - 14);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(16);
-    doc.text('Govt: (N) NOOR MUHAMMAD HIGH SCHOOL HYDERABAD', pageWidth / 2, 20, { align: 'center' });
+    doc.text('Govt: (N) NOOR MUHAMMAD', pageWidth / 2, 20, { align: 'center' });
+    doc.text('HIGH SCHOOL HYDERABAD', pageWidth / 2, 28, { align: 'center' });
     if(logoBase64) {
-      doc.addImage(logoBase64, 'PNG', (pageWidth / 2) - 15, 25, 30, 30);
+      doc.addImage(logoBase64, 'PNG', (pageWidth / 2) - 15, 33, 30, 30);
     }
-    doc.setLineWidth(0.5);
-    doc.line(margin, 60, pageWidth - margin, 60);
+    
     doc.setFontSize(14);
-    doc.text('CHARACTER CERTIFICATE', pageWidth / 2, 70, { align: 'center' });
+    doc.text('CHARACTER CERTIFICATE', pageWidth / 2, 75, { align: 'center' });
 
     // --- Body ---
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(12);
     const finalCharacter = character || student.conduct;
-    const bodyText = `This is to certify that ${student.studentName}, S/O ${student.fatherName} was a bonafide student of this School from ${formatDate(student.admissionDate)} to ${student.dateOfLeaving ? formatDate(student.dateOfLeaving) : formatDate(new Date())}.\n\nTo the best of my knowledge he bears a ${finalCharacter} Moral character. I wish him good luck.`;
-    const splitText = doc.splitTextToSize(bodyText, pageWidth - (margin * 2));
-    doc.text(splitText, margin, 85);
+    const bodyText = `This is to certify that <b>${student.studentName}</b>, S/O <b>${student.fatherName}</b> was a bonafide student of this School from <b>${formatDate(student.admissionDate)}</b> to <b>${student.dateOfLeaving ? formatDate(student.dateOfLeaving) : formatDate(new Date())}</b>. To the best of my knowledge he bears a <b>${finalCharacter}</b> Moral character. I wish him good luck.`;
+    
+    drawTextWithBold(doc, bodyText, margin, 90, { align: 'center' }, 8);
 
     // --- Footer --- (Similar to Appearance)
-    const footerY = pageHeight - 30;
+    const footerY = pageHeight - 40;
     doc.text(`Date: ${format(new Date(), 'MMMM dd, yyyy')}`, margin, footerY);
     doc.line(pageWidth / 2 - 25, footerY + 5, pageWidth / 2 + 25, footerY + 5);
     doc.text('First Assistant', pageWidth / 2, footerY + 10, { align: 'center' });
@@ -147,24 +201,25 @@ async function drawPassCertificate(doc: jsPDF, student: Student) {
     doc.rect(7, 7, pageWidth - 14, pageHeight - 14);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(16);
-    doc.text('Govt: (N) NOOR MUHAMMAD HIGH SCHOOL HYDERABAD', pageWidth / 2, 20, { align: 'center' });
+    doc.text('Govt: (N) NOOR MUHAMMAD', pageWidth / 2, 20, { align: 'center' });
+    doc.text('HIGH SCHOOL HYDERABAD', pageWidth / 2, 28, { align: 'center' });
+
     if(logoBase64) {
-      doc.addImage(logoBase64, 'PNG', (pageWidth / 2) - 15, 25, 30, 30);
+      doc.addImage(logoBase64, 'PNG', (pageWidth / 2) - 15, 33, 30, 30);
     }
-    doc.setLineWidth(0.5);
-    doc.line(margin, 60, pageWidth - margin, 60);
+    
     doc.setFontSize(14);
-    doc.text('PASS CERTIFICATE', pageWidth / 2, 70, { align: 'center' });
+    doc.text('PASS CERTIFICATE', pageWidth / 2, 75, { align: 'center' });
     
     // --- Body ---
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(12);
-    const bodyText = `This is to certify that Mr. ${formatValue(student.studentName)} S/o ${formatValue(student.fatherName)} by Caste ${formatValue(student.raceAndCaste)} was enrolled under G.R.No: ${formatValue(student.grNo)} and has been a bonafied student of this school from ${formatDate(student.admissionDate)} to ${student.dateOfLeaving ? formatDate(student.dateOfLeaving) : formatDate(new Date())}. He has Passed class ${formatValue(student.examination)}.\n\nAccording to School Record his date of Birth is ${formatDate(student.dateOfBirth)} is in words ${formatValue(student.dateOfBirthInWords)}.\n\nHe bears a good moral and I wish him success in future.`;
-    const splitText = doc.splitTextToSize(bodyText, pageWidth - (margin * 2));
-    doc.text(splitText, margin, 85);
+    const bodyText = `This is to certify that Mr. <b>${formatValue(student.studentName)}</b> S/o <b>${formatValue(student.fatherName)}</b> by Caste <b>${formatValue(student.raceAndCaste)}</b> was enrolled under G.R.No: <b>${formatValue(student.grNo)}</b> and has been a bonafied student of this school from <b>${formatDate(student.admissionDate)}</b> to <b>${student.dateOfLeaving ? formatDate(student.dateOfLeaving) : formatDate(new Date())}</b>. He has Passed class <b>${formatValue(student.examination)}</b>. According to School Record his date of Birth is <b>${formatDate(student.dateOfBirth)}</b> is in words <b>${formatValue(student.dateOfBirthInWords)}</b>. He bears a good moral and I wish him success in future.`;
+    
+    drawTextWithBold(doc, bodyText, margin, 85, { align: 'center' }, 8);
     
     // --- Footer ---
-    const footerY = pageHeight - 30;
+    const footerY = pageHeight - 40;
     doc.text(`Date: ${format(new Date(), 'MMMM dd, yyyy')}`, margin, footerY);
     doc.line(pageWidth / 2 - 25, footerY + 5, pageWidth / 2 + 25, footerY + 5);
     doc.text('First Assistant', pageWidth / 2, footerY + 10, { align: 'center' });
@@ -187,8 +242,10 @@ async function drawLeavingCertificate(doc: jsPDF, student: Student, grade?: stri
     // --- Header ---
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(20);
-    doc.text('Govt: (N) NOOR MUHAMMAD HIGH SCHOOL HYDERABAD', pageWidth / 2, y, { align: 'center' });
-    y += 15;
+    doc.text('Govt: (N) NOOR MUHAMMAD', pageWidth / 2, y, { align: 'center' });
+    y += 8;
+    doc.text('HIGH SCHOOL HYDERABAD', pageWidth / 2, y, { align: 'center' });
+    y += 7;
     
     if (logoBase64) {
       doc.addImage(logoBase64, 'PNG', (pageWidth / 2) - 20, y, 40, 40);
@@ -208,7 +265,7 @@ async function drawLeavingCertificate(doc: jsPDF, student: Student, grade?: stri
         doc.text(label, startX, startY);
         const labelWidth = doc.getTextWidth(label);
         
-        doc.setFont('helvetica', 'normal');
+        doc.setFont('helvetica', 'bold');
         const formattedValue = formatValue(value).toUpperCase();
         doc.text(formattedValue, startX + labelWidth + 2, startY);
         
