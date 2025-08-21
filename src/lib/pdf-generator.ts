@@ -178,7 +178,7 @@ async function drawAppearanceCertificate(doc: jsPDF, student: Student, grade?: s
     
     doc.setFontSize(14);
     doc.text('APPEARANCE CERTIFICATE', pageWidth / 2, y, { align: 'center' });
-    y += 15;
+    y += 10;
 
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(12);
@@ -219,7 +219,7 @@ async function drawCharacterCertificate(doc: jsPDF, student: Student, character?
     
     doc.setFontSize(14);
     doc.text('CHARACTER CERTIFICATE', pageWidth / 2, y, { align: 'center' });
-    y += 15;
+    y += 10;
 
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(12);
@@ -258,7 +258,7 @@ async function drawPassCertificate(doc: jsPDF, student: Student) {
     
     doc.setFontSize(14);
     doc.text('PASS CERTIFICATE', pageWidth / 2, y, { align: 'center' });
-    y += 15;
+    y += 10;
     
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(12);
@@ -361,10 +361,10 @@ async function drawLeavingCertificate(doc: jsPDF, student: Student, grade?: stri
     doc.text('Certified that the above information is in accordance with the school General Register.', margin, y);
     
     // --- Footer ---
-    const footerY = doc.internal.pageSize.getHeight() - 20;
+    const footerYFinal = doc.internal.pageSize.getHeight() - 20;
     doc.setFontSize(12);
     doc.setFont('helvetica', 'normal');
-    drawField('Date:', format(new Date(), 'MMMM dd, yyyy'), margin, footerY);
+    drawField('Date:', format(new Date(), 'MMMM dd, yyyy'), margin, footerYFinal);
 
     const firstAssistantText = 'First Assistant';
     const chiefHeadmasterText = 'Chief Headmaster';
@@ -372,9 +372,13 @@ async function drawLeavingCertificate(doc: jsPDF, student: Student, grade?: stri
     const faX = pageWidth / 2 - (doc.getTextWidth(firstAssistantText) / 2);
     const chX = pageWidth - margin - doc.getTextWidth(chiefHeadmasterText);
 
-    doc.text(firstAssistantText, faX, footerY + 10);
+    const signatureLineYFinal = footerYFinal - 2;
+    doc.line(faX, signatureLineYFinal, faX + doc.getTextWidth(firstAssistantText), signatureLineYFinal);
+    doc.line(chX, signatureLineYFinal, chX + doc.getTextWidth(chiefHeadmasterText), signatureLineYFinal);
+
+    doc.text(firstAssistantText, faX, footerYFinal);
     
-    doc.text(chiefHeadmasterText, chX, footerY + 10);
+    doc.text(chiefHeadmasterText, chX, footerYFinal);
 }
 
 
