@@ -1,5 +1,4 @@
 
-
 import jsPDF from 'jspdf';
 import { format } from 'date-fns';
 import type { Student, CertificateType } from './definitions';
@@ -43,7 +42,7 @@ async function getBase64Image(url: string): Promise<string> {
 // --- CERTIFICATE DRAWING FUNCTIONS ---
 
 async function drawAppearanceCertificate(doc: jsPDF, student: Student, grade?: string) {
-    const logoBase64 = await getBase64Image('/Logo.png');
+    const logoBase64 = await getBase64Image(window.location.origin + '/Logo.png');
     
     // --- Page Setup ---
     const pageWidth = doc.internal.pageSize.getWidth();
@@ -95,7 +94,7 @@ async function drawAppearanceCertificate(doc: jsPDF, student: Student, grade?: s
 }
 
 async function drawCharacterCertificate(doc: jsPDF, student: Student, character?: string) {
-    const logoBase64 = await getBase64Image('/Logo.png');
+    const logoBase64 = await getBase64Image(window.location.origin + '/Logo.png');
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
     const margin = 15;
@@ -135,7 +134,7 @@ async function drawCharacterCertificate(doc: jsPDF, student: Student, character?
 }
 
 async function drawPassCertificate(doc: jsPDF, student: Student) {
-    const logoBase64 = await getBase64Image('/Logo.png');
+    const logoBase64 = await getBase64Image(window.location.origin + '/Logo.png');
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
     const margin = 15;
@@ -175,7 +174,7 @@ async function drawPassCertificate(doc: jsPDF, student: Student) {
 
 
 async function drawLeavingCertificate(doc: jsPDF, student: Student, grade?: string) {
-    const logoBase64 = await getBase64Image('/Logo.png');
+    const logoBase64 = await getBase64Image(window.location.origin + '/Logo.png');
     const pageWidth = doc.internal.pageSize.getWidth();
     const margin = 15;
     let y = 20;
